@@ -146,4 +146,4 @@ declare global {
   }
 }
 
-window.BarcodeDetector ??= BarcodeDetector;
+globalThis.BarcodeDetector ??= BarcodeDetector;
