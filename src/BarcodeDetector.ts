@@ -1,6 +1,7 @@
 import { getImageDataFromImageBitmapSource } from "./utils.js";
 import {
   setZXingModuleOverrides,
+  getZXingModule,
   readBarcodeFromImageData,
   ZXingReadInputBarcodeFormat,
   ZXingBarcodeFormat,
@@ -123,7 +124,7 @@ export class BarcodeDetector {
   }
 }
 
-export { setZXingModuleOverrides };
+export { setZXingModuleOverrides, getZXingModule };
 
 declare global {
   var BarcodeDetector: {
