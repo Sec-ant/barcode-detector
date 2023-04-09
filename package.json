@@ -44,6 +44,6 @@
     "vite-plugin-dts": "^2.2.0"
   },
   "dependencies": {
-    "@sec-ant/zxing-wasm": "^1.2.0"
+    "@sec-ant/zxing-wasm": "^1.2.1"
   }
 }
