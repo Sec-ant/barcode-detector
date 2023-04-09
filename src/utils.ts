@@ -140,10 +140,7 @@ export function createCanvas(
 ): OffscreenCanvas | HTMLCanvasElement {
   try {
     const canvas = new OffscreenCanvas(width, height);
-    if (
-      OffscreenCanvasRenderingContext2D &&
-      canvas.getContext("2d") instanceof OffscreenCanvasRenderingContext2D
-    ) {
+    if (canvas.getContext("2d") instanceof OffscreenCanvasRenderingContext2D) {
       return canvas;
     }
     throw new Error("OffscreenCanvasRenderingContext2D is not supported");

@@ -1,1 +1,1 @@
-export * from "./BarcodeDetectorX.js";
+export * from "./BarcodeDetector.js";
