@@ -70,6 +70,7 @@ export interface DetectedBarcode {
 export class BarcodeDetector {
   #formats: BarcodeFormat[];
   constructor(barcodeDectorOptions: BarcodeDetectorOptions = {}) {
+    getZXingModule();
     this.#formats = barcodeDectorOptions?.formats ?? [];
   }
   static async getSupportedFormats(): Promise<readonly BarcodeFormat[]> {
@@ -124,7 +125,7 @@ export class BarcodeDetector {
   }
 }
 
-export { setZXingModuleOverrides, getZXingModule };
+export { setZXingModuleOverrides };
 
 declare global {
   var BarcodeDetector: {
