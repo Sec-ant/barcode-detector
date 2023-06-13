@@ -94,10 +94,10 @@ export class BarcodeDetector {
         bottomLeft: { x: bottomLeftX, y: bottomLeftY },
         bottomRight: { x: bottomRightX, y: bottomRightY },
       } = zxingReadOutput.position;
-      const minX = Math.min(topLeftX, bottomLeftX);
-      const minY = Math.min(topLeftY, topRightY);
-      const maxX = Math.max(topRightX, bottomRightX);
-      const maxY = Math.max(bottomLeftY, bottomRightY);
+      const minX = Math.min(topLeftX, topRightX, bottomLeftX, bottomRightX);
+      const minY = Math.min(topLeftY, topRightY, bottomLeftY, bottomRightY);
+      const maxX = Math.max(topLeftX, topRightX, bottomLeftX, bottomRightX);
+      const maxY = Math.max(topLeftY, topRightY, bottomLeftY, bottomRightY);
       return {
         boundingBox: new DOMRectReadOnly(minX, minY, maxX - minX, maxY - minY),
         rawValue: zxingReadOutput.text,
