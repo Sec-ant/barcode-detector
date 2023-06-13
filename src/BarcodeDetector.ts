@@ -24,7 +24,7 @@ export const BARCODE_DETECTOR_FORMATS = [
   "unknown",
 ] as const;
 
-export type BarcodeFormat = typeof BARCODE_DETECTOR_FORMATS[number];
+export type BarcodeFormat = (typeof BARCODE_DETECTOR_FORMATS)[number];
 
 const formatMap = new Map<BarcodeFormat, ZXingReadInputBarcodeFormat>([
   ["aztec", "Aztec"],
@@ -97,7 +97,7 @@ export class BarcodeDetector {
       const minX = Math.min(topLeftX, bottomLeftX);
       const minY = Math.min(topLeftY, topRightY);
       const maxX = Math.max(topRightX, bottomRightX);
-      const maxY = Math.min(bottomLeftY, bottomRightY);
+      const maxY = Math.max(bottomLeftY, bottomRightY);
       return {
         boundingBox: new DOMRectReadOnly(minX, minY, maxX - minX, maxY - minY),
         rawValue: zxingReadOutput.text,
@@ -136,7 +136,7 @@ declare global {
   interface BarcodeDetector {
     detect(image: ImageBitmapSourceWebCodecs): Promise<DetectedBarcode[]>;
   }
-  type BarcodeFormat = typeof BARCODE_DETECTOR_FORMATS[number];
+  type BarcodeFormat = (typeof BARCODE_DETECTOR_FORMATS)[number];
   interface BarcodeDetectorOptions {
     formats?: BarcodeFormat[];
   }
