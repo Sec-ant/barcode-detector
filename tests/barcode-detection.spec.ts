@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 
-import { test, assert, expect } from "vitest";
+import { test, assert } from "vitest";
+
 import "../src/index";
 
 async function getImage(
@@ -267,4 +268,22 @@ test("BarcodeDetector.detect() can process uint16 storage format ImageData", asy
   const bacodeDetector = new BarcodeDetector();
 
   await bacodeDetector.detect(imgUint16);
+});
+
+// TODO: web worker test
+
+test("BarcodeDetector.detect() throws on invalid formats", async () => {
+  const invalidFormatsList = [[], ["unknown"], ["foo", "bar"]];
+  invalidFormatsList.forEach((invalidFormats) => {
+    assert.throw(
+      () => {
+        new BarcodeDetector({
+          formats: invalidFormats as BarcodeFormat[],
+        });
+      },
+      TypeError,
+      undefined,
+      `${JSON.stringify(invalidFormats)} contains invalid formats`
+    );
+  });
 });

@@ -70,10 +70,22 @@ export interface DetectedBarcode {
 export class BarcodeDetector {
   #formats: BarcodeFormat[];
   constructor(barcodeDectorOptions: BarcodeDetectorOptions = {}) {
+    if (barcodeDectorOptions?.formats?.length === 0) {
+      throw new TypeError("formats cannot be empty");
+    }
+    barcodeDectorOptions?.formats?.forEach((format) => {
+      if (format === "unknown") {
+        throw new TypeError("format unknown is not supported");
+      }
+      if (!BARCODE_DETECTOR_FORMATS.includes(format)) {
+        throw new TypeError(`format ${format} is not supported`);
+      }
+    });
     getZXingModule();
     this.#formats = barcodeDectorOptions?.formats ?? [];
   }
   static async getSupportedFormats(): Promise<readonly BarcodeFormat[]> {
+    await getZXingModule();
     return BARCODE_DETECTOR_FORMATS;
   }
   async detect(image: ImageBitmapSourceWebCodecs): Promise<DetectedBarcode[]> {
