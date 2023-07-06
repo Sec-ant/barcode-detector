@@ -13,6 +13,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "coverage": "vitest run --coverage",
     "preview": "vite preview",
     "prepublishOnly": "npm run build"
   },
@@ -39,9 +42,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/dom-webcodecs": "^0.1.8",
+    "@vitest/browser": "^0.32.4",
+    "@vitest/coverage-istanbul": "^0.32.4",
+    "@vitest/ui": "^0.32.4",
+    "playwright": "^1.35.1",
     "typescript": "^5.1.6",
     "vite": "^4.3.9",
-    "vite-plugin-dts": "^3.1.0"
+    "vite-plugin-dts": "^3.1.0",
+    "vitest": "^0.32.4"
   },
   "dependencies": {
     "@sec-ant/zxing-wasm": "^2.0.0"

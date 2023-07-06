@@ -11,4 +11,15 @@ export default defineConfig({
     },
   },
   plugins: [dts()],
+  test: {
+    browser: {
+      enabled: true,
+      headless: true,
+      name: "chromium",
+      provider: "playwright",
+    },
+    coverage: {
+      provider: "istanbul",
+    },
+  },
 });
