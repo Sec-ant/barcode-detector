@@ -162,11 +162,11 @@ export function getImageDataFromCanvasImageSource(
     | CanvasRenderingContext2D
     | OffscreenCanvasRenderingContext2D;
   context.drawImage(canvasImageSource, 0, 0);
-  const ImageData = context.getImageData(0, 0, width, height);
+  const imageData = context.getImageData(0, 0, width, height);
   if (isHTMLCanvasElement(canvas)) {
     canvas.remove();
   }
-  return ImageData;
+  return imageData;
 }
 
 export async function getImageDataFromBlob(blob: Blob): Promise<ImageData> {
