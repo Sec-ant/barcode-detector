@@ -2,7 +2,7 @@ import { getImageDataFromImageBitmapSource } from "./utils.js";
 import {
   setZXingModuleOverrides,
   getZXingModule,
-  readBarcodeFromImageData,
+  readBarcodesFromImageData,
   ZXingReadInputBarcodeFormat,
   ZXingBarcodeFormat,
 } from "@sec-ant/zxing-wasm/reader";
@@ -81,7 +81,7 @@ export class BarcodeDetector {
     if (imageData.width === 0 || imageData.height === 0) {
       return [];
     }
-    const zxingReadOutputs = await readBarcodeFromImageData(imageData, {
+    const zxingReadOutputs = await readBarcodesFromImageData(imageData, {
       tryHarder: true,
       formats: this.#formats.map(
         (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat
