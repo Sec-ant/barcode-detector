@@ -1,8 +1,6 @@
-/// <reference types="vite/client" />
-
 import { test, assert, vi } from "vitest";
 import "../src/index";
-import { getHtmlImage, getVideo, drawImageToCanvas, seekTo } from "./stub";
+import { getHtmlImage, getVideo, drawImageToCanvas } from "./stub";
 
 function areCatsAndDogs(detectionResult: DetectedBarcode[]) {
   assert.equal(detectionResult.length, 2, "Number of barcodes");
@@ -313,9 +311,14 @@ test("Barcode - detect(ImageData), [SameObject]", async () => {
 });
 
 test("BarcodeDetector.detect() rejects on a cross-origin HTMLImageElement", async () => {
-  const image = await getHtmlImage(
-    "http://localhost:18080/resources/cats-dogs.png"
-  );
+  let image: HTMLImageElement;
+  try {
+    image = await getHtmlImage(
+      `http://localhost:${__PORT__}/resources/cats-dogs.png`
+    );
+  } catch (e) {
+    assert.fail(e);
+  }
   const barcodeDetector = new BarcodeDetector();
   try {
     await barcodeDetector.detect(image);
@@ -329,9 +332,14 @@ test("BarcodeDetector.detect() rejects on a cross-origin HTMLImageElement", asyn
 });
 
 test("BarcodeDetector.detect() rejects on a cross-origin ImageBitmap", async () => {
-  const image = await getHtmlImage(
-    "http://localhost:18080/resources/cats-dogs.png"
-  );
+  let image: HTMLImageElement;
+  try {
+    image = await getHtmlImage(
+      `http://localhost:${__PORT__}/resources/cats-dogs.png`
+    );
+  } catch (e) {
+    assert.fail(e);
+  }
   const imageBitmap = await createImageBitmap(image);
   const barcodeDetector = new BarcodeDetector();
   try {
@@ -344,9 +352,14 @@ test("BarcodeDetector.detect() rejects on a cross-origin ImageBitmap", async () 
 });
 
 test("BarcodeDetector.detect() rejects on a cross-origin HTMLVideoElement", async () => {
-  const video = await getVideo(
-    "http://localhost:18080/resources/cats-dogs.webm"
-  );
+  let video: HTMLVideoElement;
+  try {
+    video = await getVideo(
+      `http://localhost:${__PORT__}/resources/cats-dogs.webm`
+    );
+  } catch (e) {
+    assert.fail(e);
+  }
   const barcodeDetector = new BarcodeDetector();
   try {
     await barcodeDetector.detect(video);

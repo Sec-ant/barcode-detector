@@ -10,15 +10,16 @@
   "exports": {
     ".": "./dist/index.js"
   },
+  "config": {
+    "port": "18080"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "start": "http-server ./tests -c-1 --silent -p 18080",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "coverage": "vitest run --coverage",
-    "ci": "start-server-and-test 18080 test",
-    "ci:ui": "start-server-and-test 18080 test:ui",
+    "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
+    "test": "start-server-and-test $npm_package_config_port 'vitest --coverage'",
+    "test:ui": "start-server-and-test $npm_package_config_port 'vitest --ui --coverage'",
+    "coverage": "start-server-and-test $npm_package_config_port 'vitest run --coverage'",
     "preview": "vite preview",
     "prepublishOnly": "npm run build"
   },

@@ -1,6 +1,4 @@
-/// <reference types="vite/client" />
-
-import { test, assert, describe, vi } from "vitest";
+import { test, assert, describe } from "vitest";
 import "../src/index";
 import {
   getHtmlImage,

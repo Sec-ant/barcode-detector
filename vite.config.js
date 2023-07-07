@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import { config } from "./package.json";
 
 export default defineConfig({
   build: {
@@ -21,5 +22,8 @@ export default defineConfig({
     coverage: {
       provider: "istanbul",
     },
+  },
+  define: {
+    __PORT__: JSON.stringify(config.port),
   },
 });
