@@ -12,6 +12,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         runner-os: ["windows-latest", "ubuntu-latest", "macos-latest"]
     runs-on:
