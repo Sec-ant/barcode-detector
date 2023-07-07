@@ -2,7 +2,7 @@
 
 import { test, assert, vi } from "vitest";
 import "../src/index";
-import { getImage, getVideo, drawImageToCanvas, seekTo } from "./stub";
+import { getHtmlImage, getVideo, drawImageToCanvas, seekTo } from "./stub";
 
 function areCatsAndDogs(detectionResult: DetectedBarcode[]) {
   assert.equal(detectionResult.length, 2, "Number of barcodes");
@@ -13,7 +13,7 @@ function areCatsAndDogs(detectionResult: DetectedBarcode[]) {
 }
 
 test("detectedBarcode.boundingBox should be DOMRectReadOnly", async () => {
-  const image = await getImage();
+  const image = await getHtmlImage();
 
   const canvas = drawImageToCanvas(image, {
     canvas: document.createElement("canvas"),
@@ -30,7 +30,7 @@ test("detectedBarcode.boundingBox should be DOMRectReadOnly", async () => {
 });
 
 test("detectedBarcode can be passed to postMessage()", async () => {
-  const image = await getImage();
+  const image = await getHtmlImage();
 
   const canvas = drawImageToCanvas(image, {
     canvas: document.createElement("canvas"),
@@ -54,7 +54,6 @@ test("detectedBarcode can be passed to postMessage()", async () => {
 test("BarcodeDetector.detect() rejects on a Blob", async () => {
   const blob = new Blob(["not really a png"], { type: "image/png " });
   const barcodeDetector = new BarcodeDetector();
-
   try {
     await barcodeDetector.detect(blob);
     assert.fail("invalid image blob should trigger a detection error");
@@ -109,7 +108,7 @@ test("get supported barcode formats", async () => {
   },
 ].forEach(({ createCanvas, pixelFormat, name }) => {
   test(name, async () => {
-    const image = await getImage();
+    const image = await getHtmlImage();
     const canvas = drawImageToCanvas(image, {
       canvas: createCanvas(),
       pixelFormat,
@@ -122,7 +121,7 @@ test("get supported barcode formats", async () => {
 
 test("detect(empty src)", async () => {
   try {
-    await getImage("");
+    await getHtmlImage("");
     assert.fail("empty src image should not resolve");
   } catch ([_, image]) {
     const barcodeDetector = new BarcodeDetector();
@@ -137,7 +136,7 @@ test("detect(empty src)", async () => {
 });
 
 test("detect(0x0)", async () => {
-  const image = await getImage(
+  const image = await getHtmlImage(
     new URL("./resources/red-zerosize.svg", import.meta.url).href
   );
   const barcodeDetector = new BarcodeDetector();
@@ -146,7 +145,7 @@ test("detect(0x0)", async () => {
 });
 
 test("detect(HTMLImageElement)", async () => {
-  const image = await getImage();
+  const image = await getHtmlImage();
   const barcodeDetector = new BarcodeDetector();
   const detectionResult = await barcodeDetector.detect(image);
   areCatsAndDogs(detectionResult);
@@ -160,7 +159,7 @@ test("detect(HTMLVideoElement)", async () => {
 });
 
 test("BarcodeDetector.detect() rejects on a closed ImageBitmap", async () => {
-  const image = await getImage();
+  const image = await getHtmlImage();
   const imageBitmap = await createImageBitmap(image);
   imageBitmap.close();
   const barcodeDetector = new BarcodeDetector();
@@ -174,7 +173,7 @@ test("BarcodeDetector.detect() rejects on a closed ImageBitmap", async () => {
 });
 
 test("detect(ImageBitmap)", async () => {
-  const image = await getImage();
+  const image = await getHtmlImage();
   const imageBitmap = await createImageBitmap(image);
   const barcodeDetector = new BarcodeDetector();
   const detectionResult = await barcodeDetector.detect(imageBitmap);
@@ -195,7 +194,7 @@ test("BarcodeDetector.detect() rejects on a detached buffer", async () => {
 });
 
 test("detect(ImageData)", async () => {
-  const image = await getImage();
+  const image = await getHtmlImage();
   const canvas = drawImageToCanvas(image, {
     canvas: document.createElement("canvas"),
   });
@@ -239,7 +238,7 @@ test("BarcodeDetector.detect() throws on invalid formats", async () => {
 
 test("Barcode - detect(broken image)", async () => {
   try {
-    await getImage("./images/broken.png");
+    await getHtmlImage("./images/broken.png");
     assert.fail("broken image should not resolve");
   } catch ([error, image]) {
     const barcodeDetector = new BarcodeDetector();
@@ -295,7 +294,7 @@ test("BarcodeDetector.detect() rejects on an VideoFrame", async () => {
 });
 
 test("Barcode - detect(ImageData), [SameObject]", async () => {
-  const image = await getImage();
+  const image = await getHtmlImage();
   const canvas = drawImageToCanvas(image, {
     canvas: document.createElement("canvas"),
   });
@@ -314,7 +313,7 @@ test("Barcode - detect(ImageData), [SameObject]", async () => {
 });
 
 test("BarcodeDetector.detect() rejects on a cross-origin HTMLImageElement", async () => {
-  const image = await getImage(
+  const image = await getHtmlImage(
     "http://localhost:18080/resources/cats-dogs.png"
   );
   const barcodeDetector = new BarcodeDetector();
@@ -330,7 +329,7 @@ test("BarcodeDetector.detect() rejects on a cross-origin HTMLImageElement", asyn
 });
 
 test("BarcodeDetector.detect() rejects on a cross-origin ImageBitmap", async () => {
-  const image = await getImage(
+  const image = await getHtmlImage(
     "http://localhost:18080/resources/cats-dogs.png"
   );
   const imageBitmap = await createImageBitmap(image);

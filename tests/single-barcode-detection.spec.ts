@@ -2,7 +2,13 @@
 
 import { test, assert, describe, vi } from "vitest";
 import "../src/index";
-import { getImage, getVideo, drawImageToCanvas, seekTo } from "./stub";
+import {
+  getHtmlImage,
+  getSvgImage,
+  getVideo,
+  drawImageToCanvas,
+  seekTo,
+} from "./stub";
 
 interface BoundingBox {
   left: number;
@@ -945,7 +951,18 @@ function checkCornerPoints(
 describe("HTMLImageElement tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} HTMLImageElement`, async () => {
-      const image = await getImage(
+      const image = await getHtmlImage(
+        new URL(`./resources/${imageTest.name}`, import.meta.url).href
+      );
+      await testImage(image, imageTest, key);
+    });
+  }
+});
+
+describe("SVGImageElement tests", () => {
+  for (const [key, imageTest] of Object.entries(imageTests)) {
+    test(`${key} HTMLImageElement`, async () => {
+      const image = await getSvgImage(
         new URL(`./resources/${imageTest.name}`, import.meta.url).href
       );
       await testImage(image, imageTest, key);
@@ -956,7 +973,7 @@ describe("HTMLImageElement tests", () => {
 describe("HTMLCanvasElement tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} HTMLCanvasElement`, async () => {
-      const image = await getImage(
+      const image = await getHtmlImage(
         new URL(`./resources/${imageTest.name}`, import.meta.url).href
       );
       const canvas = drawImageToCanvas(image, {
@@ -970,7 +987,7 @@ describe("HTMLCanvasElement tests", () => {
 describe("ImageBitmap tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} ImageBitmap`, async () => {
-      const image = await getImage(
+      const image = await getHtmlImage(
         new URL(`./resources/${imageTest.name}`, import.meta.url).href
       );
       const imageBitmap = await createImageBitmap(image);
@@ -982,7 +999,7 @@ describe("ImageBitmap tests", () => {
 describe("OffscreenCanvas tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} OffscreenCanvas`, async () => {
-      const image = await getImage(
+      const image = await getHtmlImage(
         new URL(`./resources/${imageTest.name}`, import.meta.url).href
       );
       const canvas = await drawImageToCanvas(image, {
@@ -996,7 +1013,7 @@ describe("OffscreenCanvas tests", () => {
 describe("Blob tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} Blob`, async () => {
-      const image = await getImage(
+      const image = await getHtmlImage(
         new URL(`./resources/${imageTest.name}`, import.meta.url).href
       );
       const canvas = drawImageToCanvas(image, {
@@ -1016,7 +1033,7 @@ describe("Blob tests", () => {
 describe("ImageData tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} ImageData`, async () => {
-      const image = await getImage(
+      const image = await getHtmlImage(
         new URL(`./resources/${imageTest.name}`, import.meta.url).href
       );
       const canvas = drawImageToCanvas(image, {
@@ -1035,8 +1052,6 @@ describe("ImageData tests", () => {
   }
 });
 
-// TODO: Video Element and Video Frame
-
 describe("HTMLVideoElement tests", () => {
   for (const [name, videoTest] of Object.entries(videoTests)) {
     describe(`${name} HTMLVideoElement`, async () => {
@@ -1047,6 +1062,24 @@ describe("HTMLVideoElement tests", () => {
         test(`${videoTestPoint.test.name} HTMLVideoElement at ${name} ${videoTestPoint.time}`, async () => {
           await seekTo(video, videoTestPoint.time);
           await testImage(video, videoTestPoint.test, name);
+        });
+      }
+    });
+  }
+});
+
+describe("VideoFrame tests", () => {
+  for (const [name, videoTest] of Object.entries(videoTests)) {
+    describe(`${name} VideoFrame`, async () => {
+      const video = await getVideo(
+        new URL(`./resources/${name}`, import.meta.url).href
+      );
+      for (const videoTestPoint of videoTest) {
+        test(`${videoTestPoint.test.name} HTMLVideoElement at ${name} ${videoTestPoint.time}`, async () => {
+          await seekTo(video, videoTestPoint.time);
+          const videoFrame = new VideoFrame(video);
+          await testImage(videoFrame, videoTestPoint.test, name);
+          videoFrame.close();
         });
       }
     });

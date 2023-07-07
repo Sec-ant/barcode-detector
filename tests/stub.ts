@@ -1,4 +1,4 @@
-export async function getImage(
+export async function getHtmlImage(
   src = new URL("./resources/cats-dogs.png", import.meta.url).href
 ) {
   return await new Promise<HTMLImageElement>((resolve, reject) => {
@@ -10,6 +10,28 @@ export async function getImage(
       reject([error, image] as const);
     });
     image.src = src;
+  });
+}
+
+export async function getSvgImage(
+  src = new URL("./resources/cats-dogs.png", import.meta.url).href
+) {
+  return await new Promise<SVGImageElement>((resolve, reject) => {
+    const htmlImagePromise = getHtmlImage(src);
+    const image = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "image"
+    );
+    image.addEventListener("load", async () => {
+      const htmlImage = await htmlImagePromise;
+      image.setAttribute("width", htmlImage.width + "");
+      image.setAttribute("height", htmlImage.height + "");
+      resolve(image);
+    });
+    image.addEventListener("error", (error) => {
+      reject([error, image] as const);
+    });
+    image.href.baseVal = src;
   });
 }
 
