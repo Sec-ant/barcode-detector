@@ -13,9 +13,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "start": "http-server ./tests -c-1 --silent -p 18080",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "coverage": "vitest run --coverage",
+    "ci": "start-server-and-test 18080 test",
+    "ci:ui": "start-server-and-test 18080 test:ui",
     "preview": "vite preview",
     "prepublishOnly": "npm run build"
   },
@@ -45,7 +48,9 @@
     "@vitest/browser": "^0.32.4",
     "@vitest/coverage-istanbul": "^0.32.4",
     "@vitest/ui": "^0.32.4",
+    "http-server": "^14.1.1",
     "playwright": "^1.35.1",
+    "start-server-and-test": "^2.0.0",
     "typescript": "^5.1.6",
     "vite": "^4.3.9",
     "vite-plugin-dts": "^3.1.0",
