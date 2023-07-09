@@ -373,6 +373,7 @@ test("BarcodeDetector.detect() rejects on a non-image type Blob", async () => {
     await barcodeDetector.detect(blob);
     assert.fail("invalid image blob should trigger a detection error");
   } catch (e) {
+    console.log(e, e.code, e.message);
     assert.instanceOf(e, DOMException);
     // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
     assert.equal(e?.code, DOMException.NOT_SUPPORTED_ERR);
@@ -401,6 +402,7 @@ test("BarcodeDetector.detect() rejects on a VideoFrame", async () => {
     await barcodeDetector.detect(frame);
     assert.fail("empty frame should trigger a detection error");
   } catch (e) {
+    console.log(e, e.code, e.message);
     assert.instanceOf(e, DOMException);
     // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
     assert.equal(e?.code, DOMException.NOT_SUPPORTED_ERR);
