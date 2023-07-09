@@ -65,7 +65,7 @@ interface ImageTests {
   [k: string]: ImageTest;
 }
 
-const FUZZINESS_LARGE = 18;
+const FUZZINESS_LARGE = 15;
 const FUZZINESS_SMALL = 5;
 const FUZZINESS_X = FUZZINESS_LARGE;
 const FUZZINESS_Y = FUZZINESS_LARGE;

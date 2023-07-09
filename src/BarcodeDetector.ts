@@ -86,11 +86,11 @@ export class BarcodeDetector {
   }
   static async getSupportedFormats(): Promise<readonly BarcodeFormat[]> {
     await getZXingModule();
-    return BARCODE_DETECTOR_FORMATS;
+    return BARCODE_DETECTOR_FORMATS.filter((f) => f !== "unknown");
   }
   async detect(image: ImageBitmapSourceWebCodecs): Promise<DetectedBarcode[]> {
     const imageData = await getImageDataFromImageBitmapSource(image);
-    if (imageData.width === 0 || imageData.height === 0) {
+    if (imageData === null) {
       return [];
     }
     const zxingReadOutputs = await readBarcodesFromImageData(imageData, {

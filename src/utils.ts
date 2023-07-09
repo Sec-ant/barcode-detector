@@ -154,7 +154,7 @@ export function createCanvas(
 
 export async function getImageDataFromCanvasImageSource(
   canvasImageSource: CanvasImageSourceWebCodecs
-): Promise<ImageData> {
+): Promise<ImageData | null> {
   if (
     isHTMLImageElement(canvasImageSource) &&
     !(await isHTMLImageElementDecodable(canvasImageSource))
@@ -170,8 +170,6 @@ export async function getImageDataFromCanvasImageSource(
       "InvalidStateError"
     );
   }
-  if (isSVGImageElement(canvasImageSource)) {
-  }
   if (
     isImageBitmap(canvasImageSource) &&
     isImageBitmapClosed(canvasImageSource)
@@ -180,6 +178,9 @@ export async function getImageDataFromCanvasImageSource(
   }
   const { width, height } =
     getIntrinsicDimensionsOfCanvasImageSource(canvasImageSource);
+  if (width === 0 || height === 0) {
+    return null;
+  }
   const canvas = createCanvas(width, height);
   const context = canvas.getContext("2d") as
     | CanvasRenderingContext2D
@@ -192,7 +193,9 @@ export async function getImageDataFromCanvasImageSource(
   return imageData;
 }
 
-export async function getImageDataFromBlob(blob: Blob): Promise<ImageData> {
+export async function getImageDataFromBlob(
+  blob: Blob
+): Promise<ImageData | null> {
   let imageBitmap: ImageBitmap;
   try {
     imageBitmap = await createImageBitmap(blob);
@@ -205,7 +208,7 @@ export async function getImageDataFromBlob(blob: Blob): Promise<ImageData> {
 
 export async function getImageDataFromImageBitmapSource(
   image: ImageBitmapSourceWebCodecs
-): Promise<ImageData> {
+): Promise<ImageData | null> {
   if (isBlob(image)) {
     return await getImageDataFromBlob(image);
   }
