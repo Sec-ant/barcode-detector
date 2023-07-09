@@ -25,7 +25,7 @@ export function getIntrinsicDimensionsOfCanvasImageSource(
       height: image.height,
     };
   }
-  if (isImageBitmapElement(image)) {
+  if (isImageBitmap(image)) {
     return {
       width: image.width,
       height: image.height,
@@ -86,7 +86,7 @@ export function isHTMLCanvasElement(
   }
 }
 
-export function isImageBitmapElement(
+export function isImageBitmap(
   image: ImageBitmapSourceWebCodecs
 ): image is ImageBitmap {
   try {
@@ -152,9 +152,32 @@ export function createCanvas(
   }
 }
 
-export function getImageDataFromCanvasImageSource(
+export async function getImageDataFromCanvasImageSource(
   canvasImageSource: CanvasImageSourceWebCodecs
-): ImageData {
+): Promise<ImageData> {
+  if (
+    isHTMLImageElement(canvasImageSource) &&
+    !(await isHTMLImageElementDecodable(canvasImageSource))
+  ) {
+    throw new DOMException("Failed to decode the image.", "InvalidStateError");
+  }
+  if (
+    isHTMLVideoElement(canvasImageSource) &&
+    (canvasImageSource.readyState === 0 || canvasImageSource.readyState === 1)
+  ) {
+    throw new DOMException(
+      "The video data is not available.",
+      "InvalidStateError"
+    );
+  }
+  if (isSVGImageElement(canvasImageSource)) {
+  }
+  if (
+    isImageBitmap(canvasImageSource) &&
+    isImageBitmapClosed(canvasImageSource)
+  ) {
+    throw new DOMException("The image bitmap is closed.", "InvalidStateError");
+  }
   const { width, height } =
     getIntrinsicDimensionsOfCanvasImageSource(canvasImageSource);
   const canvas = createCanvas(width, height);
@@ -170,8 +193,13 @@ export function getImageDataFromCanvasImageSource(
 }
 
 export async function getImageDataFromBlob(blob: Blob): Promise<ImageData> {
-  const imageBitmap = await createImageBitmap(blob);
-  const imageData = getImageDataFromCanvasImageSource(imageBitmap);
+  let imageBitmap: ImageBitmap;
+  try {
+    imageBitmap = await createImageBitmap(blob);
+  } catch (e) {
+    throw e;
+  }
+  const imageData = await getImageDataFromCanvasImageSource(imageBitmap);
   return imageData;
 }
 
@@ -182,7 +210,46 @@ export async function getImageDataFromImageBitmapSource(
     return await getImageDataFromBlob(image);
   }
   if (isImageData(image)) {
+    if (isArrayBufferDetached(image.data.buffer)) {
+      throw new DOMException(
+        "The corresponding array buffer is detached.",
+        "InvalidStateError"
+      );
+    }
     return image;
   }
-  return getImageDataFromCanvasImageSource(image);
+  return await getImageDataFromCanvasImageSource(image);
+}
+
+export async function isHTMLImageElementDecodable(image: HTMLImageElement) {
+  try {
+    await image.decode();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function isArrayBufferDetached(arrayBuffer: ArrayBuffer) {
+  if (arrayBuffer.byteLength !== 0) {
+    // detached buffers will always have zero byteLength
+    return false;
+  }
+  return true;
+  /*
+  try {
+    new Uint8Array(arrayBuffer);
+    return false;
+  } catch {
+    // Uint8Array throws if using a detached buffer
+    return true;
+  }
+  */
+}
+
+export function isImageBitmapClosed(imageBitmap: ImageBitmap) {
+  if (imageBitmap.width === 0 && imageBitmap.height === 0) {
+    return true;
+  }
+  return false;
 }

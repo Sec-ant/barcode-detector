@@ -1,6 +1,8 @@
-import { test, assert, vi } from "vitest";
+declare var __PORT__: string;
+
+import { test, assert, describe } from "vitest";
 import "../src/index";
-import { getHtmlImage, getVideo, drawImageToCanvas } from "./stub";
+import { getHtmlImage, getVideo, drawImageToCanvas } from "./helpers";
 
 function areCatsAndDogs(detectionResult: DetectedBarcode[]) {
   assert.equal(detectionResult.length, 2, "Number of barcodes");
@@ -47,18 +49,6 @@ test("detectedBarcode can be passed to postMessage()", async () => {
   window.addEventListener("message", handleMessage);
 
   window.postMessage(detectionResult);
-});
-
-test("BarcodeDetector.detect() rejects on a Blob", async () => {
-  const blob = new Blob(["not really a png"], { type: "image/png " });
-  const barcodeDetector = new BarcodeDetector();
-  try {
-    await barcodeDetector.detect(blob);
-    assert.fail("invalid image blob should trigger a detection error");
-  } catch (e) {
-    assert.instanceOf(e, DOMException);
-    assert.equal(e?.code, DOMException.NOT_SUPPORTED_ERR);
-  }
 });
 
 test("get supported barcode formats", async () => {
@@ -117,22 +107,6 @@ test("get supported barcode formats", async () => {
   });
 });
 
-test("detect(empty src)", async () => {
-  try {
-    await getHtmlImage("");
-    assert.fail("empty src image should not resolve");
-  } catch ([_, image]) {
-    const barcodeDetector = new BarcodeDetector();
-    try {
-      await barcodeDetector.detect(image);
-      assert.fail("empty src image should trigger a detection error");
-    } catch (e) {
-      assert.instanceOf(e, DOMException);
-      assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
-    }
-  }
-});
-
 test("detect(0x0)", async () => {
   const image = await getHtmlImage(
     new URL("./resources/red-zerosize.svg", import.meta.url).href
@@ -178,19 +152,6 @@ test("detect(ImageBitmap)", async () => {
   areCatsAndDogs(detectionResult);
 });
 
-test("BarcodeDetector.detect() rejects on a detached buffer", async () => {
-  const data = new ImageData(1024, 1024);
-  window.postMessage("", "*", [data.data.buffer]);
-  const barcodeDetector = new BarcodeDetector();
-  try {
-    await barcodeDetector.detect(data);
-    assert.fail("detached ImageData buffer should trigger a detection error");
-  } catch (e) {
-    assert.instanceOf(e, DOMException);
-    assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
-  }
-});
-
 test("detect(ImageData)", async () => {
   const image = await getHtmlImage();
   const canvas = drawImageToCanvas(image, {
@@ -234,63 +195,6 @@ test("BarcodeDetector.detect() throws on invalid formats", async () => {
   });
 });
 
-test("Barcode - detect(broken image)", async () => {
-  try {
-    await getHtmlImage("./images/broken.png");
-    assert.fail("broken image should not resolve");
-  } catch ([error, image]) {
-    const barcodeDetector = new BarcodeDetector();
-    try {
-      await barcodeDetector.detect(image);
-      assert.fail("broken image should trigger a detection error");
-    } catch (e) {
-      assert.instanceOf(e, DOMException);
-      assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
-    }
-  }
-});
-
-test("Barcode - detect(broken video)", async () => {
-  try {
-    await getVideo("./images/broken.webm");
-    assert.fail("broken video should not resolve");
-  } catch ([error, video]) {
-    const barcodeDetector = new BarcodeDetector();
-    try {
-      await barcodeDetector.detect(video);
-      assert.fail("broken video should trigger a detection error");
-    } catch (e) {
-      assert.instanceOf(e, DOMException);
-      assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
-    }
-  }
-});
-
-test("BarcodeDetector.detect() rejects on an SVGImageElement", async () => {
-  const image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-  const barcodeDetector = new BarcodeDetector();
-  try {
-    await barcodeDetector.detect(image);
-    assert.fail("empty svg image should trigger a detection error");
-  } catch (e) {
-    assert.instanceOf(e, DOMException);
-    assert.equal(e?.code, DOMException.NOT_SUPPORTED_ERR);
-  }
-});
-
-test("BarcodeDetector.detect() rejects on an VideoFrame", async () => {
-  const canvas = document.createElement("canvas");
-  const frame = new VideoFrame(canvas, { timestamp: 0 });
-  const barcodeDetector = new BarcodeDetector();
-  try {
-    await barcodeDetector.detect(frame);
-    assert.fail("empty frame should trigger a detection error");
-  } catch (e) {
-    assert.instanceOf(e, DOMException);
-    assert.equal(e?.code, DOMException.NOT_SUPPORTED_ERR);
-  }
-});
-
 test("Barcode - detect(ImageData), [SameObject]", async () => {
   const image = await getHtmlImage();
   const canvas = drawImageToCanvas(image, {
@@ -310,64 +214,195 @@ test("Barcode - detect(ImageData), [SameObject]", async () => {
   );
 });
 
-test("BarcodeDetector.detect() rejects on a cross-origin HTMLImageElement", async () => {
-  let image: HTMLImageElement;
+describe("BarcodeDetector.detect() rejects on a cross-origin ImageBitmapSource", () => {
+  test("cross-origin HTMLImageElement", async () => {
+    let image: HTMLImageElement;
+    try {
+      image = await getHtmlImage(
+        `http://localhost:${__PORT__}/resources/cats-dogs.png`
+      );
+    } catch (e) {
+      assert.fail(e);
+    }
+    const barcodeDetector = new BarcodeDetector();
+    try {
+      await barcodeDetector.detect(image);
+      assert.fail(
+        "cross-origin HTMLImageElement should trigger a detection error"
+      );
+    } catch (e) {
+      assert.instanceOf(e, DOMException);
+      assert.equal(e?.code, DOMException.SECURITY_ERR);
+    }
+  });
+
+  test("cross-origin ImageBitmap", async () => {
+    let image: HTMLImageElement;
+    try {
+      image = await getHtmlImage(
+        `http://localhost:${__PORT__}/resources/cats-dogs.png`
+      );
+    } catch (e) {
+      assert.fail(e);
+    }
+    const imageBitmap = await createImageBitmap(image);
+    const barcodeDetector = new BarcodeDetector();
+    try {
+      await barcodeDetector.detect(imageBitmap);
+      assert.fail("cross-origin ImageBitmap should trigger a detection error");
+    } catch (e) {
+      assert.instanceOf(e, DOMException);
+      assert.equal(e?.code, DOMException.SECURITY_ERR);
+    }
+  });
+
+  test("cross-origin HTMLCanvasElement", async () => {
+    let image: HTMLImageElement;
+    try {
+      image = await getHtmlImage(
+        `http://localhost:${__PORT__}/resources/cats-dogs.png`
+      );
+    } catch (e) {
+      assert.fail(e);
+    }
+    const imageBitmap = await createImageBitmap(image);
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("bitmaprenderer")!;
+    context.transferFromImageBitmap(imageBitmap);
+    const barcodeDetector = new BarcodeDetector();
+    try {
+      await barcodeDetector.detect(canvas);
+      assert.fail(
+        "cross-origin HTMLCanvasElement should trigger a detection error"
+      );
+    } catch (e) {
+      assert.instanceOf(e, DOMException);
+      assert.equal(e?.code, DOMException.SECURITY_ERR);
+    }
+  });
+
+  test("cross-origin HTMLVideoElement", async () => {
+    let video: HTMLVideoElement;
+    try {
+      video = await getVideo(
+        `http://localhost:${__PORT__}/resources/cats-dogs.webm`
+      );
+    } catch (e) {
+      assert.fail(e);
+    }
+    const barcodeDetector = new BarcodeDetector();
+    try {
+      await barcodeDetector.detect(video);
+      assert.fail(
+        "cross-origin HTMLVideoElement should trigger a detection error"
+      );
+    } catch (e) {
+      assert.instanceOf(e, DOMException);
+      assert.equal(e?.code, DOMException.SECURITY_ERR);
+    }
+  });
+});
+
+test("BarcodeDetector.detect() rejects on a broken HTMLImageElement", async () => {
   try {
-    image = await getHtmlImage(
-      `http://localhost:${__PORT__}/resources/cats-dogs.png`
-    );
-  } catch (e) {
-    assert.fail(e);
+    await getHtmlImage("./images/broken.png");
+    assert.fail("broken image should not resolve");
+  } catch ([error, image]) {
+    // now the image is a broken HTMLImageElement
+    const barcodeDetector = new BarcodeDetector();
+    try {
+      await barcodeDetector.detect(image);
+      assert.fail("broken image should trigger a detection error");
+    } catch (e) {
+      assert.instanceOf(e, DOMException);
+      assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
+    }
   }
+});
+
+test("BarcodeDetector.detect() rejects on an empty src HTMLImageElement", async () => {
+  try {
+    await getHtmlImage("");
+    assert.fail("empty src image should not resolve");
+  } catch ([_, image]) {
+    // now the image is an empty src HTMLImageElement
+    const barcodeDetector = new BarcodeDetector();
+    try {
+      await barcodeDetector.detect(image);
+      assert.fail("empty src image should trigger a detection error");
+    } catch (e) {
+      assert.instanceOf(e, DOMException);
+      assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
+    }
+  }
+});
+
+test("BarcodeDetector.detect() rejects on a broken HTMLVideoElement", async () => {
+  try {
+    await getVideo("./images/broken.webm");
+    assert.fail("broken video should not resolve");
+  } catch ([error, video]) {
+    const barcodeDetector = new BarcodeDetector();
+    try {
+      await barcodeDetector.detect(video);
+      assert.fail("broken video should trigger a detection error");
+    } catch (e) {
+      assert.instanceOf(e, DOMException);
+      assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
+    }
+  }
+});
+
+test("BarcodeDetector.detect() rejects on a buffer-detached ImageData ", async () => {
+  const data = new ImageData(1024, 1024);
+  window.postMessage("", "*", [data.data.buffer]);
+  const barcodeDetector = new BarcodeDetector();
+  try {
+    await barcodeDetector.detect(data);
+    assert.fail("detached ImageData buffer should trigger a detection error");
+  } catch (e) {
+    assert.instanceOf(e, DOMException);
+    assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
+  }
+});
+
+test("BarcodeDetector.detect() rejects on a non-image type Blob", async () => {
+  const blob = new Blob(["not really a png"], { type: "image/png " });
+  const barcodeDetector = new BarcodeDetector();
+  try {
+    await barcodeDetector.detect(blob);
+    assert.fail("invalid image blob should trigger a detection error");
+  } catch (e) {
+    assert.instanceOf(e, DOMException);
+    // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
+    assert.equal(e?.code, DOMException.NOT_SUPPORTED_ERR);
+  }
+});
+
+test("BarcodeDetector.detect() rejects on an SVGImageElement", async () => {
+  const image = document.createElementNS("http://www.w3.org/2000/svg", "image");
   const barcodeDetector = new BarcodeDetector();
   try {
     await barcodeDetector.detect(image);
-    assert.fail(
-      "cross-origin HTMLImageElement should trigger a detection error"
-    );
+    assert.fail("empty svg image should trigger a detection error");
   } catch (e) {
+    console.log(e, e.code, e.message);
     assert.instanceOf(e, DOMException);
-    assert.equal(e?.code, DOMException.SECURITY_ERR);
+    // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
+    assert.equal(e?.code, DOMException.NOT_SUPPORTED_ERR);
   }
 });
 
-test("BarcodeDetector.detect() rejects on a cross-origin ImageBitmap", async () => {
-  let image: HTMLImageElement;
-  try {
-    image = await getHtmlImage(
-      `http://localhost:${__PORT__}/resources/cats-dogs.png`
-    );
-  } catch (e) {
-    assert.fail(e);
-  }
-  const imageBitmap = await createImageBitmap(image);
+test("BarcodeDetector.detect() rejects on a VideoFrame", async () => {
+  const canvas = document.createElement("canvas");
+  const frame = new VideoFrame(canvas, { timestamp: 0 });
   const barcodeDetector = new BarcodeDetector();
   try {
-    await barcodeDetector.detect(imageBitmap);
-    assert.fail("cross-origin ImageBitmap should trigger a detection error");
+    await barcodeDetector.detect(frame);
+    assert.fail("empty frame should trigger a detection error");
   } catch (e) {
     assert.instanceOf(e, DOMException);
-    assert.equal(e?.code, DOMException.SECURITY_ERR);
-  }
-});
-
-test("BarcodeDetector.detect() rejects on a cross-origin HTMLVideoElement", async () => {
-  let video: HTMLVideoElement;
-  try {
-    video = await getVideo(
-      `http://localhost:${__PORT__}/resources/cats-dogs.webm`
-    );
-  } catch (e) {
-    assert.fail(e);
-  }
-  const barcodeDetector = new BarcodeDetector();
-  try {
-    await barcodeDetector.detect(video);
-    assert.fail(
-      "cross-origin HTMLVideoElement should trigger a detection error"
-    );
-  } catch (e) {
-    assert.instanceOf(e, DOMException);
-    assert.equal(e?.code, DOMException.SECURITY_ERR);
+    // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
+    assert.equal(e?.code, DOMException.NOT_SUPPORTED_ERR);
   }
 });
