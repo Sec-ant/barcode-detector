@@ -47,6 +47,22 @@ import { BarcodeDetector } from "@sec-ant/barcode-detector";
 
 This is the combination of [pure module](#pure-module) and [side effects](#side-effects).
 
+## `setZXingModuleOverrides`
+
+Apart from `BarcodeDetector`, there's also an exported function called `setZXingModuleOverrides`. This package uses [Sec-ant/zxing-wasm](https://github.com/Sec-ant/zxing-wasm) to provide the core function of reading barcodes. So there will be a `.wasm` binary file to load. By default, the path of the `.wasm` binary file is:
+
+```
+https://cdn.jsdelivr.net/npm/@sec-ant/zxing-wasm@{version}/dist/reader/zxing_reader.wasm
+```
+
+`setZXingModuleOverrides` is useful when you want to take control of the location where the `.wasm` binary file will be served, so you can use this package in a local network or you want to choose another CDN. You have to use this function prior to `new BarcodeDetector()` for it to take effect. For more information on how to use it, please check [the notes here](https://github.com/Sec-ant/zxing-wasm#notes).
+
+This function is also exported from the [side effects](#side-effects) subpath.
+
+```ts
+import { setZXingModuleOverrides } from "@sec-ant/barcode-detector/side-effects";
+```
+
 ## API
 
 Please check the [spec](https://wicg.github.io/shape-detection-api/#barcode-detection-api) and [MDN doc](https://developer.mozilla.org/docs/Web/API/Barcode_Detection_API) for more information.
