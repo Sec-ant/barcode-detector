@@ -1,5 +1,5 @@
 import { test, assert, describe } from "vitest";
-import "../src/index";
+import "../src/side-effects";
 import {
   getHtmlImage,
   getSvgImage,
