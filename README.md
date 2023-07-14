@@ -18,7 +18,7 @@ You can use this package in 3 ways:
 import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
 ```
 
-Or rename the export to prevent possible namespace collisions:
+or rename the export to prevent possible namespace collisions:
 
 ```ts
 import { BarcodeDetector as BarcodeDetectorPolyfill } from "@sec-ant/barcode-detector/pure";
