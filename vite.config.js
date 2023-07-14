@@ -7,11 +7,17 @@ export default defineConfig({
     lib: {
       entry: {
         index: "src/index.ts",
+        pure: "src/pure.ts",
+        "side-effects": "src/side-effects.ts",
       },
       formats: ["es"],
     },
   },
-  plugins: [dts()],
+  plugins: [
+    dts({
+      clearPureImport: false,
+    }),
+  ],
   test: {
     browser: {
       enabled: true,

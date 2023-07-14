@@ -6,23 +6,7 @@ import {
   ZXingReadInputBarcodeFormat,
   ZXingBarcodeFormat,
 } from "@sec-ant/zxing-wasm/reader";
-
-export const BARCODE_DETECTOR_FORMATS = [
-  "aztec",
-  "code_128",
-  "code_39",
-  "code_93",
-  "codabar",
-  "data_matrix",
-  "ean_13",
-  "ean_8",
-  "itf",
-  "pdf417",
-  "qr_code",
-  "upc_a",
-  "upc_e",
-  "unknown",
-] as const;
+import { BARCODE_DETECTOR_FORMATS } from "./utils.js";
 
 export type BarcodeFormat = (typeof BARCODE_DETECTOR_FORMATS)[number];
 
@@ -55,7 +39,7 @@ export interface BarcodeDetectorOptions {
   formats?: BarcodeFormat[];
 }
 
-type Point2D = {
+export type Point2D = {
   x: number;
   y: number;
 };
@@ -138,26 +122,3 @@ export class BarcodeDetector {
 }
 
 export { setZXingModuleOverrides };
-
-declare global {
-  var BarcodeDetector: {
-    readonly prototype: BarcodeDetector;
-    new (barcodeDectorOptions?: BarcodeDetectorOptions): BarcodeDetector;
-    getSupportedFormats(): Promise<readonly BarcodeFormat[]>;
-  };
-  interface BarcodeDetector {
-    detect(image: ImageBitmapSourceWebCodecs): Promise<DetectedBarcode[]>;
-  }
-  type BarcodeFormat = (typeof BARCODE_DETECTOR_FORMATS)[number];
-  interface BarcodeDetectorOptions {
-    formats?: BarcodeFormat[];
-  }
-  interface DetectedBarcode {
-    boundingBox: DOMRectReadOnly;
-    rawValue: string;
-    format: BarcodeFormat;
-    cornerPoints: [Point2D, Point2D, Point2D, Point2D];
-  }
-}
-
-globalThis.BarcodeDetector ??= BarcodeDetector;
