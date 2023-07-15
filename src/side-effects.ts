@@ -1,5 +1,5 @@
 import { BarcodeDetector, Point2D } from "./BarcodeDetector.js";
-export { setZXingModuleOverrides } from "./BarcodeDetector";
+export { setZXingModuleOverrides } from "./BarcodeDetector.js";
 import { BARCODE_DETECTOR_FORMATS } from "./utils.js";
 
 declare global {
