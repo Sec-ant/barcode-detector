@@ -1,4 +1,4 @@
-export async function getHtmlImage(
+export async function getHTMLImage(
   src = new URL("./resources/cats-dogs.png", import.meta.url).href
 ) {
   return await new Promise<HTMLImageElement>((resolve, reject) => {
@@ -13,11 +13,11 @@ export async function getHtmlImage(
   });
 }
 
-export async function getSvgImage(
+export async function getSVGImage(
   src = new URL("./resources/cats-dogs.png", import.meta.url).href
 ) {
   return await new Promise<SVGImageElement>((resolve, reject) => {
-    const htmlImagePromise = getHtmlImage(src);
+    const htmlImagePromise = getHTMLImage(src);
     const image = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "image"
