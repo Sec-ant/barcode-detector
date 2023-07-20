@@ -1,5 +1,4 @@
 import { defineConfig } from "vite";
-import dts from "vite-plugin-dts";
 import { config } from "./package.json";
 
 export default defineConfig({
@@ -13,11 +12,6 @@ export default defineConfig({
       formats: ["es"],
     },
   },
-  plugins: [
-    dts({
-      clearPureImport: false,
-    }),
-  ],
   test: {
     browser: {
       enabled: true,

@@ -17,7 +17,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "type-check": "tsc --noEmit --emitDeclarationOnly false",
+    "build": "npm run type-check && vite build && tsc",
     "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
     "test": "start-server-and-test $npm_package_config_port 'vitest --coverage'",
     "test:ui": "start-server-and-test $npm_package_config_port 'vitest --ui --coverage'",
@@ -56,7 +57,6 @@
     "start-server-and-test": "^2.0.0",
     "typescript": "^5.1.6",
     "vite": "^4.4.4",
-    "vite-plugin-dts": "^3.3.0",
     "vitest": "^0.33.0"
   },
   "dependencies": {
