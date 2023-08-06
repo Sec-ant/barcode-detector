@@ -52,17 +52,17 @@
   "license": "MIT",
   "devDependencies": {
     "@types/dom-webcodecs": "^0.1.8",
-    "@vitest/browser": "^0.33.0",
-    "@vitest/coverage-istanbul": "^0.33.0",
-    "@vitest/ui": "^0.33.0",
+    "@vitest/browser": "^0.34.1",
+    "@vitest/coverage-istanbul": "^0.34.1",
+    "@vitest/ui": "^0.34.1",
     "http-server": "^14.1.1",
-    "playwright": "^1.36.1",
+    "playwright": "^1.36.2",
     "start-server-and-test": "^2.0.0",
     "typescript": "^5.1.6",
-    "vite": "^4.4.4",
-    "vitest": "^0.33.0"
+    "vite": "^4.4.8",
+    "vitest": "^0.34.1"
   },
   "dependencies": {
-    "@sec-ant/zxing-wasm": "^2.1.1"
+    "@sec-ant/zxing-wasm": "^2.1.2"
   }
 }
