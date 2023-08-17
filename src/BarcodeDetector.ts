@@ -96,7 +96,7 @@ export class BarcodeDetector {
       const maxY = Math.max(topLeftY, topRightY, bottomLeftY, bottomRightY);
       return {
         boundingBox: new DOMRectReadOnly(minX, minY, maxX - minX, maxY - minY),
-        rawValue: zxingReadOutput.text,
+        rawValue: new TextDecoder().decode(zxingReadOutput.bytes),
         format: convertFormat(zxingReadOutput.format),
         cornerPoints: [
           {
