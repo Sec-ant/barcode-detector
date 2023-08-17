@@ -74,7 +74,7 @@
     "@types/dom-webcodecs": "^0.1.8",
     "@vitest/browser": "^0.34.1",
     "@vitest/coverage-istanbul": "^0.34.1",
-    "@vitest/ui": "^0.34.1",
+    "@vitest/ui": "^0.34.2",
     "http-server": "^14.1.1",
     "playwright": "^1.37.0",
     "rimraf": "^5.0.1",
