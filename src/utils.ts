@@ -60,7 +60,9 @@ export function getIntrinsicDimensionsOfCanvasImageSource(
       height: image.displayHeight,
     };
   }
-  throw new TypeError("Unsupported image type.");
+  throw new TypeError(
+    "The provided value is not of type '(Blob or HTMLCanvasElement or HTMLImageElement or HTMLVideoElement or ImageBitmap or ImageData or OffscreenCanvas or SVGImageElement or VideoFrame)'."
+  );
 }
 
 export function isHTMLImageElement(
@@ -160,7 +162,7 @@ export function createCanvas(
     if (canvas.getContext("2d") instanceof OffscreenCanvasRenderingContext2D) {
       return canvas;
     }
-    throw new Error("OffscreenCanvasRenderingContext2D is not supported.");
+    throw void 0;
   } catch {
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
     canvas.width = width;
@@ -176,22 +178,34 @@ export async function getImageDataFromCanvasImageSource(
     isHTMLImageElement(canvasImageSource) &&
     !(await isHTMLImageElementDecodable(canvasImageSource))
   ) {
-    throw new DOMException("Failed to decode the image.", "InvalidStateError");
+    throw new DOMException(
+      "Failed to load or decode HTMLImageElement.",
+      "InvalidStateError"
+    );
+  }
+  if (
+    isSVGImageElement(canvasImageSource) &&
+    !(await isSVGImageElementDecodable(canvasImageSource))
+  ) {
+    throw new DOMException(
+      "Failed to load or decode SVGImageElement.",
+      "InvalidStateError"
+    );
   }
   if (
     isHTMLVideoElement(canvasImageSource) &&
     (canvasImageSource.readyState === 0 || canvasImageSource.readyState === 1)
   ) {
-    throw new DOMException(
-      "The video data is not available.",
-      "InvalidStateError"
-    );
+    throw new DOMException("Invalid element or state.", "InvalidStateError");
   }
   if (
     isImageBitmap(canvasImageSource) &&
     isImageBitmapClosed(canvasImageSource)
   ) {
-    throw new DOMException("The image bitmap is closed.", "InvalidStateError");
+    throw new DOMException(
+      "The image source is detached.",
+      "InvalidStateError"
+    );
   }
   const { width, height } =
     getIntrinsicDimensionsOfCanvasImageSource(canvasImageSource);
@@ -214,7 +228,7 @@ export async function getImageDataFromBlob(
   try {
     imageBitmap = await createImageBitmap(blob);
   } catch (e) {
-    throw e;
+    throw new DOMException("Unsupported source.", "NotSupportedError");
   }
   const imageData = await getImageDataFromCanvasImageSource(imageBitmap);
   return imageData;
@@ -229,7 +243,7 @@ export async function getImageDataFromImageBitmapSource(
   if (isImageData(image)) {
     if (isImageDataArrayBufferDetached(image)) {
       throw new DOMException(
-        "The corresponding array buffer is detached.",
+        "The image data has been detached.",
         "InvalidStateError"
       );
     }
@@ -241,6 +255,23 @@ export async function getImageDataFromImageBitmapSource(
 export async function isHTMLImageElementDecodable(image: HTMLImageElement) {
   try {
     await image.decode();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+declare global {
+  interface SVGImageElement {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGImageElement/decode) */
+    // Not supported in Safari, 2023.8.18
+    decode?(): Promise<void>;
+  }
+}
+
+export async function isSVGImageElementDecodable(image: SVGImageElement) {
+  try {
+    await image.decode?.();
     return true;
   } catch {
     return false;
@@ -260,4 +291,20 @@ export function isImageBitmapClosed(imageBitmap: ImageBitmap) {
     return true;
   }
   return false;
+}
+
+export function addPrefixToExceptionOrError(e: unknown, prefix: string) {
+  if (e instanceof DOMException) {
+    return new DOMException(`${prefix}: ${e.message}`, e.name);
+  }
+  if (e instanceof Error) {
+    return new (e.constructor as
+      | ErrorConstructor
+      | EvalErrorConstructor
+      | TypeErrorConstructor
+      | RangeErrorConstructor
+      | SyntaxErrorConstructor
+      | ReferenceErrorConstructor)(`${prefix}: ${e.message}`);
+  }
+  return new Error(`${prefix}: ${e}`);
 }

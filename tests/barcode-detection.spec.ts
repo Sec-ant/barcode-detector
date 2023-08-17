@@ -351,12 +351,10 @@ describe("BarcodeDetector.detect() rejects", () => {
       assert.fail("invalid image blob should trigger a detection error");
     } catch (e) {
       assert.instanceOf(e, DOMException);
-      // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
-      assert.equal((e as DOMException)?.code, DOMException.INVALID_STATE_ERR);
+      assert.equal((e as DOMException)?.code, DOMException.NOT_SUPPORTED_ERR);
     }
   });
 
-  // TODO: this test is skipped for ambiguous specs
   test.skip("BarcodeDetector.detect() rejects on an SVGImageElement", async () => {
     const image = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -367,14 +365,11 @@ describe("BarcodeDetector.detect() rejects", () => {
       await barcodeDetector.detect(image);
       assert.fail("empty svg image should trigger a detection error");
     } catch (e) {
-      console.log((e as DOMException)?.stack);
       assert.instanceOf(e, DOMException);
-      // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
       assert.equal((e as DOMException)?.code, DOMException.NOT_SUPPORTED_ERR);
     }
   });
 
-  // TODO: this test is skipped for ambiguous specs
   test.skip("BarcodeDetector.detect() rejects on a VideoFrame", async () => {
     const canvas = document.createElement("canvas");
     const frame = new VideoFrame(canvas, { timestamp: 0 });
@@ -383,9 +378,7 @@ describe("BarcodeDetector.detect() rejects", () => {
       await barcodeDetector.detect(frame);
       assert.fail("empty frame should trigger a detection error");
     } catch (e) {
-      console.log((e as DOMException)?.stack);
       assert.instanceOf(e, DOMException);
-      // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
       assert.equal((e as DOMException)?.code, DOMException.NOT_SUPPORTED_ERR);
     }
   });
