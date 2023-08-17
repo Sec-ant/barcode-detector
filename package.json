@@ -1,5 +1,6 @@
 {
   "name": "@sec-ant/barcode-detector",
+  "description": "A Barcode Detection API polyfill that uses ZXing webassembly under the hood",
   "private": false,
   "version": "1.1.2",
   "type": "module",
@@ -11,24 +12,6 @@
     ".": "./dist/index.js",
     "./pure": "./dist/pure.js",
     "./side-effects": "./dist/side-effects.js"
-  },
-  "config": {
-    "port": "18080"
-  },
-  "scripts": {
-    "dev": "vite",
-    "type-check": "tsc --noEmit --emitDeclarationOnly false",
-    "build": "npm run type-check && vite build && tsc",
-    "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
-    "pretest": "node ./scripts/list-dir.js",
-    "pretest:ui": "node ./scripts/list-dir.js",
-    "precoverage": "node ./scripts/list-dir.js",
-    "test": "start-server-and-test $npm_package_config_port 'vitest --coverage'",
-    "test:ui": "start-server-and-test $npm_package_config_port 'vitest --ui --coverage'",
-    "coverage": "start-server-and-test $npm_package_config_port 'vitest run --coverage'",
-    "prepublishOnly": "npm run build",
-    "ncu": "npx npm-check-updates -u",
-    "postncu": "npm i"
   },
   "repository": {
     "type": "git",
@@ -51,6 +34,25 @@
   ],
   "author": "Ze-Zheng Wu",
   "license": "MIT",
+  "config": {
+    "port": "18080"
+  },
+  "scripts": {
+    "lint": "tsc --noEmit --emitDeclarationOnly false",
+    "prebuild": "npm run lint",
+    "build": "vite build",
+    "postbuild": "tsc",
+    "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
+    "pretest": "node ./scripts/list-dir.js",
+    "pretest:ui": "node ./scripts/list-dir.js",
+    "precoverage": "node ./scripts/list-dir.js",
+    "test": "start-server-and-test $npm_package_config_port 'vitest --coverage'",
+    "test:ui": "start-server-and-test $npm_package_config_port 'vitest --ui --coverage'",
+    "coverage": "start-server-and-test $npm_package_config_port 'vitest run --coverage'",
+    "prepublishOnly": "npm run build",
+    "ncu": "npx npm-check-updates -u",
+    "postncu": "npm i"
+  },
   "devDependencies": {
     "@types/dom-webcodecs": "^0.1.8",
     "@vitest/browser": "^0.34.1",

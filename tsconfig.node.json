@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "types": [
+      "node",
+      "vitest"
+    ],
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+  },
+  "include": [
+    "./vite.config.ts",
+    "./package.json"
+  ]
+}
