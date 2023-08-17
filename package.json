@@ -7,7 +7,9 @@
   "files": [
     "./dist/**/*"
   ],
-  "main": "./dist/es/index.js",
+  "main": "./dist/umd/index.js",
+  "module": "./dist/es/index.js",
+  "types": "./dist/es/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/es/index.js",

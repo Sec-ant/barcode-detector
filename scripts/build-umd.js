@@ -1,5 +1,6 @@
 import { build } from "vite";
 import { rimraf } from "rimraf";
+import { writeFile } from "node:fs/promises";
 
 const entryPoints = [
   {
@@ -33,6 +34,16 @@ async function buildPackages() {
       configFile: false,
     });
   }
+  await writeFile(
+    "dist/umd/package.json",
+    JSON.stringify(
+      {
+        type: "commonjs",
+      },
+      undefined,
+      2
+    ) + "\n"
+  );
 }
 
 buildPackages();
