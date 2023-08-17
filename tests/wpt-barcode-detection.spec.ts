@@ -1,5 +1,5 @@
 import { test, assert, describe } from "vitest";
-import { BarcodeDetector } from "../dist/index.js";
+import { BarcodeDetector } from "../dist/es/index.js";
 import {
   getHTMLImage,
   getSVGImage,

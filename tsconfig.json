@@ -16,7 +16,6 @@
     "esModuleInterop": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "declarationDir": "dist",
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,

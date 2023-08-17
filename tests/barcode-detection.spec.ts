@@ -1,7 +1,7 @@
 declare var __PORT__: string;
 
 import { test, assert, describe } from "vitest";
-import { BarcodeDetector } from "../dist/index.js";
+import { BarcodeDetector } from "../dist/es/index.js";
 import { getHTMLImage, getVideo, drawImageToCanvas } from "./helpers.js";
 
 function areCatsAndDogs(detectionResult: DetectedBarcode[]) {

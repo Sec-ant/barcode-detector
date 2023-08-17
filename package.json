@@ -7,11 +7,23 @@
   "files": [
     "./dist/**/*"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/es/index.js",
   "exports": {
-    ".": "./dist/index.js",
-    "./pure": "./dist/pure.js",
-    "./side-effects": "./dist/side-effects.js"
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/umd/index.js",
+      "default": "./dist/es/index.js"
+    },
+    "./pure": {
+      "import": "./dist/es/pure.js",
+      "require": "./dist/umd/pure.js",
+      "default": "./dist/es/pure.js"
+    },
+    "./side-effects": {
+      "import": "./dist/es/side-effects.js",
+      "require": "./dist/umd/side-effects.js",
+      "default": "./dist/es/side-effects.js"
+    }
   },
   "repository": {
     "type": "git",
@@ -40,8 +52,11 @@
   "scripts": {
     "lint": "tsc --noEmit --emitDeclarationOnly false",
     "prebuild": "npm run lint",
-    "build": "vite build",
-    "postbuild": "tsc",
+    "build:es": "vite build",
+    "build:umd": "node ./scripts/build-umd.js",
+    "postbuild:es": "tsc --declarationDir ./dist/es",
+    "postbuild:umd": "tsc --declarationDir ./dist/umd",
+    "build": "npm run build:es && npm run build:umd",
     "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
     "pretest": "npm run build && node ./scripts/list-dir.js",
     "pretest:ui": "npm run build && node ./scripts/list-dir.js",
@@ -60,6 +75,7 @@
     "@vitest/ui": "^0.34.1",
     "http-server": "^14.1.1",
     "playwright": "^1.37.0",
+    "rimraf": "^5.0.1",
     "start-server-and-test": "^2.0.0",
     "typescript": "^5.1.6",
     "vite": "^4.4.9",

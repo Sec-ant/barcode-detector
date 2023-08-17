@@ -1,7 +1,7 @@
 import { test, assert, describe } from "vitest";
 import toc from "./samples/toc.json";
 import { getHTMLImage } from "./helpers.js";
-import { BarcodeDetector } from "../dist/index.js";
+import { BarcodeDetector } from "../dist/es/index.js";
 
 const barcodeDetector = new BarcodeDetector();
 
