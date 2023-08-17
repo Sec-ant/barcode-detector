@@ -72,7 +72,7 @@
   },
   "devDependencies": {
     "@types/dom-webcodecs": "^0.1.8",
-    "@vitest/browser": "^0.34.1",
+    "@vitest/browser": "^0.34.2",
     "@vitest/coverage-istanbul": "^0.34.1",
     "@vitest/ui": "^0.34.2",
     "http-server": "^14.1.1",
