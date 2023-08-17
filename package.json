@@ -26,8 +26,9 @@
     "test": "start-server-and-test $npm_package_config_port 'vitest --coverage'",
     "test:ui": "start-server-and-test $npm_package_config_port 'vitest --ui --coverage'",
     "coverage": "start-server-and-test $npm_package_config_port 'vitest run --coverage'",
-    "preview": "vite preview",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "ncu": "npx npm-check-updates -u",
+    "postncu": "npm i"
   },
   "repository": {
     "type": "git",
@@ -56,10 +57,10 @@
     "@vitest/coverage-istanbul": "^0.34.1",
     "@vitest/ui": "^0.34.1",
     "http-server": "^14.1.1",
-    "playwright": "^1.36.2",
+    "playwright": "^1.37.0",
     "start-server-and-test": "^2.0.0",
     "typescript": "^5.1.6",
-    "vite": "^4.4.8",
+    "vite": "^4.4.9",
     "vitest": "^0.34.1"
   },
   "dependencies": {
