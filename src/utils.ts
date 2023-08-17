@@ -227,7 +227,7 @@ export async function getImageDataFromImageBitmapSource(
     return await getImageDataFromBlob(image);
   }
   if (isImageData(image)) {
-    if (isArrayBufferDetached(image.data.buffer)) {
+    if (isImageDataArrayBufferDetached(image)) {
       throw new DOMException(
         "The corresponding array buffer is detached.",
         "InvalidStateError"
@@ -247,21 +247,12 @@ export async function isHTMLImageElementDecodable(image: HTMLImageElement) {
   }
 }
 
-export function isArrayBufferDetached(arrayBuffer: ArrayBuffer) {
-  if (arrayBuffer.byteLength !== 0) {
-    // detached buffers will always have zero byteLength
+export function isImageDataArrayBufferDetached(image: ImageData) {
+  if (image.data.buffer.byteLength !== 0) {
     return false;
   }
+  // detached buffers will always have zero byteLength
   return true;
-  /*
-  try {
-    new Uint8Array(arrayBuffer);
-    return false;
-  } catch {
-    // Uint8Array throws if using a detached buffer
-    return true;
-  }
-  */
 }
 
 export function isImageBitmapClosed(imageBitmap: ImageBitmap) {
