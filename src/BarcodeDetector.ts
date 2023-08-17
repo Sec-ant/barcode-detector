@@ -55,14 +55,14 @@ export class BarcodeDetector {
   #formats: BarcodeFormat[];
   constructor(barcodeDectorOptions: BarcodeDetectorOptions = {}) {
     if (barcodeDectorOptions?.formats?.length === 0) {
-      throw new TypeError("formats cannot be empty");
+      throw new TypeError("Formats cannot be empty.");
     }
     barcodeDectorOptions?.formats?.forEach((format) => {
       if (format === "unknown") {
-        throw new TypeError("format unknown is not supported");
+        throw new TypeError("Format unknown is not supported.");
       }
       if (!BARCODE_DETECTOR_FORMATS.includes(format)) {
-        throw new TypeError(`format ${format} is not supported`);
+        throw new TypeError(`Format ${format} is not supported.`);
       }
     });
     getZXingModule();

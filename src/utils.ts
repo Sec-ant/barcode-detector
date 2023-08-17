@@ -60,7 +60,7 @@ export function getIntrinsicDimensionsOfCanvasImageSource(
       height: image.displayHeight,
     };
   }
-  throw new Error("Unsupported image type");
+  throw new TypeError("Unsupported image type.");
 }
 
 export function isHTMLImageElement(
@@ -160,7 +160,7 @@ export function createCanvas(
     if (canvas.getContext("2d") instanceof OffscreenCanvasRenderingContext2D) {
       return canvas;
     }
-    throw new Error("OffscreenCanvasRenderingContext2D is not supported");
+    throw new Error("OffscreenCanvasRenderingContext2D is not supported.");
   } catch {
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
     canvas.width = width;
