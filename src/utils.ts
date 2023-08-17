@@ -204,9 +204,6 @@ export async function getImageDataFromCanvasImageSource(
     | OffscreenCanvasRenderingContext2D;
   context.drawImage(canvasImageSource, 0, 0);
   const imageData = context.getImageData(0, 0, width, height);
-  if (isHTMLCanvasElement(canvas)) {
-    canvas.remove();
-  }
   return imageData;
 }
 
