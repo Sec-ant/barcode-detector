@@ -13,7 +13,7 @@ toc.forEach((e) => {
           new URL(`./samples/${f}`, import.meta.url).href
         );
         const value =
-          (await fetch(image.src.replace(/\.png$/, ".txt")).then((e) =>
+          (await fetch(image.src.replace(/\.(png|jpg)$/, ".txt")).then((e) =>
             e.text()
           )) || undefined;
         const detectedBarcodes = await barcodeDetector.detect(image);

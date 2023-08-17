@@ -16,7 +16,11 @@ await writeFile(
         .map(async ([n, p]) => [
           n,
           (await readdir(p, { withFileTypes: true }))
-            .filter((e) => e.isFile() && e.name.endsWith(".png"))
+            .filter(
+              (e) =>
+                e.isFile() &&
+                (e.name.endsWith(".png") || e.name.endsWith(".jpg"))
+            )
             .map((e) =>
               relative(samplesDir, resolve(e.path, encodeURIComponent(e.name)))
             ),
