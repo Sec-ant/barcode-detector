@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+  },
+  "include": [
+    "./dist/**/*",
+    "./tests/**/*.ts",
+    "./tests/**/*.js",
+    "./tests/**/*.json",
+  ]
+}

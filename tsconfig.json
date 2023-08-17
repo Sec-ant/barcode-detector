@@ -26,11 +26,14 @@
     "skipLibCheck": true
   },
   "include": [
-    "src"
+    "./src",
   ],
   "references": [
     {
       "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.tests.json"
     }
   ]
 }

@@ -1,12 +1,12 @@
 import { test, assert, describe } from "vitest";
-import "../src/side-effects";
+import { BarcodeDetector } from "../dist/index.js";
 import {
   getHTMLImage,
   getSVGImage,
   getVideo,
   drawImageToCanvas,
   seekTo,
-} from "./helpers";
+} from "./helpers.js";
 
 interface BoundingBox {
   left: number;
@@ -858,7 +858,7 @@ async function testImage(
   if (!supportedFormats.includes(test.format)) return;
   const detectedBarcodes = await barcodeDetector.detect(imageBitmapSource);
   assert.equal(detectedBarcodes.length, 1);
-  const detectedBarcode = detectedBarcodes[0];
+  const detectedBarcode = detectedBarcodes[0] as DetectedBarcode;
   checkBoundingBox(
     detectedBarcode.boundingBox,
     test.barcode.boundingBox,
@@ -917,16 +917,16 @@ function checkCornerPoints(
   expectedCornerPoints: CornerPoints,
   key: string
 ) {
-  const corners = ["topLeft", "topRight", "bottomRight", "bottomLeft"];
+  const corners = ["topLeft", "topRight", "bottomRight", "bottomLeft"] as const;
 
   for (let i = 0; i < corners.length; ++i) {
-    const corner = corners[i];
+    const corner = corners[i]!;
     const {
       position: expected,
       fuzzinessX,
       fuzzinessY,
     } = expectedCornerPoints[corner];
-    const actual = actualCornerPoints[i];
+    const actual = actualCornerPoints[i]!;
     assert.approximately(
       actual.x,
       expected.x,
@@ -1057,9 +1057,11 @@ describe("HTMLVideoElement tests", () => {
         new URL(`./resources/${name}`, import.meta.url).href
       );
       for (const videoTestPoint of videoTest) {
-        test(`${videoTestPoint.test.name} HTMLVideoElement at ${name} ${videoTestPoint.time}`, async () => {
+        test(`${videoTestPoint.test!.name} HTMLVideoElement at ${name} ${
+          videoTestPoint.time
+        }`, async () => {
           await seekTo(video, videoTestPoint.time);
-          await testImage(video, videoTestPoint.test, name);
+          await testImage(video, videoTestPoint.test!, name);
         });
       }
     });
@@ -1073,10 +1075,12 @@ describe("VideoFrame tests", () => {
         new URL(`./resources/${name}`, import.meta.url).href
       );
       for (const videoTestPoint of videoTest) {
-        test(`${videoTestPoint.test.name} HTMLVideoElement at ${name} ${videoTestPoint.time}`, async () => {
+        test(`${videoTestPoint.test!.name} HTMLVideoElement at ${name} ${
+          videoTestPoint.time
+        }`, async () => {
           await seekTo(video, videoTestPoint.time);
           const videoFrame = new VideoFrame(video);
-          await testImage(videoFrame, videoTestPoint.test, name);
+          await testImage(videoFrame, videoTestPoint.test!, name);
           videoFrame.close();
         });
       }

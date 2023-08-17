@@ -1,15 +1,15 @@
 declare var __PORT__: string;
 
 import { test, assert, describe } from "vitest";
-import "../src/side-effects";
-import { getHTMLImage, getVideo, drawImageToCanvas } from "./helpers";
+import { BarcodeDetector } from "../dist/index.js";
+import { getHTMLImage, getVideo, drawImageToCanvas } from "./helpers.js";
 
 function areCatsAndDogs(detectionResult: DetectedBarcode[]) {
   assert.equal(detectionResult.length, 2, "Number of barcodes");
-  assert.equal(detectionResult[0].rawValue, "cats", "barcode 1");
-  assert.equal(detectionResult[0].format, "qr_code", "barcode 1 format");
-  assert.equal(detectionResult[1].rawValue, "dogs", "barcode 2");
-  assert.equal(detectionResult[1].format, "code_128", "barcode 2 format");
+  assert.equal(detectionResult[0]?.rawValue, "cats", "barcode 1");
+  assert.equal(detectionResult[0]?.format, "qr_code", "barcode 1 format");
+  assert.equal(detectionResult[1]?.rawValue, "dogs", "barcode 2");
+  assert.equal(detectionResult[1]?.format, "code_128", "barcode 2 format");
 }
 
 test("detectedBarcode.boundingBox should be DOMRectReadOnly", async () => {
@@ -41,7 +41,9 @@ test("detectedBarcode can be passed to postMessage()", async () => {
     canvas.getContext("2d")?.getImageData(0, 0, canvas.width, canvas.height)!
   );
 
-  const handleMessage = ({ data: passedDetectionResult }) => {
+  const handleMessage = ({
+    data: passedDetectionResult,
+  }: MessageEvent<DetectedBarcode[]>) => {
     assert.deepEqual(passedDetectionResult, detectionResult);
     window.removeEventListener("message", handleMessage);
   };
@@ -195,7 +197,7 @@ describe("BarcodeDetector.detect() rejects", () => {
           `http://localhost:${__PORT__}/resources/cats-dogs.png`
         );
       } catch (e) {
-        assert.fail(e);
+        assert.fail(String(e));
       }
       const barcodeDetector = new BarcodeDetector();
       try {
@@ -205,7 +207,7 @@ describe("BarcodeDetector.detect() rejects", () => {
         );
       } catch (e) {
         assert.instanceOf(e, DOMException);
-        assert.equal(e?.code, DOMException.SECURITY_ERR);
+        assert.equal((e as DOMException)?.code, DOMException.SECURITY_ERR);
       }
     });
 
@@ -216,7 +218,7 @@ describe("BarcodeDetector.detect() rejects", () => {
           `http://localhost:${__PORT__}/resources/cats-dogs.png`
         );
       } catch (e) {
-        assert.fail(e);
+        assert.fail(String(e));
       }
       const imageBitmap = await createImageBitmap(image);
       const barcodeDetector = new BarcodeDetector();
@@ -227,7 +229,7 @@ describe("BarcodeDetector.detect() rejects", () => {
         );
       } catch (e) {
         assert.instanceOf(e, DOMException);
-        assert.equal(e?.code, DOMException.SECURITY_ERR);
+        assert.equal((e as DOMException)?.code, DOMException.SECURITY_ERR);
       }
     });
 
@@ -238,7 +240,7 @@ describe("BarcodeDetector.detect() rejects", () => {
           `http://localhost:${__PORT__}/resources/cats-dogs.png`
         );
       } catch (e) {
-        assert.fail(e);
+        assert.fail(String(e));
       }
       const imageBitmap = await createImageBitmap(image);
       const canvas = document.createElement("canvas");
@@ -252,7 +254,7 @@ describe("BarcodeDetector.detect() rejects", () => {
         );
       } catch (e) {
         assert.instanceOf(e, DOMException);
-        assert.equal(e?.code, DOMException.SECURITY_ERR);
+        assert.equal((e as DOMException)?.code, DOMException.SECURITY_ERR);
       }
     });
 
@@ -263,7 +265,7 @@ describe("BarcodeDetector.detect() rejects", () => {
           `http://localhost:${__PORT__}/resources/cats-dogs.webm`
         );
       } catch (e) {
-        assert.fail(e);
+        assert.fail(String(e));
       }
       const barcodeDetector = new BarcodeDetector();
       try {
@@ -273,7 +275,7 @@ describe("BarcodeDetector.detect() rejects", () => {
         );
       } catch (e) {
         assert.instanceOf(e, DOMException);
-        assert.equal(e?.code, DOMException.SECURITY_ERR);
+        assert.equal((e as DOMException)?.code, DOMException.SECURITY_ERR);
       }
     });
   });
@@ -282,15 +284,15 @@ describe("BarcodeDetector.detect() rejects", () => {
     try {
       await getHTMLImage("./images/broken.png");
       assert.fail("broken image should not resolve");
-    } catch ([error, image]) {
+    } catch ([error, image]: any) {
       // now the image is a broken HTMLImageElement
       const barcodeDetector = new BarcodeDetector();
       try {
-        await barcodeDetector.detect(image);
+        await barcodeDetector.detect(image as HTMLImageElement);
         assert.fail("broken image should trigger a detection error");
       } catch (e) {
         assert.instanceOf(e, DOMException);
-        assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
+        assert.equal((e as DOMException)?.code, DOMException.INVALID_STATE_ERR);
       }
     }
   });
@@ -299,15 +301,15 @@ describe("BarcodeDetector.detect() rejects", () => {
     try {
       await getHTMLImage("");
       assert.fail("empty src image should not resolve");
-    } catch ([_, image]) {
+    } catch ([_, image]: any) {
       // now the image is an empty src HTMLImageElement
       const barcodeDetector = new BarcodeDetector();
       try {
-        await barcodeDetector.detect(image);
+        await barcodeDetector.detect(image as HTMLImageElement);
         assert.fail("empty src image should trigger a detection error");
       } catch (e) {
         assert.instanceOf(e, DOMException);
-        assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
+        assert.equal((e as DOMException)?.code, DOMException.INVALID_STATE_ERR);
       }
     }
   });
@@ -316,14 +318,14 @@ describe("BarcodeDetector.detect() rejects", () => {
     try {
       await getVideo("./images/broken.webm");
       assert.fail("broken video should not resolve");
-    } catch ([error, video]) {
+    } catch ([error, video]: any) {
       const barcodeDetector = new BarcodeDetector();
       try {
-        await barcodeDetector.detect(video);
+        await barcodeDetector.detect(video as HTMLVideoElement);
         assert.fail("broken video should trigger a detection error");
       } catch (e) {
         assert.instanceOf(e, DOMException);
-        assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
+        assert.equal((e as DOMException)?.code, DOMException.INVALID_STATE_ERR);
       }
     }
   });
@@ -337,7 +339,7 @@ describe("BarcodeDetector.detect() rejects", () => {
       assert.fail("detached ImageData buffer should trigger a detection error");
     } catch (e) {
       assert.instanceOf(e, DOMException);
-      assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
+      assert.equal((e as DOMException)?.code, DOMException.INVALID_STATE_ERR);
     }
   });
 
@@ -350,7 +352,7 @@ describe("BarcodeDetector.detect() rejects", () => {
     } catch (e) {
       assert.instanceOf(e, DOMException);
       // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
-      assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
+      assert.equal((e as DOMException)?.code, DOMException.INVALID_STATE_ERR);
     }
   });
 
@@ -365,10 +367,10 @@ describe("BarcodeDetector.detect() rejects", () => {
       await barcodeDetector.detect(image);
       assert.fail("empty svg image should trigger a detection error");
     } catch (e) {
-      console.log(e.stack);
+      console.log((e as DOMException)?.stack);
       assert.instanceOf(e, DOMException);
       // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
-      assert.equal(e?.code, DOMException.NOT_SUPPORTED_ERR);
+      assert.equal((e as DOMException)?.code, DOMException.NOT_SUPPORTED_ERR);
     }
   });
 
@@ -381,10 +383,10 @@ describe("BarcodeDetector.detect() rejects", () => {
       await barcodeDetector.detect(frame);
       assert.fail("empty frame should trigger a detection error");
     } catch (e) {
-      console.log(e.stack);
+      console.log((e as DOMException)?.stack);
       assert.instanceOf(e, DOMException);
       // TODO: is this dom exception supposed to be INVALID_STATE_ERR or NOT_SUPPORTED_ERR
-      assert.equal(e?.code, DOMException.NOT_SUPPORTED_ERR);
+      assert.equal((e as DOMException)?.code, DOMException.NOT_SUPPORTED_ERR);
     }
   });
 
@@ -398,7 +400,7 @@ describe("BarcodeDetector.detect() rejects", () => {
       assert.fail("closed ImageBitmap should trigger a detection error");
     } catch (e) {
       assert.instanceOf(e, DOMException);
-      assert.equal(e?.code, DOMException.INVALID_STATE_ERR);
+      assert.equal((e as DOMException)?.code, DOMException.INVALID_STATE_ERR);
     }
   });
 });

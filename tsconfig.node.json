@@ -6,12 +6,14 @@
       "node",
       "vitest"
     ],
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "skipLibCheck": true,
+    "allowJs": true
   },
   "include": [
+    "./scripts",
     "./vite.config.ts",
-    "./package.json"
+    "./package.json",
   ]
 }
