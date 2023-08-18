@@ -217,8 +217,12 @@ export async function getImageDataFromCanvasImageSource(
     | CanvasRenderingContext2D
     | OffscreenCanvasRenderingContext2D;
   context.drawImage(canvasImageSource, 0, 0);
-  const imageData = context.getImageData(0, 0, width, height);
-  return imageData;
+  try {
+    const imageData = context.getImageData(0, 0, width, height);
+    return imageData;
+  } catch (e) {
+    throw new DOMException("Source would taint origin.", "SecurityError");
+  }
 }
 
 export async function getImageDataFromBlob(
