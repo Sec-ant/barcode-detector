@@ -3,11 +3,11 @@ import {
   addPrefixToExceptionOrError,
 } from "./utils.js";
 import {
-  setZXingModuleOverrides,
   getZXingModule,
   readBarcodesFromImageData,
   ZXingReadInputBarcodeFormat,
   ZXingBarcodeFormat,
+  ZXingReadOutput,
 } from "@sec-ant/zxing-wasm/reader";
 import { BARCODE_DETECTOR_FORMATS } from "./utils.js";
 
@@ -59,7 +59,7 @@ export class BarcodeDetector {
   constructor(barcodeDectorOptions: BarcodeDetectorOptions = {}) {
     try {
       // TODO(https://github.com/WICG/shape-detection-api/issues/66):
-      // potentially process UNKNOWN as platform-specific formats.
+      // Potentially process UNKNOWN as platform-specific formats.
       const formats = barcodeDectorOptions?.formats?.filter(
         (f) => f !== "unknown"
       );
@@ -73,7 +73,12 @@ export class BarcodeDetector {
           );
         }
       });
-      getZXingModule();
+      // Use eager loading so that a user can fetch and init the wasm
+      // before running actual detections, therefore shorten the cold start
+      // of the first detection.
+      // Errors/exceptions should be handled in the 'detect' method.
+      // So here we just catch and ignore the uncaught (in promise) rejections.
+      getZXingModule().catch(() => {});
       this.#formats = formats ?? [];
     } catch (e) {
       throw addPrefixToExceptionOrError(
@@ -83,7 +88,6 @@ export class BarcodeDetector {
     }
   }
   static async getSupportedFormats(): Promise<readonly BarcodeFormat[]> {
-    await getZXingModule();
     return BARCODE_DETECTOR_FORMATS.filter((f) => f !== "unknown");
   }
   async detect(image: ImageBitmapSourceWebCodecs): Promise<DetectedBarcode[]> {
@@ -92,12 +96,20 @@ export class BarcodeDetector {
       if (imageData === null) {
         return [];
       }
-      const zxingReadOutputs = await readBarcodesFromImageData(imageData, {
-        tryHarder: true,
-        formats: this.#formats.map(
-          (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat
-        ),
-      });
+      let zxingReadOutputs: ZXingReadOutput[];
+      try {
+        zxingReadOutputs = await readBarcodesFromImageData(imageData, {
+          tryHarder: true,
+          formats: this.#formats.map(
+            (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat
+          ),
+        });
+      } catch {
+        throw new DOMException(
+          "Barcode detection service unavailable. Use 'setZXingModuleOverrides' in offline or strict CSP environments.",
+          "NotSupportedError"
+        );
+      }
       return zxingReadOutputs.map((zxingReadOutput) => {
         const {
           topLeft: { x: topLeftX, y: topLeftY },
@@ -147,4 +159,4 @@ export class BarcodeDetector {
   }
 }
 
-export { setZXingModuleOverrides };
+export { setZXingModuleOverrides } from "@sec-ant/zxing-wasm";

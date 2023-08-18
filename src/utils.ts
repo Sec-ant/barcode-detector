@@ -301,6 +301,8 @@ export async function isSVGImageElementDecodable(image: SVGImageElement) {
 }
 
 export function isVideoFrameClosed(image: VideoFrame) {
+  // The format of a closed VideoFrame is null.
+  // Not sure if this is the correct way to check closed frames though.
   if (image.format === null) {
     return true;
   }
@@ -311,7 +313,7 @@ export function isImageDataArrayBufferDetached(image: ImageData) {
   if (image.data.buffer.byteLength !== 0) {
     return false;
   }
-  // detached buffers will always have zero byteLength
+  // Detached buffers will always have zero byteLength
   return true;
 }
 
