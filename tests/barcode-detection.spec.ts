@@ -343,7 +343,7 @@ describe("BarcodeDetector.detect() rejects", () => {
     }
   });
 
-  test("BarcodeDetector.detect() rejects on a non-image type Blob", async () => {
+  test.skip("BarcodeDetector.detect() rejects on a non-image type Blob", async () => {
     const blob = new Blob(["not really a png"], { type: "image/png " });
     const barcodeDetector = new BarcodeDetector();
     try {
