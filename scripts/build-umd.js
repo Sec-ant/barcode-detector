@@ -1,6 +1,7 @@
 import { build } from "vite";
 import { rimraf } from "rimraf";
 import { writeFile } from "node:fs/promises";
+import replace from "@rollup/plugin-replace";
 
 const entryPoints = [
   {
@@ -32,6 +33,14 @@ async function buildPackages() {
         emptyOutDir: false,
       },
       configFile: false,
+      plugins: [
+        replace({
+          preventAssignment: true,
+          values: {
+            "define.amd": JSON.stringify(false),
+          },
+        }),
+      ],
     });
   }
   await writeFile(
