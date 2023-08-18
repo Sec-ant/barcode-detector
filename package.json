@@ -7,23 +7,22 @@
   "files": [
     "./dist/**/*"
   ],
-  "main": "./dist/umd/index.js",
+  "main": "./dist/cjs/index.js",
   "module": "./dist/es/index.js",
-  "types": "./dist/es/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/es/index.js",
-      "require": "./dist/umd/index.js",
+      "require": "./dist/cjs/index.js",
       "default": "./dist/es/index.js"
     },
     "./pure": {
       "import": "./dist/es/pure.js",
-      "require": "./dist/umd/pure.js",
+      "require": "./dist/cjs/pure.js",
       "default": "./dist/es/pure.js"
     },
     "./side-effects": {
       "import": "./dist/es/side-effects.js",
-      "require": "./dist/umd/side-effects.js",
+      "require": "./dist/cjs/side-effects.js",
       "default": "./dist/es/side-effects.js"
     }
   },
@@ -52,13 +51,14 @@
     "port": "18080"
   },
   "scripts": {
-    "lint": "tsc --noEmit --emitDeclarationOnly false",
-    "prebuild": "npm run lint",
+    "type-check": "tsc --noEmit --emitDeclarationOnly false",
+    "prebuild": "npm run type-check",
     "build:es": "vite build",
-    "build:umd": "node ./scripts/build-umd.js",
+    "build:cjs": "node ./scripts/build-cjs.js",
+    "build:iife": "node ./scripts/build-iife.js",
     "postbuild:es": "tsc --declarationDir ./dist/es",
-    "postbuild:umd": "tsc --declarationDir ./dist/umd",
-    "build": "npm run build:es && npm run build:umd",
+    "postbuild:cjs": "tsc --declarationDir ./dist/cjs",
+    "build": "npm run build:es && npm run build:cjs && npm run build:iife",
     "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
     "pretest": "npm run build && node ./scripts/list-dir.js",
     "pretest:ui": "npm run build && node ./scripts/list-dir.js",
@@ -71,13 +71,12 @@
     "postncu": "npm i"
   },
   "devDependencies": {
-    "@rollup/plugin-replace": "^5.0.2",
     "@types/dom-webcodecs": "^0.1.8",
     "@vitest/browser": "^0.34.2",
     "@vitest/coverage-istanbul": "^0.34.2",
     "@vitest/ui": "^0.34.2",
     "http-server": "^14.1.1",
-    "playwright": "^1.37.0",
+    "playwright": "^1.37.1",
     "rimraf": "^5.0.1",
     "start-server-and-test": "^2.0.0",
     "typescript": "^5.1.6",
