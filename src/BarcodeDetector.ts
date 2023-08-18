@@ -58,6 +58,8 @@ export class BarcodeDetector {
   #formats: BarcodeFormat[];
   constructor(barcodeDectorOptions: BarcodeDetectorOptions = {}) {
     try {
+      // TODO(https://github.com/WICG/shape-detection-api/issues/66):
+      // potentially process UNKNOWN as platform-specific formats.
       const formats = barcodeDectorOptions?.formats?.filter(
         (f) => f !== "unknown"
       );

@@ -187,10 +187,22 @@ export async function getImageDataFromCanvasImageSource(
     isSVGImageElement(canvasImageSource) &&
     !(await isSVGImageElementDecodable(canvasImageSource))
   ) {
+    // TODO(https://github.com/chromium/chromium/blob/fe4f6d2155412504930c9d1c53892af5aac1db8d/third_party/blink/renderer/modules/shapedetection/shape_detector.cc#L59-L63):
+    // SVGImageElement type inputs are not supported in Chromium.
+    // We still support svg images, but we should reject on those that cannot be decoded.
     throw new DOMException(
       "Failed to load or decode SVGImageElement.",
       "InvalidStateError"
     );
+  }
+  if (
+    isVideoFrame(canvasImageSource) &&
+    isVideoFrameClosed(canvasImageSource)
+  ) {
+    // TODO(https://github.com/chromium/chromium/blob/fe4f6d2155412504930c9d1c53892af5aac1db8d/third_party/blink/renderer/modules/shapedetection/shape_detector.cc#L59-L63):
+    // VideoFrame type inputs are not supported in Chromium.
+    // We still support video frames, but we should reject on those that are closed.
+    throw new DOMException("VideoFrame is closed.", "InvalidStateError");
   }
   if (
     isHTMLVideoElement(canvasImageSource) &&
@@ -231,8 +243,14 @@ export async function getImageDataFromBlob(
   let imageBitmap: ImageBitmap;
   try {
     imageBitmap = await createImageBitmap(blob);
-  } catch (e) {
-    throw new DOMException("Unsupported source.", "NotSupportedError");
+  } catch {
+    // TODO(https://github.com/chromium/chromium/blob/fe4f6d2155412504930c9d1c53892af5aac1db8d/third_party/blink/renderer/modules/shapedetection/shape_detector.cc#L59-L63):
+    // Blob type inputs are not supported in Chromium.
+    // We still support blobs, but we should reject on non-image blobs.
+    throw new DOMException(
+      "Failed to load or decode Blob.",
+      "InvalidStateError"
+    );
   }
   const imageData = await getImageDataFromCanvasImageSource(imageBitmap);
   return imageData;
@@ -267,8 +285,8 @@ export async function isHTMLImageElementDecodable(image: HTMLImageElement) {
 
 declare global {
   interface SVGImageElement {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGImageElement/decode) */
-    // Not supported in Safari, 2023.8.18
+    // TODO(https://developer.mozilla.org/docs/Web/API/SVGImageElement/decode):
+    // SVGImageElement.prototype.decode is not supported in Safari, 2023.8.18
     decode?(): Promise<void>;
   }
 }
@@ -280,6 +298,13 @@ export async function isSVGImageElementDecodable(image: SVGImageElement) {
   } catch {
     return false;
   }
+}
+
+export function isVideoFrameClosed(image: VideoFrame) {
+  if (image.format === null) {
+    return true;
+  }
+  return false;
 }
 
 export function isImageDataArrayBufferDetached(image: ImageData) {
