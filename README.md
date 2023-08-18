@@ -4,13 +4,15 @@ A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-de
 
 ## Install
 
+To install, run the following command:
+
 ```bash
 npm i @sec-ant/barcode-detector
 ```
 
-## Usage
+## Recommended Usage with Node + ESM
 
-You can use this package in 3 ways:
+This package can be imported in three different ways:
 
 ### Pure Module
 
@@ -18,16 +20,13 @@ You can use this package in 3 ways:
 import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
 ```
 
-or rename the export to prevent possible namespace collisions:
+To avoid potential namespace collisions, you can also rename the export:
 
 ```ts
 import { BarcodeDetector as BarcodeDetectorPolyfill } from "@sec-ant/barcode-detector/pure";
 ```
 
-This is useful when you don't want to pollute `globalThis`:
-
-- You just want to use a package to detect barcodes.
-- The runtime you're using has already provided an implementation of the Barcode Detection API but you still want this package to work.
+This approach is beneficial when you want to use a package to detect barcodes without polluting `globalThis`, or when your runtime already provides an implementation of the Barcode Detection API, but you still want this package to function.
 
 ### Side Effects
 
@@ -35,9 +34,7 @@ This is useful when you don't want to pollute `globalThis`:
 import "@sec-ant/barcode-detector/side-effects";
 ```
 
-This is useful when you just need a drop-in polyfill.
-
-If there's already an implementation of Barcode Detection API on `globalThis`, this won't take effect. Please instead use [pure module](#pure-module).
+This approach is beneficial when you need a drop-in polyfill. If there's already an implementation of Barcode Detection API on `globalThis`, this won't take effect (type declarations will, as we cannot optionally declare types). In such cases, please use the [pure module](#pure-module) instead.
 
 ### Both
 
@@ -45,23 +42,162 @@ If there's already an implementation of Barcode Detection API on `globalThis`, t
 import { BarcodeDetector } from "@sec-ant/barcode-detector";
 ```
 
-This is the combination of [pure module](#pure-module) and [side effects](#side-effects).
+This approach combines the [pure module](#pure-module) and [side effects](#side-effects).
+
+## Recommended Usage in Modern Browsers
+
+For [modern browsers that support ES modules](https://caniuse.com/es6-module), this package can be imported via the `<script type="module">` tags:
+
+1. Include side effects:
+
+   ```html
+   <!-- register -->
+   <script
+     type="module"
+     src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/es/side-effects.min.js"
+   ></script>
+
+   <!-- use -->
+   <script type="module">
+     const barcodeDetector = new BarcodeDetector();
+   </script>
+   ```
+
+2. Script scoped access:
+
+   ```html
+   <script type="module">
+     import { BarcodeDetector } from "https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/es/pure.min.js";
+     const barcodeDetector = new BarcodeDetector();
+   </script>
+   ```
+
+3. With import maps:
+
+   ```html
+   <!-- import map -->
+   <script type="importmap">
+     {
+       "imports": {
+         "@sec-ant/barcode-detector/pure": "https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/es/pure.min.js"
+       }
+     }
+   </script>
+
+   <!-- script scoped access -->
+   <script type="module">
+     import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
+     const barcodeDetector = new BarcodeDetector();
+   </script>
+   ```
+
+## Usage with Legacy Compatibility
+
+Starting from v1.2, this package supports IIFE and CJS build outputs for use cases that require legacy compatibility.
+
+### IIFE
+
+For legacy browsers that lack support for module type `<script>` tags, or for userscripts, IIFE is the preferred choice. Upon executing the IIFE script, a variable named `BarcodeDetectionAPI` will be registered in the global.
+
+```html
+<!-- 
+  IIFE pure.js registers:
+  window.BarcodeDetectionAPI.BarcodeDetector
+  window.BarcodeDetectionAPI.setZXingModuleOverrides
+  -->
+<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/iife/pure.min.js"></script>
+
+<!-- 
+  IIFE side-effects.js registers:
+  window.BarcodeDetector
+  window.BarcodeDetectionAPI.setZXingModuleOverrides
+  -->
+<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/iife/side-effects.min.js"></script>
+
+<!-- 
+  IIFE index.js registers:
+  window.BarcodeDetector
+  window.BarcodeDetectionAPI.BarcodeDetector
+  window.BarcodeDetectionAPI.setZXingModuleOverrides
+  -->
+<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/iife/index.min.js"></script>
+```
+
+### CJS
+
+This package can also be consumed as a commonjs package:
+
+1. Vanilla Javascript:
+
+   ```js
+   // src/index.js
+   const { BarcodeDetector } = require("@sec-ant/barcode-detector/pure");
+   ```
+
+2. With Typescript:
+
+   ```ts
+   // src/index.ts
+   import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
+   ```
+
+   ```json
+   // tsconfig.json
+   {
+     "compilerOptions": {
+       "module": "CommonJS",
+       "moduleResolution": "Node",
+       "skipLibCheck": true
+     },
+     "include": ["src"]
+   }
+   ```
 
 ## `setZXingModuleOverrides`
 
-Apart from `BarcodeDetector`, there's also an exported function called `setZXingModuleOverrides`. This package uses [Sec-ant/zxing-wasm](https://github.com/Sec-ant/zxing-wasm) to provide the core function of reading barcodes. So there will be a `.wasm` binary file to load. By default, the path of the `.wasm` binary file is:
+In addition to `BarcodeDetector`, this package exports another function called `setZXingModuleOverrides`.
+
+This package employs [Sec-ant/zxing-wasm](https://github.com/Sec-ant/zxing-wasm) to enable the core barcode reading functionality. As a result, a `.wasm` binary file is fetched at runtime. The default fetch path for this binary file is:
 
 ```
-https://cdn.jsdelivr.net/npm/@sec-ant/zxing-wasm@{version}/dist/reader/zxing_reader.wasm
+https://cdn.jsdelivr.net/npm/@sec-ant/zxing-wasm@<version>/dist/reader/zxing_reader.wasm
 ```
 
-`setZXingModuleOverrides` is useful when you want to take control of the location where the `.wasm` binary file will be served, so you can use this package in a local network or you want to choose another CDN. You have to use this function prior to `new BarcodeDetector()` for it to take effect. For more information on how to use it, please check [the notes here](https://github.com/Sec-ant/zxing-wasm#notes).
+The `setZXingModuleOverrides` function allows you to govern where the `.wasm` binary is served from, thereby enabling offline use of the package, use within a local network, or within a site having strict [CSP](https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#unsafe_webassembly_execution) rules.
 
-This function is also exported from the [side effects](#side-effects) subpath.
+For instance, should you want to inline this `.wasm` file in your build output for offline usage, with the assistance of build tools, you could try:
 
 ```ts
-import { setZXingModuleOverrides } from "@sec-ant/barcode-detector/side-effects";
+// src/index.ts
+import wasmFile from "../node_modules/@sec-ant/zxing-wasm/dist/reader/zxing_reader.wasm?url";
+
+import {
+  setZXingModuleOverrides,
+  BarcodeDetector,
+} from "@sec-ant/barcode-detector/pure";
+
+setZXingModuleOverrides({
+  locateFile: (path, prefix) => {
+    if (path.endsWith(".wasm")) {
+      return wasmFile;
+    }
+    return prefix + path;
+  },
+});
+
+const barcodeDetector = new BarcodeDetector();
+
+// detect barcodes
+// ...
 ```
+
+Alternatively, the `.wasm` file could be copied to your dist folder to be served from your local server, without incorporating it into the output as an extensive base64 data URL.
+
+It's noteworthy that you'll always want to choose the correct version of the `.wasm` file, so the APIs exported by it are exactly what the js code expected.
+
+For more information on how to use this function, you can check [the notes here](https://github.com/Sec-ant/zxing-wasm#notes) and [discussions here](https://github.com/gruhn/vue-qrcode-reader/issues/354).
+
+This function is exported from all the subpaths, including the [side effects](#side-effects).
 
 ## API
 
