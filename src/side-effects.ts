@@ -3,6 +3,7 @@ export { setZXingModuleOverrides } from "./BarcodeDetector.js";
 import { BARCODE_DETECTOR_FORMATS } from "./utils.js";
 
 declare global {
+  // eslint-disable-next-line no-var
   var BarcodeDetector: {
     readonly prototype: BarcodeDetector;
     new (barcodeDectorOptions?: BarcodeDetectorOptions): BarcodeDetector;

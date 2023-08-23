@@ -42,10 +42,10 @@ export interface BarcodeDetectorOptions {
   formats?: BarcodeFormat[];
 }
 
-export type Point2D = {
+export interface Point2D {
   x: number;
   y: number;
-};
+}
 
 export interface DetectedBarcode {
   boundingBox: DOMRectReadOnly;
@@ -61,7 +61,7 @@ export class BarcodeDetector {
       // TODO(https://github.com/WICG/shape-detection-api/issues/66):
       // Potentially process UNKNOWN as platform-specific formats.
       const formats = barcodeDectorOptions?.formats?.filter(
-        (f) => f !== "unknown"
+        (f) => f !== "unknown",
       );
       if (formats?.length === 0) {
         throw new TypeError("Hint option provided, but is empty.");
@@ -69,7 +69,7 @@ export class BarcodeDetector {
       formats?.forEach((format) => {
         if (!BARCODE_DETECTOR_FORMATS.includes(format)) {
           throw new TypeError(
-            `Failed to read the 'formats' property from 'BarcodeDetectorOptions': The provided value '${format}' is not a valid enum value of type BarcodeFormat.`
+            `Failed to read the 'formats' property from 'BarcodeDetectorOptions': The provided value '${format}' is not a valid enum value of type BarcodeFormat.`,
           );
         }
       });
@@ -78,12 +78,14 @@ export class BarcodeDetector {
       // of the first detection.
       // Errors/exceptions should be handled in the 'detect' method.
       // So here we just catch and ignore the uncaught (in promise) rejections.
-      getZXingModule().catch(() => {});
+      getZXingModule().catch(() => {
+        /*void*/
+      });
       this.#formats = formats ?? [];
     } catch (e) {
       throw addPrefixToExceptionOrError(
         e,
-        "Failed to construct 'BarcodeDetector'"
+        "Failed to construct 'BarcodeDetector'",
       );
     }
   }
@@ -101,13 +103,13 @@ export class BarcodeDetector {
         zxingReadOutputs = await readBarcodesFromImageData(imageData, {
           tryHarder: true,
           formats: this.#formats.map(
-            (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat
+            (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat,
           ),
         });
       } catch {
         throw new DOMException(
           "Barcode detection service unavailable. Use 'setZXingModuleOverrides' in offline or strict CSP environments.",
-          "NotSupportedError"
+          "NotSupportedError",
         );
       }
       return zxingReadOutputs.map((zxingReadOutput) => {
@@ -126,7 +128,7 @@ export class BarcodeDetector {
             minX,
             minY,
             maxX - minX,
-            maxY - minY
+            maxY - minY,
           ),
           rawValue: new TextDecoder().decode(zxingReadOutput.bytes),
           format: convertFormat(zxingReadOutput.format),
@@ -153,7 +155,7 @@ export class BarcodeDetector {
     } catch (e) {
       throw addPrefixToExceptionOrError(
         e,
-        "Failed to execute 'detect' on 'BarcodeDetector'"
+        "Failed to execute 'detect' on 'BarcodeDetector'",
       );
     }
   }

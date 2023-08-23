@@ -1,5 +1,5 @@
 import { test, assert, describe } from "vitest";
-import { BarcodeDetector } from "../dist/es/index.js";
+import { BarcodeDetector } from "../src/index.js";
 import {
   getHTMLImage,
   getSVGImage,
@@ -61,9 +61,7 @@ interface ImageTest {
   cornerPoints: CornerPoints;
 }
 
-interface ImageTests {
-  [k: string]: ImageTest;
-}
+type ImageTests = Record<string, ImageTest>;
 
 const FUZZINESS_LARGE = 15;
 const FUZZINESS_SMALL = 5;
@@ -262,27 +260,27 @@ const imageTests: ImageTests = {
     format: "pdf417",
     payload: "Barcode Detection is Fun!",
     barcode: {
-      boundingBox: { left: 39, right: 755, top: 243, bottom: 356 },
+      boundingBox: { left: 57, right: 742, top: 255, bottom: 345 },
       fuzziness: FUZZINESS_LARGE,
     },
     cornerPoints: {
       topLeft: {
-        position: { x: 39, y: 243 },
+        position: { x: 57, y: 255 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       topRight: {
-        position: { x: 755, y: 243 },
+        position: { x: 742, y: 255 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomRight: {
-        position: { x: 755, y: 356 },
+        position: { x: 742, y: 345 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomLeft: {
-        position: { x: 39, y: 356 },
+        position: { x: 57, y: 345 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
@@ -293,27 +291,27 @@ const imageTests: ImageTests = {
     format: "pdf417",
     payload: "Barcode Detection is Fun!",
     barcode: {
-      boundingBox: { left: 186, right: 786, top: 242, bottom: 359 },
+      boundingBox: { left: 185, right: 615, top: 240, bottom: 360 },
       fuzziness: FUZZINESS_LARGE,
     },
     cornerPoints: {
       topLeft: {
-        position: { x: 186, y: 242 },
+        position: { x: 185, y: 240 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       topRight: {
-        position: { x: 786, y: 242 },
+        position: { x: 615, y: 240 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomRight: {
-        position: { x: 786, y: 359 },
+        position: { x: 615, y: 360 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomLeft: {
-        position: { x: 186, y: 359 },
+        position: { x: 185, y: 360 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
@@ -324,27 +322,27 @@ const imageTests: ImageTests = {
     format: "pdf417",
     payload: "Barcode Detection is Fun!",
     barcode: {
-      boundingBox: { left: 84, right: 712, top: 217, bottom: 382 },
+      boundingBox: { left: 100, right: 700, top: 218, bottom: 382 },
       fuzziness: FUZZINESS_LARGE,
     },
     cornerPoints: {
       topLeft: {
-        position: { x: 84, y: 217 },
+        position: { x: 100, y: 218 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       topRight: {
-        position: { x: 712, y: 217 },
+        position: { x: 700, y: 218 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomRight: {
-        position: { x: 712, y: 382 },
+        position: { x: 700, y: 382 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomLeft: {
-        position: { x: 84, y: 382 },
+        position: { x: 100, y: 382 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
@@ -355,27 +353,27 @@ const imageTests: ImageTests = {
     format: "pdf417",
     payload: "Barcode Detection is Fun!",
     barcode: {
-      boundingBox: { left: 39, right: 755, top: 209, bottom: 390 },
+      boundingBox: { left: 57, right: 742, top: 210, bottom: 390 },
       fuzziness: FUZZINESS_LARGE,
     },
     cornerPoints: {
       topLeft: {
-        position: { x: 39, y: 209 },
+        position: { x: 57, y: 210 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       topRight: {
-        position: { x: 755, y: 209 },
+        position: { x: 742, y: 210 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomRight: {
-        position: { x: 755, y: 390 },
+        position: { x: 742, y: 390 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomLeft: {
-        position: { x: 39, y: 390 },
+        position: { x: 57, y: 390 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
@@ -386,27 +384,27 @@ const imageTests: ImageTests = {
     format: "pdf417",
     payload: "Barcode Detection is Fun!",
     barcode: {
-      boundingBox: { left: 84, right: 712, top: 227, bottom: 360 },
+      boundingBox: { left: 100, right: 700, top: 240, bottom: 360 },
       fuzziness: FUZZINESS_LARGE,
     },
     cornerPoints: {
       topLeft: {
-        position: { x: 84, y: 227 },
+        position: { x: 100, y: 240 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       topRight: {
-        position: { x: 712, y: 227 },
+        position: { x: 700, y: 240 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomRight: {
-        position: { x: 712, y: 360 },
+        position: { x: 700, y: 360 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomLeft: {
-        position: { x: 84, y: 360 },
+        position: { x: 100, y: 360 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
@@ -417,27 +415,27 @@ const imageTests: ImageTests = {
     format: "pdf417",
     payload: "Barcode Detection is Fun!",
     barcode: {
-      boundingBox: { left: 170, right: 621, top: 119, bottom: 480 },
+      boundingBox: { left: 185, right: 615, top: 120, bottom: 480 },
       fuzziness: FUZZINESS_LARGE,
     },
     cornerPoints: {
       topLeft: {
-        position: { x: 171, y: 119 },
+        position: { x: 185, y: 120 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       topRight: {
-        position: { x: 621, y: 119 },
+        position: { x: 615, y: 120 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomRight: {
-        position: { x: 621, y: 480 },
+        position: { x: 615, y: 480 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomLeft: {
-        position: { x: 170, y: 480 },
+        position: { x: 185, y: 480 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
@@ -448,27 +446,27 @@ const imageTests: ImageTests = {
     format: "pdf417",
     payload: "Barcode Detection is Fun!",
     barcode: {
-      boundingBox: { left: 84, right: 713, top: 209, bottom: 390 },
+      boundingBox: { left: 100, right: 700, top: 210, bottom: 390 },
       fuzziness: FUZZINESS_LARGE,
     },
     cornerPoints: {
       topLeft: {
-        position: { x: 84, y: 209 },
+        position: { x: 100, y: 210 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       topRight: {
-        position: { x: 713, y: 209 },
+        position: { x: 700, y: 210 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomRight: {
-        position: { x: 713, y: 390 },
+        position: { x: 700, y: 390 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomLeft: {
-        position: { x: 84, y: 390 },
+        position: { x: 100, y: 390 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
@@ -479,27 +477,27 @@ const imageTests: ImageTests = {
     format: "pdf417",
     payload: "Barcode Detection is Fun!",
     barcode: {
-      boundingBox: { left: 84, right: 712, top: 227, bottom: 360 },
+      boundingBox: { left: 100, right: 700, top: 240, bottom: 360 },
       fuzziness: FUZZINESS_LARGE,
     },
     cornerPoints: {
       topLeft: {
-        position: { x: 84, y: 227 },
+        position: { x: 100, y: 240 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       topRight: {
-        position: { x: 712, y: 227 },
+        position: { x: 700, y: 240 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomRight: {
-        position: { x: 712, y: 360 },
+        position: { x: 700, y: 360 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomLeft: {
-        position: { x: 84, y: 360 },
+        position: { x: 100, y: 360 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
@@ -510,27 +508,27 @@ const imageTests: ImageTests = {
     format: "pdf417",
     payload: "Barcode Detection is Fun!",
     barcode: {
-      boundingBox: { left: 126, right: 666, top: 209, bottom: 390 },
+      boundingBox: { left: 142, right: 657, top: 210, bottom: 390 },
       fuzziness: FUZZINESS_LARGE,
     },
     cornerPoints: {
       topLeft: {
-        position: { x: 126, y: 209 },
+        position: { x: 142, y: 210 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       topRight: {
-        position: { x: 666, y: 209 },
+        position: { x: 657, y: 210 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomRight: {
-        position: { x: 666, y: 390 },
+        position: { x: 657, y: 390 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
       bottomLeft: {
-        position: { x: 126, y: 390 },
+        position: { x: 142, y: 390 },
         fuzzinessX: FUZZINESS_X,
         fuzzinessY: FUZZINESS_Y,
       },
@@ -852,10 +850,12 @@ const barcodeDetector = new BarcodeDetector();
 async function testImage(
   imageBitmapSource: ImageBitmapSourceWebCodecs,
   test: ImageTest,
-  key: string
+  key: string,
 ) {
   const supportedFormats = await BarcodeDetector.getSupportedFormats();
-  if (!supportedFormats.includes(test.format)) return;
+  if (!supportedFormats.includes(test.format)) {
+    return;
+  }
   const detectedBarcodes = await barcodeDetector.detect(imageBitmapSource);
   assert.equal(detectedBarcodes.length, 1);
   const detectedBarcode = detectedBarcodes[0] as DetectedBarcode;
@@ -863,7 +863,7 @@ async function testImage(
     detectedBarcode.boundingBox,
     test.barcode.boundingBox,
     test.barcode.fuzziness,
-    key
+    key,
   );
   assert.equal(detectedBarcode.rawValue, test.payload);
   assert.equal(detectedBarcode.format, test.format);
@@ -875,7 +875,7 @@ function checkBoundingBox(
   actual: DOMRectReadOnly,
   expected: BoundingBox,
   fuzziness: number,
-  key: string
+  key: string,
 ) {
   assert.instanceOf(actual, DOMRectReadOnly);
   assert.approximately(
@@ -884,7 +884,7 @@ function checkBoundingBox(
     fuzziness,
     `${key} bounding box left position deviated by ${
       actual.left - expected.left
-    }`
+    }`,
   );
   assert.approximately(
     actual.right,
@@ -892,7 +892,7 @@ function checkBoundingBox(
     fuzziness,
     `${key} bounding box right position deviated by ${
       actual.left - expected.left
-    }`
+    }`,
   );
   assert.approximately(
     actual.top,
@@ -900,7 +900,7 @@ function checkBoundingBox(
     fuzziness,
     `${key} bounding box top position deviated by ${
       actual.left - expected.left
-    }`
+    }`,
   );
   assert.approximately(
     actual.bottom,
@@ -908,14 +908,14 @@ function checkBoundingBox(
     fuzziness,
     `${key} bounding box bottom position deviated by ${
       actual.left - expected.left
-    }`
+    }`,
   );
 }
 
 function checkCornerPoints(
   actualCornerPoints: DetectedBarcode["cornerPoints"],
   expectedCornerPoints: CornerPoints,
-  key: string
+  key: string,
 ) {
   const corners = ["topLeft", "topRight", "bottomRight", "bottomLeft"] as const;
 
@@ -933,7 +933,7 @@ function checkCornerPoints(
       fuzzinessX,
       `${key} ${corner} corner point position x deviated by ${
         actual.x - expected.x
-      }`
+      }`,
     );
     assert.approximately(
       actual.y,
@@ -941,7 +941,7 @@ function checkCornerPoints(
       fuzzinessY,
       `${key} ${corner} corner point position y deviated by ${
         actual.y - expected.y
-      }`
+      }`,
     );
   }
 }
@@ -950,7 +950,7 @@ describe("HTMLImageElement tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} HTMLImageElement`, async () => {
       const image = await getHTMLImage(
-        new URL(`./resources/${imageTest.name}`, import.meta.url).href
+        new URL(`./resources/${imageTest.name}`, import.meta.url).href,
       );
       await testImage(image, imageTest, key);
     });
@@ -961,7 +961,7 @@ describe("SVGImageElement tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} HTMLImageElement`, async () => {
       const image = await getSVGImage(
-        new URL(`./resources/${imageTest.name}`, import.meta.url).href
+        new URL(`./resources/${imageTest.name}`, import.meta.url).href,
       );
       await testImage(image, imageTest, key);
     });
@@ -972,7 +972,7 @@ describe("HTMLCanvasElement tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} HTMLCanvasElement`, async () => {
       const image = await getHTMLImage(
-        new URL(`./resources/${imageTest.name}`, import.meta.url).href
+        new URL(`./resources/${imageTest.name}`, import.meta.url).href,
       );
       const canvas = drawImageToCanvas(image, {
         canvas: document.createElement("canvas"),
@@ -986,7 +986,7 @@ describe("ImageBitmap tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} ImageBitmap`, async () => {
       const image = await getHTMLImage(
-        new URL(`./resources/${imageTest.name}`, import.meta.url).href
+        new URL(`./resources/${imageTest.name}`, import.meta.url).href,
       );
       const imageBitmap = await createImageBitmap(image);
       await testImage(imageBitmap, imageTest, key);
@@ -998,7 +998,7 @@ describe("OffscreenCanvas tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} OffscreenCanvas`, async () => {
       const image = await getHTMLImage(
-        new URL(`./resources/${imageTest.name}`, import.meta.url).href
+        new URL(`./resources/${imageTest.name}`, import.meta.url).href,
       );
       const canvas = await drawImageToCanvas(image, {
         canvas: new OffscreenCanvas(image.width, image.height),
@@ -1012,7 +1012,7 @@ describe("Blob tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} Blob`, async () => {
       const image = await getHTMLImage(
-        new URL(`./resources/${imageTest.name}`, import.meta.url).href
+        new URL(`./resources/${imageTest.name}`, import.meta.url).href,
       );
       const canvas = drawImageToCanvas(image, {
         canvas: document.createElement("canvas"),
@@ -1020,7 +1020,7 @@ describe("Blob tests", () => {
       const blob = (await new Promise<Blob | null>((resolve) =>
         canvas.toBlob((blob) => {
           resolve(blob);
-        })
+        }),
       ))!;
       assert.isNotNull(blob);
       await testImage(blob, imageTest, key);
@@ -1032,18 +1032,13 @@ describe("ImageData tests", () => {
   for (const [key, imageTest] of Object.entries(imageTests)) {
     test(`${key} ImageData`, async () => {
       const image = await getHTMLImage(
-        new URL(`./resources/${imageTest.name}`, import.meta.url).href
+        new URL(`./resources/${imageTest.name}`, import.meta.url).href,
       );
       const canvas = drawImageToCanvas(image, {
         canvas: document.createElement("canvas"),
       });
-      const context = canvas.getContext("2d");
-      const imageData = context?.getImageData(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      )!;
+      const context = canvas.getContext("2d")!;
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
       assert.isDefined(imageData);
       await testImage(imageData, imageTest, key);
     });
@@ -1054,7 +1049,7 @@ describe("HTMLVideoElement tests", () => {
   for (const [name, videoTest] of Object.entries(videoTests)) {
     describe(`${name} HTMLVideoElement`, async () => {
       const video = await getVideo(
-        new URL(`./resources/${name}`, import.meta.url).href
+        new URL(`./resources/${name}`, import.meta.url).href,
       );
       for (const videoTestPoint of videoTest) {
         test(`${videoTestPoint.test!.name} HTMLVideoElement at ${name} ${
@@ -1072,7 +1067,7 @@ describe("VideoFrame tests", () => {
   for (const [name, videoTest] of Object.entries(videoTests)) {
     describe(`${name} VideoFrame`, async () => {
       const video = await getVideo(
-        new URL(`./resources/${name}`, import.meta.url).href
+        new URL(`./resources/${name}`, import.meta.url).href,
       );
       for (const videoTestPoint of videoTest) {
         test(`${videoTestPoint.test!.name} HTMLVideoElement at ${name} ${

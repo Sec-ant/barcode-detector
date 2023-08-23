@@ -1,5 +1,5 @@
 export async function getHTMLImage(
-  src = new URL("./resources/cats-dogs.png", import.meta.url).href
+  src = new URL("./resources/cats-dogs.png", import.meta.url).href,
 ) {
   return await new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
@@ -14,13 +14,13 @@ export async function getHTMLImage(
 }
 
 export async function getSVGImage(
-  src = new URL("./resources/cats-dogs.png", import.meta.url).href
+  src = new URL("./resources/cats-dogs.png", import.meta.url).href,
 ) {
   return await new Promise<SVGImageElement>((resolve, reject) => {
     const htmlImagePromise = getHTMLImage(src);
     const image = document.createElementNS(
       "http://www.w3.org/2000/svg",
-      "image"
+      "image",
     );
     image.addEventListener("load", async () => {
       const htmlImage = await htmlImagePromise;
@@ -36,7 +36,7 @@ export async function getSVGImage(
 }
 
 export async function getVideo(
-  src = new URL("./resources/cats-dogs.webm", import.meta.url).href
+  src = new URL("./resources/cats-dogs.webm", import.meta.url).href,
 ) {
   return await new Promise<HTMLVideoElement>((resolve, reject) => {
     const video = document.createElement("video");
@@ -46,14 +46,14 @@ export async function getVideo(
         await seekTo(video, 0);
         resolve(video);
       },
-      { once: true }
+      { once: true },
     );
     video.addEventListener(
       "error",
       (error) => {
         reject([error, video] as const);
       },
-      { once: true }
+      { once: true },
     );
     video.src = src;
     video.loop = true;
@@ -83,14 +83,14 @@ export async function seekTo(video: HTMLVideoElement, time: number) {
         await waitForNFrames(3);
         resolve();
       },
-      { once: true }
+      { once: true },
     );
     video.currentTime = time;
   });
 }
 
 export function drawImageToCanvas<
-  T extends HTMLCanvasElement | OffscreenCanvas
+  T extends HTMLCanvasElement | OffscreenCanvas,
 >(
   image: HTMLImageElement,
   {
@@ -99,7 +99,7 @@ export function drawImageToCanvas<
   }: {
     canvas: T;
     pixelFormat?: string;
-  }
+  },
 ): T {
   canvas.width = image.width;
   canvas.height = image.height;

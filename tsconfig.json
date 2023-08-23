@@ -3,13 +3,8 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
-    "types": [
-      "dom-webcodecs"
-    ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["dom-webcodecs"],
     "moduleResolution": "NodeNext",
     "strict": true,
     "isolatedModules": true,
@@ -24,15 +19,10 @@
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true
   },
-  "include": [
-    "./src",
-  ],
+  "include": ["./src"],
   "references": [
     {
       "path": "./tsconfig.node.json"
-    },
-    {
-      "path": "./tsconfig.tests.json"
     }
   ]
 }

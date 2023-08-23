@@ -8,9 +8,7 @@ await writeFile(
   resolve(samplesDir, "toc.json"),
   JSON.stringify(
     await Promise.all(
-      (
-        await readdir(samplesDir, { withFileTypes: true })
-      )
+      (await readdir(samplesDir, { withFileTypes: true }))
         .filter((e) => e.isDirectory())
         .map((e) => [e.name, resolve(e.path, e.name)])
         .map(async ([n, p]) => [
@@ -19,12 +17,12 @@ await writeFile(
             .filter(
               (e) =>
                 e.isFile() &&
-                (e.name.endsWith(".png") || e.name.endsWith(".jpg"))
+                (e.name.endsWith(".png") || e.name.endsWith(".jpg")),
             )
             .map((e) =>
-              relative(samplesDir, resolve(e.path, encodeURIComponent(e.name)))
+              relative(samplesDir, resolve(e.path, encodeURIComponent(e.name))),
             ),
-        ])
-    )
-  )
+        ]),
+    ),
+  ),
 );

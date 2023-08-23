@@ -3,12 +3,12 @@
   "compilerOptions": {
     "composite": true,
     "resolveJsonModule": true,
-    "allowJs": true,
+    "allowJs": true
   },
   "include": [
     "./dist/**/*",
     "./tests/**/*.ts",
     "./tests/**/*.js",
-    "./tests/**/*.json",
+    "./tests/**/*.json"
   ]
 }
