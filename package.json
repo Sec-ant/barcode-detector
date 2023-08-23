@@ -76,7 +76,6 @@
     "postncu": "npm i"
   },
   "devDependencies": {
-    "@types/dom-webcodecs": "^0.1.8",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
     "@vitest/browser": "^0.34.2",
@@ -94,6 +93,7 @@
     "vitest": "^0.34.2"
   },
   "dependencies": {
-    "@sec-ant/zxing-wasm": "^2.1.2"
+    "@sec-ant/zxing-wasm": "^2.1.2",
+    "@types/dom-webcodecs": "^0.1.8"
   }
 }
