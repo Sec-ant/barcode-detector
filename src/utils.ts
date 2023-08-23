@@ -16,7 +16,7 @@ export const BARCODE_DETECTOR_FORMATS = [
 ] as const;
 
 export function getIntrinsicDimensionsOfCanvasImageSource(
-  image: CanvasImageSourceWebCodecs
+  image: CanvasImageSourceWebCodecs,
 ): { width: number; height: number } {
   if (isHTMLImageElement(image)) {
     return {
@@ -61,12 +61,12 @@ export function getIntrinsicDimensionsOfCanvasImageSource(
     };
   }
   throw new TypeError(
-    "The provided value is not of type '(Blob or HTMLCanvasElement or HTMLImageElement or HTMLVideoElement or ImageBitmap or ImageData or OffscreenCanvas or SVGImageElement or VideoFrame)'."
+    "The provided value is not of type '(Blob or HTMLCanvasElement or HTMLImageElement or HTMLVideoElement or ImageBitmap or ImageData or OffscreenCanvas or SVGImageElement or VideoFrame)'.",
   );
 }
 
 export function isHTMLImageElement(
-  image: ImageBitmapSourceWebCodecs
+  image: ImageBitmapSourceWebCodecs,
 ): image is HTMLImageElement {
   try {
     return image instanceof HTMLImageElement;
@@ -76,7 +76,7 @@ export function isHTMLImageElement(
 }
 
 export function isSVGImageElement(
-  image: ImageBitmapSourceWebCodecs
+  image: ImageBitmapSourceWebCodecs,
 ): image is SVGImageElement {
   try {
     return image instanceof SVGImageElement;
@@ -86,7 +86,7 @@ export function isSVGImageElement(
 }
 
 export function isHTMLVideoElement(
-  image: ImageBitmapSourceWebCodecs
+  image: ImageBitmapSourceWebCodecs,
 ): image is HTMLVideoElement {
   try {
     return image instanceof HTMLVideoElement;
@@ -96,7 +96,7 @@ export function isHTMLVideoElement(
 }
 
 export function isHTMLCanvasElement(
-  image: ImageBitmapSourceWebCodecs
+  image: ImageBitmapSourceWebCodecs,
 ): image is HTMLCanvasElement {
   try {
     return image instanceof HTMLCanvasElement;
@@ -106,7 +106,7 @@ export function isHTMLCanvasElement(
 }
 
 export function isImageBitmap(
-  image: ImageBitmapSourceWebCodecs
+  image: ImageBitmapSourceWebCodecs,
 ): image is ImageBitmap {
   try {
     return image instanceof ImageBitmap;
@@ -116,7 +116,7 @@ export function isImageBitmap(
 }
 
 export function isOffscreenCanvas(
-  image: ImageBitmapSourceWebCodecs
+  image: ImageBitmapSourceWebCodecs,
 ): image is OffscreenCanvas {
   try {
     return image instanceof OffscreenCanvas;
@@ -126,7 +126,7 @@ export function isOffscreenCanvas(
 }
 
 export function isVideoFrame(
-  image: ImageBitmapSourceWebCodecs
+  image: ImageBitmapSourceWebCodecs,
 ): image is VideoFrame {
   try {
     return image instanceof VideoFrame;
@@ -144,7 +144,7 @@ export function isBlob(image: ImageBitmapSourceWebCodecs): image is Blob {
 }
 
 export function isImageData(
-  image: ImageBitmapSourceWebCodecs
+  image: ImageBitmapSourceWebCodecs,
 ): image is ImageData {
   try {
     return image instanceof ImageData;
@@ -155,7 +155,7 @@ export function isImageData(
 
 export function createCanvas(
   width: number,
-  height: number
+  height: number,
 ): OffscreenCanvas | HTMLCanvasElement {
   try {
     const canvas = new OffscreenCanvas(width, height);
@@ -172,7 +172,7 @@ export function createCanvas(
 }
 
 export async function getImageDataFromCanvasImageSource(
-  canvasImageSource: CanvasImageSourceWebCodecs
+  canvasImageSource: CanvasImageSourceWebCodecs,
 ): Promise<ImageData | null> {
   if (
     isHTMLImageElement(canvasImageSource) &&
@@ -180,7 +180,7 @@ export async function getImageDataFromCanvasImageSource(
   ) {
     throw new DOMException(
       "Failed to load or decode HTMLImageElement.",
-      "InvalidStateError"
+      "InvalidStateError",
     );
   }
   if (
@@ -192,7 +192,7 @@ export async function getImageDataFromCanvasImageSource(
     // We still support svg images, but we should reject on those that cannot be decoded.
     throw new DOMException(
       "Failed to load or decode SVGImageElement.",
-      "InvalidStateError"
+      "InvalidStateError",
     );
   }
   if (
@@ -216,7 +216,7 @@ export async function getImageDataFromCanvasImageSource(
   ) {
     throw new DOMException(
       "The image source is detached.",
-      "InvalidStateError"
+      "InvalidStateError",
     );
   }
   const { width, height } =
@@ -238,7 +238,7 @@ export async function getImageDataFromCanvasImageSource(
 }
 
 export async function getImageDataFromBlob(
-  blob: Blob
+  blob: Blob,
 ): Promise<ImageData | null> {
   let imageBitmap: ImageBitmap;
   try {
@@ -249,7 +249,7 @@ export async function getImageDataFromBlob(
     // We still support blobs, but we should reject on non-image blobs.
     throw new DOMException(
       "Failed to load or decode Blob.",
-      "InvalidStateError"
+      "InvalidStateError",
     );
   }
   const imageData = await getImageDataFromCanvasImageSource(imageBitmap);
@@ -257,7 +257,7 @@ export async function getImageDataFromBlob(
 }
 
 export async function getImageDataFromImageBitmapSource(
-  image: ImageBitmapSourceWebCodecs
+  image: ImageBitmapSourceWebCodecs,
 ): Promise<ImageData | null> {
   if (isBlob(image)) {
     return await getImageDataFromBlob(image);
@@ -266,7 +266,7 @@ export async function getImageDataFromImageBitmapSource(
     if (isImageDataArrayBufferDetached(image)) {
       throw new DOMException(
         "The image data has been detached.",
-        "InvalidStateError"
+        "InvalidStateError",
       );
     }
     return image;

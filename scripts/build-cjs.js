@@ -24,8 +24,8 @@ async function buildPackages() {
         type: "commonjs",
       },
       undefined,
-      2
-    ) + "\n"
+      2,
+    ) + "\n",
   );
 }
 

@@ -213,7 +213,7 @@ const barcodeDetector: BarcodeDetector = new BarcodeDetector({
 });
 
 const imageFile = await fetch(
-  "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Hello%20world!"
+  "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Hello%20world!",
 ).then((resp) => resp.blob());
 
 barcodeDetector.detect(imageFile).then(console.log);
