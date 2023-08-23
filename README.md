@@ -1,5 +1,7 @@
 # @sec-ant/barcode-detector
 
+[![npm](https://img.shields.io/npm/v/@sec-ant/barcode-detector)](https://www.npmjs.com/package/@sec-ant/barcode-detector/v/latest) [![jsDelivr hits (npm scoped)](https://img.shields.io/jsdelivr/npm/hm/%40sec-ant%2Fbarcode-detector?color=%23ff5627)](https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@latest/)
+
 A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill that uses [ZXing webassembly](https://github.com/Sec-ant/zxing-wasm) under the hood.
 
 ## Install
