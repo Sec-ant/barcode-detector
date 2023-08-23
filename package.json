@@ -1,0 +1,99 @@
+{
+  "name": "@sec-ant/barcode-detector",
+  "description": "A Barcode Detection API polyfill that uses ZXing webassembly under the hood",
+  "private": false,
+  "version": "1.2.0",
+  "type": "module",
+  "files": [
+    "./dist"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/es/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/es/index.js"
+    },
+    "./pure": {
+      "import": "./dist/es/pure.js",
+      "require": "./dist/cjs/pure.js",
+      "default": "./dist/es/pure.js"
+    },
+    "./side-effects": {
+      "import": "./dist/es/side-effects.js",
+      "require": "./dist/cjs/side-effects.js",
+      "default": "./dist/es/side-effects.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sec-ant/barcode-detector"
+  },
+  "homepage": "https://github.com/Sec-ant/barcode-detector",
+  "bugs": {
+    "url": "https://github.com/Sec-ant/barcode-detector/issues",
+    "email": "zzwu@zju.edu.cn"
+  },
+  "keywords": [
+    "es6",
+    "qrcode",
+    "barcode",
+    "barcode-detector",
+    "wasm",
+    "polyfill",
+    "zxing",
+    "esmodule",
+    "webassembly"
+  ],
+  "author": {
+    "name": "Ze-Zheng Wu"
+  },
+  "license": "MIT",
+  "config": {
+    "port": "18080"
+  },
+  "scripts": {
+    "lint": "eslint . --ext .ts",
+    "type-check": "tsc --noEmit --emitDeclarationOnly false",
+    "format": "prettier . --write",
+    "prebuild": "npm run lint && npm run type-check && npm run format",
+    "build:es": "vite build",
+    "build:cjs": "node ./scripts/build-cjs.js",
+    "build:iife": "node ./scripts/build-iife.js",
+    "build": "npm run build:es && npm run build:cjs && npm run build:iife",
+    "postbuild:es": "tsc --declarationDir ./dist/es",
+    "postbuild:cjs": "tsc --declarationDir ./dist/cjs",
+    "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
+    "pretest": "node ./scripts/list-dir.js",
+    "pretest:ui": "node ./scripts/list-dir.js",
+    "precoverage": "node ./scripts/list-dir.js",
+    "test": "start-server-and-test $npm_package_config_port 'vitest --coverage'",
+    "test:ui": "start-server-and-test $npm_package_config_port 'vitest --ui --coverage'",
+    "coverage": "start-server-and-test $npm_package_config_port 'vitest run --coverage'",
+    "prepublishOnly": "npm run build",
+    "ncu": "npx npm-check-updates -u",
+    "postncu": "npm i"
+  },
+  "devDependencies": {
+    "@types/dom-webcodecs": "^0.1.8",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "@vitest/browser": "^0.34.2",
+    "@vitest/coverage-istanbul": "^0.34.2",
+    "@vitest/ui": "^0.34.2",
+    "eslint": "^8.47.0",
+    "http-server": "^14.1.1",
+    "npm-check-updates": "^16.13.0",
+    "playwright": "^1.37.1",
+    "prettier": "^3.0.2",
+    "rimraf": "^5.0.1",
+    "start-server-and-test": "^2.0.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.9",
+    "vitest": "^0.34.2"
+  },
+  "dependencies": {
+    "@sec-ant/zxing-wasm": "^2.1.2"
+  }
+}
