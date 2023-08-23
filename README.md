@@ -143,8 +143,9 @@ This package can also be consumed as a commonjs package:
    import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
    ```
 
+   `tsconfig.json`:
+
    ```json
-   // tsconfig.json
    {
      "compilerOptions": {
        "module": "CommonJS",
@@ -195,7 +196,7 @@ const barcodeDetector = new BarcodeDetector();
 
 Alternatively, the `.wasm` file could be copied to your dist folder to be served from your local server, without incorporating it into the output as an extensive base64 data URL.
 
-It's noteworthy that you'll always want to choose the correct version of the `.wasm` file, so the APIs exported by it are exactly what the js code expected.
+It's noteworthy that you'll always want to choose the correct version of the `.wasm` file, so the APIs exported by it are exactly what the js code expects.
 
 For more information on how to use this function, you can check [the notes here](https://github.com/Sec-ant/zxing-wasm#notes) and [discussions here](https://github.com/gruhn/vue-qrcode-reader/issues/354).
 
@@ -203,7 +204,7 @@ This function is exported from all the subpaths, including the [side effects](#s
 
 ## API
 
-Please check the [spec](https://wicg.github.io/shape-detection-api/#barcode-detection-api) and [MDN doc](https://developer.mozilla.org/docs/Web/API/Barcode_Detection_API) for more information.
+Please check the [spec](https://wicg.github.io/shape-detection-api/#barcode-detection-api), [MDN doc](https://developer.mozilla.org/docs/Web/API/Barcode_Detection_API) and [Chromium implementation](https://github.com/chromium/chromium/tree/main/third_party/blink/renderer/modules/shapedetection) for more information.
 
 ## Example
 
