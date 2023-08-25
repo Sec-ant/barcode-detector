@@ -1,5 +1,6 @@
 import { build } from "vite";
 import { rimraf } from "rimraf";
+import esbuildConfig from "../esbuild.config.json" assert { type: "json" };
 
 const entryPoints = [
   {
@@ -30,6 +31,7 @@ async function buildPackages() {
         outDir: "dist/iife",
         emptyOutDir: false,
       },
+      esbuild: esbuildConfig,
       configFile: false,
     });
   }
