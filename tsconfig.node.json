@@ -2,8 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "composite": true,
-    "module": "ESNext",
-    "types": ["node", "vitest"],
+    "types": ["node"],
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "skipLibCheck": true,
