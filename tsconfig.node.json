@@ -8,10 +8,5 @@
     "skipLibCheck": true,
     "allowJs": true
   },
-  "include": [
-    "./scripts",
-    "./vite.config.ts",
-    "./package.json",
-    "./esbuild.config.json"
-  ]
+  "include": ["./scripts", "./vite.config.ts", "./package.json"]
 }

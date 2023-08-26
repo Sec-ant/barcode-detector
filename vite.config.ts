@@ -1,7 +1,6 @@
 /// <reference types="vitest" />
 import { defineConfig } from "vite";
 import { config } from "./package.json";
-import esbuildConfig from "./esbuild.config.json";
 
 export default defineConfig({
   build: {
@@ -15,7 +14,6 @@ export default defineConfig({
     },
     outDir: "dist/es",
   },
-  esbuild: esbuildConfig,
   test: {
     browser: {
       enabled: true,

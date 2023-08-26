@@ -1,6 +1,5 @@
 import { build } from "vite";
 import { writeFile } from "node:fs/promises";
-import esbuildConfig from "../esbuild.config.json" assert { type: "json" };
 
 async function buildPackages() {
   await build({
@@ -16,7 +15,6 @@ async function buildPackages() {
       },
       outDir: "dist/cjs",
     },
-    esbuild: esbuildConfig,
     configFile: false,
   });
   await writeFile(
