@@ -15,7 +15,7 @@ export const BARCODE_DETECTOR_FORMATS = [
   "unknown",
 ] as const;
 
-export function getIntrinsicDimensionsOfCanvasImageSource(
+function getIntrinsicDimensionsOfCanvasImageSource(
   image: CanvasImageSourceWebCodecs,
 ): { width: number; height: number } {
   if (isHTMLImageElement(image)) {
@@ -36,19 +36,7 @@ export function getIntrinsicDimensionsOfCanvasImageSource(
       height: image.videoHeight,
     };
   }
-  if (isHTMLCanvasElement(image)) {
-    return {
-      width: image.width,
-      height: image.height,
-    };
-  }
   if (isImageBitmap(image)) {
-    return {
-      width: image.width,
-      height: image.height,
-    };
-  }
-  if (isOffscreenCanvas(image)) {
     return {
       width: image.width,
       height: image.height,
@@ -60,12 +48,24 @@ export function getIntrinsicDimensionsOfCanvasImageSource(
       height: image.displayHeight,
     };
   }
+  if (isHTMLCanvasElement(image)) {
+    return {
+      width: image.width,
+      height: image.height,
+    };
+  }
+  if (isOffscreenCanvas(image)) {
+    return {
+      width: image.width,
+      height: image.height,
+    };
+  }
   throw new TypeError(
     "The provided value is not of type '(Blob or HTMLCanvasElement or HTMLImageElement or HTMLVideoElement or ImageBitmap or ImageData or OffscreenCanvas or SVGImageElement or VideoFrame)'.",
   );
 }
 
-export function isHTMLImageElement(
+function isHTMLImageElement(
   image: ImageBitmapSourceWebCodecs,
 ): image is HTMLImageElement {
   try {
@@ -75,7 +75,7 @@ export function isHTMLImageElement(
   }
 }
 
-export function isSVGImageElement(
+function isSVGImageElement(
   image: ImageBitmapSourceWebCodecs,
 ): image is SVGImageElement {
   try {
@@ -85,7 +85,7 @@ export function isSVGImageElement(
   }
 }
 
-export function isHTMLVideoElement(
+function isHTMLVideoElement(
   image: ImageBitmapSourceWebCodecs,
 ): image is HTMLVideoElement {
   try {
@@ -95,7 +95,7 @@ export function isHTMLVideoElement(
   }
 }
 
-export function isHTMLCanvasElement(
+function isHTMLCanvasElement(
   image: ImageBitmapSourceWebCodecs,
 ): image is HTMLCanvasElement {
   try {
@@ -105,7 +105,7 @@ export function isHTMLCanvasElement(
   }
 }
 
-export function isImageBitmap(
+function isImageBitmap(
   image: ImageBitmapSourceWebCodecs,
 ): image is ImageBitmap {
   try {
@@ -115,7 +115,7 @@ export function isImageBitmap(
   }
 }
 
-export function isOffscreenCanvas(
+function isOffscreenCanvas(
   image: ImageBitmapSourceWebCodecs,
 ): image is OffscreenCanvas {
   try {
@@ -125,9 +125,7 @@ export function isOffscreenCanvas(
   }
 }
 
-export function isVideoFrame(
-  image: ImageBitmapSourceWebCodecs,
-): image is VideoFrame {
+function isVideoFrame(image: ImageBitmapSourceWebCodecs): image is VideoFrame {
   try {
     return image instanceof VideoFrame;
   } catch {
@@ -135,7 +133,7 @@ export function isVideoFrame(
   }
 }
 
-export function isBlob(image: ImageBitmapSourceWebCodecs): image is Blob {
+function isBlob(image: ImageBitmapSourceWebCodecs): image is Blob {
   try {
     return image instanceof Blob;
   } catch {
@@ -143,9 +141,7 @@ export function isBlob(image: ImageBitmapSourceWebCodecs): image is Blob {
   }
 }
 
-export function isImageData(
-  image: ImageBitmapSourceWebCodecs,
-): image is ImageData {
+function isImageData(image: ImageBitmapSourceWebCodecs): image is ImageData {
   try {
     return image instanceof ImageData;
   } catch {
@@ -153,7 +149,7 @@ export function isImageData(
   }
 }
 
-export function createCanvas(
+function createCanvas(
   width: number,
   height: number,
 ): OffscreenCanvas | HTMLCanvasElement {
@@ -171,7 +167,7 @@ export function createCanvas(
   }
 }
 
-export async function getImageDataFromCanvasImageSource(
+async function getImageDataFromCanvasImageSource(
   canvasImageSource: CanvasImageSourceWebCodecs,
 ): Promise<ImageData | null> {
   if (
@@ -237,9 +233,7 @@ export async function getImageDataFromCanvasImageSource(
   }
 }
 
-export async function getImageDataFromBlob(
-  blob: Blob,
-): Promise<ImageData | null> {
+async function getImageDataFromBlob(blob: Blob): Promise<ImageData | null> {
   let imageBitmap: ImageBitmap;
   try {
     imageBitmap = await createImageBitmap(blob);
@@ -254,6 +248,24 @@ export async function getImageDataFromBlob(
   }
   const imageData = await getImageDataFromCanvasImageSource(imageBitmap);
   return imageData;
+}
+
+function getImageDataFromCanvas(
+  canvas: HTMLCanvasElement | OffscreenCanvas,
+): ImageData | null {
+  const { width, height } = canvas;
+  if (width === 0 || height === 0) {
+    return null;
+  }
+  const context = canvas.getContext("2d") as
+    | CanvasRenderingContext2D
+    | OffscreenCanvasRenderingContext2D;
+  try {
+    const imageData = context.getImageData(0, 0, width, height);
+    return imageData;
+  } catch (e) {
+    throw new DOMException("Source would taint origin.", "SecurityError");
+  }
 }
 
 export async function getImageDataFromImageBitmapSource(
@@ -271,10 +283,13 @@ export async function getImageDataFromImageBitmapSource(
     }
     return image;
   }
+  if (isHTMLCanvasElement(image) || isOffscreenCanvas(image)) {
+    return getImageDataFromCanvas(image);
+  }
   return await getImageDataFromCanvasImageSource(image);
 }
 
-export async function isHTMLImageElementDecodable(image: HTMLImageElement) {
+async function isHTMLImageElementDecodable(image: HTMLImageElement) {
   try {
     await image.decode();
     return true;
@@ -291,7 +306,7 @@ declare global {
   }
 }
 
-export async function isSVGImageElementDecodable(image: SVGImageElement) {
+async function isSVGImageElementDecodable(image: SVGImageElement) {
   try {
     await image.decode?.();
     return true;
@@ -300,7 +315,7 @@ export async function isSVGImageElementDecodable(image: SVGImageElement) {
   }
 }
 
-export function isVideoFrameClosed(image: VideoFrame) {
+function isVideoFrameClosed(image: VideoFrame) {
   // The format of a closed VideoFrame is null.
   // Not sure if this is the correct way to check closed frames though.
   if (image.format === null) {
@@ -309,7 +324,7 @@ export function isVideoFrameClosed(image: VideoFrame) {
   return false;
 }
 
-export function isImageDataArrayBufferDetached(image: ImageData) {
+function isImageDataArrayBufferDetached(image: ImageData) {
   if (image.data.buffer.byteLength !== 0) {
     return false;
   }
@@ -317,7 +332,7 @@ export function isImageDataArrayBufferDetached(image: ImageData) {
   return true;
 }
 
-export function isImageBitmapClosed(imageBitmap: ImageBitmap) {
+function isImageBitmapClosed(imageBitmap: ImageBitmap) {
   if (imageBitmap.width === 0 && imageBitmap.height === 0) {
     return true;
   }
