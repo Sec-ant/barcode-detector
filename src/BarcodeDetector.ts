@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import {
   getImageDataFromImageBitmapSource,
   addPrefixToExceptionOrError,
@@ -8,6 +9,7 @@ import {
   ZXingReadInputBarcodeFormat,
   ZXingBarcodeFormat,
   ZXingReadOutput,
+  ZXingModule,
 } from "@sec-ant/zxing-wasm/reader";
 import { BARCODE_DETECTOR_FORMATS } from "./utils.js";
 
@@ -54,9 +56,29 @@ export interface DetectedBarcode {
   cornerPoints: [Point2D, Point2D, Point2D, Point2D];
 }
 
-export class BarcodeDetector {
+interface CustomEventMap {
+  load: CustomEvent<ZXingModule<"reader">>;
+  error: CustomEvent<unknown>;
+}
+
+type ChangeEventListener = <K extends keyof CustomEventMap>(
+  type: K,
+  callback:
+    | ((evt: CustomEventMap[K]) => void)
+    | { handleEvent(evt: CustomEventMap[K]): void }
+    | null,
+  options?: boolean | AddEventListenerOptions | undefined,
+) => void;
+
+export interface BarcodeDetector {
+  addEventListener: ChangeEventListener;
+  removeEventListener: ChangeEventListener;
+}
+
+export class BarcodeDetector extends EventTarget {
   #formats: BarcodeFormat[];
   constructor(barcodeDectorOptions: BarcodeDetectorOptions = {}) {
+    super();
     try {
       // TODO(https://github.com/WICG/shape-detection-api/issues/66):
       // Potentially process UNKNOWN as platform-specific formats.
@@ -73,15 +95,23 @@ export class BarcodeDetector {
           );
         }
       });
+      this.#formats = formats ?? [];
       // Use eager loading so that a user can fetch and init the wasm
       // before running actual detections, therefore shorten the cold start
-      // of the first detection.
-      // Errors/exceptions should be handled in the 'detect' method.
-      // So here we just catch and ignore the uncaught (in promise) rejections.
-      getZXingModule().catch(() => {
-        /*void*/
-      });
-      this.#formats = formats ?? [];
+      // of the first detection. Also we dispatch load and error events
+      // so users can add lifecycle hooks if they want. The load event will
+      // expose the ZXing module for advanced usage.
+      getZXingModule()
+        .then((zxingModule) => {
+          this.dispatchEvent(
+            new CustomEvent("load", {
+              detail: zxingModule as ZXingModule<"reader">,
+            }),
+          );
+        })
+        .catch((error: unknown) => {
+          this.dispatchEvent(new CustomEvent("error", { detail: error }));
+        });
     } catch (e) {
       throw addPrefixToExceptionOrError(
         e,

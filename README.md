@@ -206,10 +206,42 @@ This function is exported from all the subpaths, including the [side effects](#s
 
 Please check the [spec](https://wicg.github.io/shape-detection-api/#barcode-detection-api), [MDN doc](https://developer.mozilla.org/docs/Web/API/Barcode_Detection_API) and [Chromium implementation](https://github.com/chromium/chromium/tree/main/third_party/blink/renderer/modules/shapedetection) for more information.
 
+## Lifecycle Events
+
+The `BarcodeDetector` provided by this package also extends class `EventTarget` and provides 2 lifecycle events: `load` and `error`. You can use `addEventListener` and `removeEventListener` to register and remove callback hooks on these events.
+
+### `load` Event
+
+The `load` event, which is a `CustomEvent`, will be dispatched on the successful instanciation of ZXing wasm module. For advanced usage, the instanciated module is passed as the `detail` parameter.
+
+```ts
+import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
+
+const barcodeDetector = new BarcodeDetector();
+
+barcodeDetector.addEventListener("load", ({ detail }) => {
+  console.log(detail); // zxing wasm module
+});
+```
+
+### `error` Event
+
+The `error` event, which is a `CustomEvent`, will be dispatched if the instanciation of ZXing wasm module is failed. An error is passed as the `detail` parameter.
+
+```ts
+import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
+
+const barcodeDetector = new BarcodeDetector();
+
+barcodeDetector.addEventListener("error", ({ detail }) => {
+  console.log(detail); // an error
+});
+```
+
 ## Example
 
 ```ts
-import "@sec-ant/barcode-detector/side-effects";
+import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
 
 const barcodeDetector: BarcodeDetector = new BarcodeDetector({
   formats: ["qr_code"],
