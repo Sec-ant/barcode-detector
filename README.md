@@ -4,6 +4,8 @@
 
 A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill that uses [ZXing webassembly](https://github.com/Sec-ant/zxing-wasm) under the hood.
 
+> This package is now released under the name `barcode-detector` on the npm registry starting from version 2.0.0. The original name `@sec-ant/barcode-detector` will continue to be used for versions prior to 2.0.0, and will be retained solely for maintenance purposes. Eventually, it will be deprecated at an appropriate juncture.
+
 ## Install
 
 To install, run the following command:
