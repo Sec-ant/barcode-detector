@@ -56,7 +56,7 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
    <!-- register -->
    <script
      type="module"
-     src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/es/side-effects.min.js"
+     src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/es/side-effects.min.js"
    ></script>
 
    <!-- use -->
@@ -69,7 +69,7 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
 
    ```html
    <script type="module">
-     import { BarcodeDetector } from "https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/es/pure.min.js";
+     import { BarcodeDetector } from "https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/es/pure.min.js";
      const barcodeDetector = new BarcodeDetector();
    </script>
    ```
@@ -81,7 +81,7 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
    <script type="importmap">
      {
        "imports": {
-         "@sec-ant/barcode-detector/pure": "https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/es/pure.min.js"
+         "@sec-ant/barcode-detector/pure": "https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/es/pure.min.js"
        }
      }
    </script>
@@ -107,14 +107,14 @@ For legacy browsers that lack support for module type `<script>` tags, or for us
   window.BarcodeDetectionAPI.BarcodeDetector
   window.BarcodeDetectionAPI.setZXingModuleOverrides
   -->
-<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/iife/pure.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/iife/pure.min.js"></script>
 
 <!-- 
   IIFE side-effects.js registers:
   window.BarcodeDetector
   window.BarcodeDetectionAPI.setZXingModuleOverrides
   -->
-<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/iife/side-effects.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/iife/side-effects.min.js"></script>
 
 <!-- 
   IIFE index.js registers:
@@ -122,7 +122,7 @@ For legacy browsers that lack support for module type `<script>` tags, or for us
   window.BarcodeDetectionAPI.BarcodeDetector
   window.BarcodeDetectionAPI.setZXingModuleOverrides
   -->
-<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.2/dist/iife/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/iife/index.min.js"></script>
 ```
 
 ### CJS
