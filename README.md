@@ -1,17 +1,17 @@
-# @sec-ant/barcode-detector
+# barcode-detector
 
-[![npm](https://img.shields.io/npm/v/@sec-ant/barcode-detector)](https://www.npmjs.com/package/@sec-ant/barcode-detector/v/latest) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/%40sec-ant/barcode-detector)](https://www.npmjs.com/package/@sec-ant/barcode-detector/v/latest) [![jsDelivr hits (npm scoped)](https://img.shields.io/jsdelivr/npm/hm/%40sec-ant%2Fbarcode-detector?color=%23ff5627)](https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@latest/)
+[![npm](https://img.shields.io/npm/v/barcode-detector)](https://www.npmjs.com/package/barcode-detector/v/latest) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/%40sec-ant/barcode-detector)](https://www.npmjs.com/package/barcode-detector/v/latest) [![jsDelivr hits (npm scoped)](https://img.shields.io/jsdelivr/npm/hm/%40sec-ant%2Fbarcode-detector?color=%23ff5627)](https://cdn.jsdelivr.net/npm/barcode-detector@latest/)
 
 A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill that uses [ZXing webassembly](https://github.com/Sec-ant/zxing-wasm) under the hood.
 
-> This package is now released under the name `barcode-detector` on the npm registry starting from version 2.0.0. The original name `@sec-ant/barcode-detector` will continue to be used for versions prior to 2.0.0, and will be retained solely for maintenance purposes. Eventually, it will be deprecated at an appropriate juncture.
+> This package was originally published as [`@sec-ant/barcode-detector`](https://www.npmjs.com/package/@sec-ant/barcode-detector) on the npm registry. With appreciation for the generous offer from [@gruhn](https://github.com/gruhn), the package is now released under the name `barcode-detector` starting from version 2.0.0. The original name `@sec-ant/barcode-detector` will continue to be used for versions prior to 2.0.0, and will be retained solely for maintenance purposes. Eventually, it will be deprecated at an appropriate juncture.
 
 ## Install
 
 To install, run the following command:
 
 ```bash
-npm i @sec-ant/barcode-detector
+npm i barcode-detector
 ```
 
 ## Recommended Usage with Node + ESM
@@ -21,13 +21,13 @@ This package can be imported in three different ways:
 ### Pure Module
 
 ```ts
-import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
+import { BarcodeDetector } from "barcode-detector/pure";
 ```
 
 To avoid potential namespace collisions, you can also rename the export:
 
 ```ts
-import { BarcodeDetector as BarcodeDetectorPolyfill } from "@sec-ant/barcode-detector/pure";
+import { BarcodeDetector as BarcodeDetectorPolyfill } from "barcode-detector/pure";
 ```
 
 This approach is beneficial when you want to use a package to detect barcodes without polluting `globalThis`, or when your runtime already provides an implementation of the Barcode Detection API, but you still want this package to function.
@@ -35,7 +35,7 @@ This approach is beneficial when you want to use a package to detect barcodes wi
 ### Side Effects
 
 ```ts
-import "@sec-ant/barcode-detector/side-effects";
+import "barcode-detector/side-effects";
 ```
 
 This approach is beneficial when you need a drop-in polyfill. If there's already an implementation of Barcode Detection API on `globalThis`, this won't take effect (type declarations will, as we cannot optionally declare types). In such cases, please use the [pure module](#pure-module) instead.
@@ -43,7 +43,7 @@ This approach is beneficial when you need a drop-in polyfill. If there's already
 ### Both
 
 ```ts
-import { BarcodeDetector } from "@sec-ant/barcode-detector";
+import { BarcodeDetector } from "barcode-detector";
 ```
 
 This approach combines the [pure module](#pure-module) and [side effects](#side-effects).
@@ -58,7 +58,7 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
    <!-- register -->
    <script
      type="module"
-     src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/es/side-effects.min.js"
+     src="https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/es/side-effects.min.js"
    ></script>
 
    <!-- use -->
@@ -71,7 +71,7 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
 
    ```html
    <script type="module">
-     import { BarcodeDetector } from "https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/es/pure.min.js";
+     import { BarcodeDetector } from "https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/es/pure.min.js";
      const barcodeDetector = new BarcodeDetector();
    </script>
    ```
@@ -83,14 +83,14 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
    <script type="importmap">
      {
        "imports": {
-         "@sec-ant/barcode-detector/pure": "https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/es/pure.min.js"
+         "barcode-detector/pure": "https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/es/pure.min.js"
        }
      }
    </script>
 
    <!-- script scoped access -->
    <script type="module">
-     import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
+     import { BarcodeDetector } from "barcode-detector/pure";
      const barcodeDetector = new BarcodeDetector();
    </script>
    ```
@@ -109,14 +109,14 @@ For legacy browsers that lack support for module type `<script>` tags, or for us
   window.BarcodeDetectionAPI.BarcodeDetector
   window.BarcodeDetectionAPI.setZXingModuleOverrides
   -->
-<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/iife/pure.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/iife/pure.min.js"></script>
 
 <!-- 
   IIFE side-effects.js registers:
   window.BarcodeDetector
   window.BarcodeDetectionAPI.setZXingModuleOverrides
   -->
-<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/iife/side-effects.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/iife/side-effects.min.js"></script>
 
 <!-- 
   IIFE index.js registers:
@@ -124,7 +124,7 @@ For legacy browsers that lack support for module type `<script>` tags, or for us
   window.BarcodeDetectionAPI.BarcodeDetector
   window.BarcodeDetectionAPI.setZXingModuleOverrides
   -->
-<script src="https://cdn.jsdelivr.net/npm/@sec-ant/barcode-detector@1.3/dist/iife/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/iife/index.min.js"></script>
 ```
 
 ### CJS
@@ -135,14 +135,14 @@ This package can also be consumed as a commonjs package:
 
    ```js
    // src/index.js
-   const { BarcodeDetector } = require("@sec-ant/barcode-detector/pure");
+   const { BarcodeDetector } = require("barcode-detector/pure");
    ```
 
 2. With Typescript:
 
    ```ts
    // src/index.ts
-   import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
+   import { BarcodeDetector } from "barcode-detector/pure";
    ```
 
    `tsconfig.json`:
@@ -179,7 +179,7 @@ import wasmFile from "../node_modules/@sec-ant/zxing-wasm/dist/reader/zxing_read
 import {
   setZXingModuleOverrides,
   BarcodeDetector,
-} from "@sec-ant/barcode-detector/pure";
+} from "barcode-detector/pure";
 
 setZXingModuleOverrides({
   locateFile: (path, prefix) => {
@@ -217,7 +217,7 @@ The `BarcodeDetector` provided by this package also extends class `EventTarget` 
 The `load` event, which is a `CustomEvent`, will be dispatched on the successful instanciation of ZXing wasm module. For advanced usage, the instanciated module is passed as the `detail` parameter.
 
 ```ts
-import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
+import { BarcodeDetector } from "barcode-detector/pure";
 
 const barcodeDetector = new BarcodeDetector();
 
@@ -231,7 +231,7 @@ barcodeDetector.addEventListener("load", ({ detail }) => {
 The `error` event, which is a `CustomEvent`, will be dispatched if the instanciation of ZXing wasm module is failed. An error is passed as the `detail` parameter.
 
 ```ts
-import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
+import { BarcodeDetector } from "barcode-detector/pure";
 
 const barcodeDetector = new BarcodeDetector();
 
@@ -243,7 +243,7 @@ barcodeDetector.addEventListener("error", ({ detail }) => {
 ## Example
 
 ```ts
-import { BarcodeDetector } from "@sec-ant/barcode-detector/pure";
+import { BarcodeDetector } from "barcode-detector/pure";
 
 const barcodeDetector: BarcodeDetector = new BarcodeDetector({
   formats: ["qr_code"],
