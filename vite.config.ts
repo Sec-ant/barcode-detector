@@ -4,6 +4,7 @@ import { config } from "./package.json";
 
 export default defineConfig({
   build: {
+    target: ["es2020", "edge88", "firefox68", "chrome75", "safari13"],
     lib: {
       entry: {
         index: "src/index.ts",
