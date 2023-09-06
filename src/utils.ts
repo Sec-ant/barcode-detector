@@ -233,10 +233,26 @@ async function getImageDataFromCanvasImageSource(
   }
 }
 
+// TODO: use readBarcodesFromImageData to directly consume blobs.
 async function getImageDataFromBlob(blob: Blob): Promise<ImageData | null> {
-  let imageBitmap: ImageBitmap;
+  let imageSource: ImageBitmap | HTMLImageElement;
   try {
-    imageBitmap = await createImageBitmap(blob);
+    if (createImageBitmap) {
+      imageSource = await createImageBitmap(blob);
+    } else {
+      // if createImageBitmap is not supported,
+      // we use image element.
+      // This doesn't work in a web worker, though.
+      imageSource = new Image();
+      let imageUrl = "";
+      try {
+        imageUrl = URL.createObjectURL(blob);
+        imageSource.src = imageUrl;
+        await imageSource.decode();
+      } finally {
+        URL.revokeObjectURL(imageUrl);
+      }
+    }
   } catch {
     // TODO(https://github.com/chromium/chromium/blob/fe4f6d2155412504930c9d1c53892af5aac1db8d/third_party/blink/renderer/modules/shapedetection/shape_detector.cc#L59-L63):
     // Blob type inputs are not supported in Chromium.
@@ -246,7 +262,7 @@ async function getImageDataFromBlob(blob: Blob): Promise<ImageData | null> {
       "InvalidStateError",
     );
   }
-  const imageData = await getImageDataFromCanvasImageSource(imageBitmap);
+  const imageData = await getImageDataFromCanvasImageSource(imageSource);
   return imageData;
 }
 
