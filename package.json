@@ -83,7 +83,7 @@
     "@vitest/ui": "^0.34.3",
     "eslint": "^8.48.0",
     "http-server": "^14.1.1",
-    "npm-check-updates": "^16.13.2",
+    "npm-check-updates": "^16.13.3",
     "playwright": "^1.37.1",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.1",
