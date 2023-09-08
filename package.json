@@ -76,14 +76,14 @@
     "postncu": "npm i"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.5.0",
-    "@typescript-eslint/parser": "^6.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
     "@vitest/browser": "^0.34.3",
     "@vitest/coverage-istanbul": "^0.34.3",
     "@vitest/ui": "^0.34.3",
     "eslint": "^8.48.0",
     "http-server": "^14.1.1",
-    "npm-check-updates": "^16.13.2",
+    "npm-check-updates": "^16.13.3",
     "playwright": "^1.37.1",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.1",
@@ -93,7 +93,7 @@
     "vitest": "^0.34.3"
   },
   "dependencies": {
-    "@sec-ant/zxing-wasm": "^2.1.3",
+    "@sec-ant/zxing-wasm": "^2.1.4",
     "@types/dom-webcodecs": "^0.1.8"
   }
 }
