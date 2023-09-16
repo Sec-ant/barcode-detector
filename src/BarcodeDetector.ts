@@ -136,9 +136,11 @@ export class BarcodeDetector extends EventTarget {
             (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat,
           ),
         });
-      } catch {
+      } catch (e) {
+        // we need this information to debug
+        console.error(e);
         throw new DOMException(
-          "Barcode detection service unavailable. Use 'setZXingModuleOverrides' in offline or strict CSP environments.",
+          "Barcode detection service unavailable.",
           "NotSupportedError",
         );
       }
