@@ -3,6 +3,7 @@
   "compilerOptions": {
     "composite": true,
     "types": ["node"],
+    "module": "ESNext",
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "skipLibCheck": true,
