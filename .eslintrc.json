@@ -16,6 +16,7 @@
   "plugins": ["@typescript-eslint"],
   "ignorePatterns": ["node_modules", "dist"],
   "rules": {
-    "curly": "error"
+    "curly": "error",
+    "quotes": ["error", "double", { "allowTemplateLiterals": false }]
   }
 }
