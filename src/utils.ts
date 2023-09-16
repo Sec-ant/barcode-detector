@@ -133,7 +133,7 @@ function isVideoFrame(image: ImageBitmapSourceWebCodecs): image is VideoFrame {
   }
 }
 
-function isBlob(image: ImageBitmapSourceWebCodecs): image is Blob {
+export function isBlob(image: ImageBitmapSourceWebCodecs): image is Blob {
   try {
     return image instanceof Blob;
   } catch {
@@ -233,16 +233,21 @@ async function getImageDataFromCanvasImageSource(
   }
 }
 
-// TODO: use readBarcodesFromImageData to directly consume blobs.
-async function getImageDataFromBlob(blob: Blob): Promise<ImageData | null> {
+async function getImageDataOrBlobFromBlob(
+  blob: Blob,
+): Promise<ImageData | Blob | null> {
   let imageSource: ImageBitmap | HTMLImageElement;
   try {
+    // if createImageBitmap is supported
+    // we use it to check if this is a valid image blob
+    // this is not supported in early browsers or web workers in safari (2023.9.16)
     if (createImageBitmap) {
       imageSource = await createImageBitmap(blob);
-    } else {
-      // if createImageBitmap is not supported,
-      // we use image element.
-      // This doesn't work in a web worker, though.
+    }
+    // if createImageBitmap is not supported
+    // we use image element to check if this is a valid image blob
+    // this is not supported in web workers by spec
+    else if (Image) {
       imageSource = new Image();
       let imageUrl = "";
       try {
@@ -252,6 +257,11 @@ async function getImageDataFromBlob(blob: Blob): Promise<ImageData | null> {
       } finally {
         URL.revokeObjectURL(imageUrl);
       }
+    }
+    // if we are not lucky enough (web workers in early browsers or safari)
+    // just return the blob and use `readBarcodesFromImageFile` to detect barcodes
+    else {
+      return blob;
     }
   } catch {
     // TODO(https://github.com/chromium/chromium/blob/fe4f6d2155412504930c9d1c53892af5aac1db8d/third_party/blink/renderer/modules/shapedetection/shape_detector.cc#L59-L63):
@@ -284,11 +294,11 @@ function getImageDataFromCanvas(
   }
 }
 
-export async function getImageDataFromImageBitmapSource(
+export async function getImageDataOrBlobFromImageBitmapSource(
   image: ImageBitmapSourceWebCodecs,
-): Promise<ImageData | null> {
+): Promise<ImageData | Blob | null> {
   if (isBlob(image)) {
-    return await getImageDataFromBlob(image);
+    return await getImageDataOrBlobFromBlob(image);
   }
   if (isImageData(image)) {
     if (isImageDataArrayBufferDetached(image)) {

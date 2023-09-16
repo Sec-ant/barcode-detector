@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import {
-  getImageDataFromImageBitmapSource,
+  getImageDataOrBlobFromImageBitmapSource,
   addPrefixToExceptionOrError,
+  isBlob,
 } from "./utils.js";
 import {
   getZXingModule,
   readBarcodesFromImageData,
+  readBarcodesFromImageFile,
   ZXingReadInputBarcodeFormat,
   ZXingBarcodeFormat,
   ZXingReadOutput,
@@ -124,18 +126,32 @@ export class BarcodeDetector extends EventTarget {
   }
   async detect(image: ImageBitmapSourceWebCodecs): Promise<DetectedBarcode[]> {
     try {
-      const imageData = await getImageDataFromImageBitmapSource(image);
-      if (imageData === null) {
+      const imageDataOrBlob =
+        await getImageDataOrBlobFromImageBitmapSource(image);
+      // `null` indicates that the image has zero width or height
+      if (imageDataOrBlob === null) {
         return [];
       }
       let zxingReadOutputs: ZXingReadOutput[];
       try {
-        zxingReadOutputs = await readBarcodesFromImageData(imageData, {
-          tryHarder: true,
-          formats: this.#formats.map(
-            (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat,
-          ),
-        });
+        // if `imageDataOrBlob` is still a blob
+        // it means we cannot handle it with our js code
+        // so we directly feed it to the wasm module
+        if (isBlob(imageDataOrBlob)) {
+          zxingReadOutputs = await readBarcodesFromImageFile(imageDataOrBlob, {
+            tryHarder: true,
+            formats: this.#formats.map(
+              (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat,
+            ),
+          });
+        } else {
+          zxingReadOutputs = await readBarcodesFromImageData(imageDataOrBlob, {
+            tryHarder: true,
+            formats: this.#formats.map(
+              (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat,
+            ),
+          });
+        }
       } catch (e) {
         // we need this information to debug
         console.error(e);
