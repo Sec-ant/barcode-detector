@@ -58,7 +58,7 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
    <!-- register -->
    <script
      type="module"
-     src="https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/es/side-effects.min.js"
+     src="https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/es/side-effects.min.js"
    ></script>
 
    <!-- use -->
@@ -71,7 +71,7 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
 
    ```html
    <script type="module">
-     import { BarcodeDetector } from "https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/es/pure.min.js";
+     import { BarcodeDetector } from "https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/es/pure.min.js";
      const barcodeDetector = new BarcodeDetector();
    </script>
    ```
@@ -83,7 +83,7 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
    <script type="importmap">
      {
        "imports": {
-         "barcode-detector/pure": "https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/es/pure.min.js"
+         "barcode-detector/pure": "https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/es/pure.min.js"
        }
      }
    </script>
@@ -109,14 +109,14 @@ For legacy browsers that lack support for module type `<script>` tags, or for us
   window.BarcodeDetectionAPI.BarcodeDetector
   window.BarcodeDetectionAPI.setZXingModuleOverrides
   -->
-<script src="https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/iife/pure.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/iife/pure.min.js"></script>
 
 <!-- 
   IIFE side-effects.js registers:
   window.BarcodeDetector
   window.BarcodeDetectionAPI.setZXingModuleOverrides
   -->
-<script src="https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/iife/side-effects.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/iife/side-effects.min.js"></script>
 
 <!-- 
   IIFE index.js registers:
@@ -124,7 +124,7 @@ For legacy browsers that lack support for module type `<script>` tags, or for us
   window.BarcodeDetectionAPI.BarcodeDetector
   window.BarcodeDetectionAPI.setZXingModuleOverrides
   -->
-<script src="https://cdn.jsdelivr.net/npm/barcode-detector@2/dist/iife/index.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/iife/index.min.js"></script>
 ```
 
 ### CJS
@@ -165,10 +165,10 @@ In addition to `BarcodeDetector`, this package exports another function called `
 This package employs [Sec-ant/zxing-wasm](https://github.com/Sec-ant/zxing-wasm) to enable the core barcode reading functionality. As a result, a `.wasm` binary file is fetched at runtime. The default fetch path for this binary file is:
 
 ```
-https://cdn.jsdelivr.net/npm/@sec-ant/zxing-wasm@<version>/dist/reader/zxing_reader.wasm
+https://fastly.jsdelivr.net/npm/@sec-ant/zxing-wasm@<version>/dist/reader/zxing_reader.wasm
 ```
 
-The `setZXingModuleOverrides` function allows you to govern where the `.wasm` binary is served from, thereby enabling offline use of the package, use within a local network, or within a site having strict [CSP](https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#unsafe_webassembly_execution) rules.
+The `setZXingModuleOverrides` function allows you to govern where the `.wasm` binary is served from, thereby enabling offline use of the package, use within a local network, or within a site having strict [CSP](https://developer.mozilla.org/docs/Web/HTTP/CSP) rules.
 
 For instance, should you want to inline this `.wasm` file in your build output for offline usage, with the assistance of build tools, you could try:
 
@@ -200,7 +200,7 @@ Alternatively, the `.wasm` file could be copied to your dist folder to be served
 
 It's noteworthy that you'll always want to choose the correct version of the `.wasm` file, so the APIs exported by it are exactly what the js code expects.
 
-For more information on how to use this function, you can check [the notes here](https://github.com/Sec-ant/zxing-wasm#notes) and [discussions here](https://github.com/gruhn/vue-qrcode-reader/issues/354).
+For more information on how to use this function, you can check [the notes here](https://github.com/Sec-ant/zxing-wasm#notes) and [discussions here](https://github.com/Sec-ant/barcode-detector/issues/18) and [here](https://github.com/gruhn/vue-qrcode-reader/issues/354).
 
 This function is exported from all the subpaths, including the [side effects](#side-effects).
 
@@ -214,7 +214,7 @@ The `BarcodeDetector` provided by this package also extends class `EventTarget` 
 
 ### `load` Event
 
-The `load` event, which is a `CustomEvent`, will be dispatched on the successful instanciation of ZXing wasm module. For advanced usage, the instanciated module is passed as the `detail` parameter.
+The `load` event, which is a `CustomEvent`, will be dispatched on the successful instantiation of ZXing wasm module. For advanced usage, the instantiated module is passed as the `detail` parameter.
 
 ```ts
 import { BarcodeDetector } from "barcode-detector/pure";
@@ -228,7 +228,7 @@ barcodeDetector.addEventListener("load", ({ detail }) => {
 
 ### `error` Event
 
-The `error` event, which is a `CustomEvent`, will be dispatched if the instanciation of ZXing wasm module is failed. An error is passed as the `detail` parameter.
+The `error` event, which is a `CustomEvent`, will be dispatched if the instantiation of ZXing wasm module is failed. An error is passed as the `detail` parameter.
 
 ```ts
 import { BarcodeDetector } from "barcode-detector/pure";
