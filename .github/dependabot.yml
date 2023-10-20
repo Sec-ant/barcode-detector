@@ -9,6 +9,11 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "@sec-ant/zxing-wasm"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
     groups:
       minor-and-patch-updates:
         update-types:
