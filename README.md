@@ -1,6 +1,6 @@
 # barcode-detector
 
-[![npm](https://img.shields.io/npm/v/barcode-detector)](https://www.npmjs.com/package/barcode-detector/v/latest) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/%40sec-ant/barcode-detector)](https://www.npmjs.com/package/barcode-detector/v/latest) [![jsDelivr hits (npm scoped)](https://img.shields.io/jsdelivr/npm/hm/barcode-detector?color=%23ff5627)](https://cdn.jsdelivr.net/npm/barcode-detector@latest/)
+[![npm](https://img.shields.io/npm/v/barcode-detector)](https://www.npmjs.com/package/barcode-detector/v/latest) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/barcode-detector)](https://www.npmjs.com/package/barcode-detector/v/latest) [![jsDelivr hits (npm scoped)](https://img.shields.io/jsdelivr/npm/hm/barcode-detector?color=%23ff5627)](https://cdn.jsdelivr.net/npm/barcode-detector@latest/)
 
 A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill that uses [ZXing webassembly](https://github.com/Sec-ant/zxing-wasm) under the hood.
 
