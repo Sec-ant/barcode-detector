@@ -77,12 +77,12 @@
     "bump-zxing-wasm": "npm i @sec-ant/zxing-wasm@latest --save-exact"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.8.0",
-    "@typescript-eslint/parser": "^6.8.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
     "@vitest/browser": "^0.34.6",
     "@vitest/coverage-istanbul": "^0.34.6",
     "@vitest/ui": "^0.34.6",
-    "eslint": "^8.51.0",
+    "eslint": "^8.52.0",
     "http-server": "^14.1.1",
     "npm-check-updates": "^16.14.6",
     "playwright": "^1.39.0",
@@ -95,7 +95,7 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
-    "@sec-ant/zxing-wasm": "2.1.6",
-    "@types/dom-webcodecs": "^0.1.9"
+    "@types/dom-webcodecs": "^0.1.9",
+    "zxing-wasm": "1.0.0-rc.3"
   }
 }

@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/barcode-detector)](https://www.npmjs.com/package/barcode-detector/v/latest) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/barcode-detector)](https://www.npmjs.com/package/barcode-detector/v/latest) [![jsDelivr hits (npm scoped)](https://img.shields.io/jsdelivr/npm/hm/barcode-detector?color=%23ff5627)](https://cdn.jsdelivr.net/npm/barcode-detector@latest/)
 
-A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill that uses [ZXing webassembly](https://github.com/Sec-ant/zxing-wasm) under the hood.
+A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill that uses [ZXing-C++ WebAssembly](https://github.com/Sec-ant/zxing-wasm) under the hood.
 
 > This package was originally published as [`@sec-ant/barcode-detector`](https://www.npmjs.com/package/@sec-ant/barcode-detector) on the npm registry. With appreciation for the generous offer from [@gruhn](https://github.com/gruhn), the package is now released under the name `barcode-detector` starting from version 2.0.0. The original name `@sec-ant/barcode-detector` will continue to be used for versions prior to 2.0.0, and will be retained solely for maintenance purposes. Eventually, it will be deprecated at an appropriate juncture.
 
@@ -162,10 +162,10 @@ This package can also be consumed as a commonjs package:
 
 In addition to `BarcodeDetector`, this package exports another function called `setZXingModuleOverrides`.
 
-This package employs [Sec-ant/zxing-wasm](https://github.com/Sec-ant/zxing-wasm) to enable the core barcode reading functionality. As a result, a `.wasm` binary file is fetched at runtime. The default fetch path for this binary file is:
+This package employs [zxing-wasm](https://github.com/Sec-ant/zxing-wasm) to enable the core barcode reading functionality. As a result, a `.wasm` binary file is fetched at runtime. The default fetch path for this binary file is:
 
 ```
-https://fastly.jsdelivr.net/npm/@sec-ant/zxing-wasm@<version>/dist/reader/zxing_reader.wasm
+https://fastly.jsdelivr.net/npm/zxing-wasm@<version>/dist/reader/zxing_reader.wasm
 ```
 
 The `setZXingModuleOverrides` function allows you to govern where the `.wasm` binary is served from, thereby enabling offline use of the package, use within a local network, or within a site having strict [CSP](https://developer.mozilla.org/docs/Web/HTTP/CSP) rules.
@@ -174,7 +174,7 @@ For instance, should you want to inline this `.wasm` file in your build output f
 
 ```ts
 // src/index.ts
-import wasmFile from "../node_modules/@sec-ant/zxing-wasm/dist/reader/zxing_reader.wasm?url";
+import wasmFile from "../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm?url";
 
 import {
   setZXingModuleOverrides,
@@ -261,5 +261,3 @@ barcodeDetector.detect(imageFile).then(console.log);
 The source code in this repository, as well as the build output, except for the parts listed below, is licensed under the [MIT license](./LICENSE).
 
 Test samples and resources are collected from [zxing-cpp/zxing-cpp](https://github.com/zxing-cpp/zxing-cpp), which is licensed under the [Apache-2.0 license](https://raw.githubusercontent.com/zxing-cpp/zxing-cpp/master/LICENSE), and [web-platform-tests/wpt](https://github.com/web-platform-tests/wpt), which is licensed under the [3-Clause BSD license](https://raw.githubusercontent.com/web-platform-tests/wpt/master/LICENSE.md).
-
-This package has an indirect dependency on [Sec-ant/zxing-wasm-build](https://github.com/Sec-ant/zxing-wasm-build), which is licensed under the [Apache-2.0 license](https://raw.githubusercontent.com/Sec-ant/zxing-wasm-build/main/LICENSE).

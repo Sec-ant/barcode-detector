@@ -8,16 +8,16 @@ import {
   getZXingModule,
   readBarcodesFromImageData,
   readBarcodesFromImageFile,
-  ZXingReadInputBarcodeFormat,
-  ZXingBarcodeFormat,
-  ZXingReadOutput,
-  ZXingModule,
-} from "@sec-ant/zxing-wasm/reader";
+  type ReadInputBarcodeFormat,
+  type BarcodeFormat as ZXingBarcodeFormat,
+  type ReadResult,
+  type ZXingModule,
+} from "zxing-wasm/reader";
 import { BARCODE_DETECTOR_FORMATS } from "./utils.js";
 
 export type BarcodeFormat = (typeof BARCODE_DETECTOR_FORMATS)[number];
 
-const formatMap = new Map<BarcodeFormat, ZXingReadInputBarcodeFormat>([
+const formatMap = new Map<BarcodeFormat, ReadInputBarcodeFormat>([
   ["aztec", "Aztec"],
   ["code_128", "Code128"],
   ["code_39", "Code39"],
@@ -132,7 +132,7 @@ export class BarcodeDetector extends EventTarget {
       if (imageDataOrBlob === null) {
         return [];
       }
-      let zxingReadOutputs: ZXingReadOutput[];
+      let zxingReadOutputs: ReadResult[];
       try {
         // if `imageDataOrBlob` is still a blob
         // it means we cannot handle it with our js code
@@ -141,14 +141,14 @@ export class BarcodeDetector extends EventTarget {
           zxingReadOutputs = await readBarcodesFromImageFile(imageDataOrBlob, {
             tryHarder: true,
             formats: this.#formats.map(
-              (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat,
+              (format) => formatMap.get(format) as ReadInputBarcodeFormat,
             ),
           });
         } else {
           zxingReadOutputs = await readBarcodesFromImageData(imageDataOrBlob, {
             tryHarder: true,
             formats: this.#formats.map(
-              (format) => formatMap.get(format) as ZXingReadInputBarcodeFormat,
+              (format) => formatMap.get(format) as ReadInputBarcodeFormat,
             ),
           });
         }
@@ -178,7 +178,7 @@ export class BarcodeDetector extends EventTarget {
             maxX - minX,
             maxY - minY,
           ),
-          rawValue: new TextDecoder().decode(zxingReadOutput.bytes),
+          rawValue: zxingReadOutput.text,
           format: convertFormat(zxingReadOutput.format),
           cornerPoints: [
             {
@@ -209,4 +209,4 @@ export class BarcodeDetector extends EventTarget {
   }
 }
 
-export { setZXingModuleOverrides } from "@sec-ant/zxing-wasm";
+export { setZXingModuleOverrides } from "zxing-wasm";
