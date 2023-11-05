@@ -209,4 +209,4 @@ export class BarcodeDetector extends EventTarget {
   }
 }
 
-export { setZXingModuleOverrides } from "zxing-wasm";
+export { setZXingModuleOverrides } from "zxing-wasm/reader";
