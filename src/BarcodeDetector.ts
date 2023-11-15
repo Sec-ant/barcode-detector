@@ -11,7 +11,7 @@ import {
   type ReadInputBarcodeFormat,
   type BarcodeFormat as ZXingBarcodeFormat,
   type ReadResult,
-  type ZXingModule,
+  type ZXingReaderModule,
 } from "zxing-wasm/reader";
 import { BARCODE_DETECTOR_FORMATS } from "./utils.js";
 
@@ -59,7 +59,7 @@ export interface DetectedBarcode {
 }
 
 interface CustomEventMap {
-  load: CustomEvent<ZXingModule<"reader">>;
+  load: CustomEvent<ZXingReaderModule>;
   error: CustomEvent<unknown>;
 }
 
@@ -107,7 +107,7 @@ export class BarcodeDetector extends EventTarget {
         .then((zxingModule) => {
           this.dispatchEvent(
             new CustomEvent("load", {
-              detail: zxingModule as ZXingModule<"reader">,
+              detail: zxingModule as ZXingReaderModule,
             }),
           );
         })
