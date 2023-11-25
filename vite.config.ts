@@ -12,6 +12,7 @@ export default defineConfig({
         "side-effects": "src/side-effects.ts",
       },
       formats: ["es"],
+      fileName: (_, entryName) => `${entryName}.js`,
     },
     outDir: "dist/es",
   },

@@ -1,38 +1,34 @@
-import { build } from "vite";
+import { type LibraryOptions, build } from "vite";
 import { rimraf } from "rimraf";
+import viteConfig from "../vite.config";
 
-const entryPoints = [
-  {
-    entryAlias: "index",
-    entryPath: "src/index.ts",
-  },
-  {
-    entryAlias: "pure",
-    entryPath: "src/pure.ts",
-  },
-  {
-    entryAlias: "side-effects",
-    entryPath: "src/side-effects.ts",
-  },
-];
-
-async function buildPackages() {
+async function buildIife() {
   await rimraf("dist/iife");
-  for (const { entryAlias, entryPath } of entryPoints) {
-    await build({
-      build: {
-        lib: {
-          entry: entryPath,
-          formats: ["iife"],
-          name: "BarcodeDetectionAPI",
-          fileName: () => `${entryAlias}.js`,
-        },
-        outDir: "dist/iife",
-        emptyOutDir: false,
+  await Promise.all(
+    Object.entries((viteConfig.build?.lib as LibraryOptions).entry).map(
+      ([entryAlias, entryPath]) => {
+        return build({
+          ...viteConfig,
+          build: {
+            ...viteConfig.build,
+            lib: {
+              ...(viteConfig.build?.lib as LibraryOptions),
+              entry: {
+                [entryAlias]: entryPath,
+              },
+              formats: ["iife"],
+              name: "BarcodeDetectionAPI",
+            },
+            rollupOptions: undefined,
+            outDir: "dist/iife",
+            emptyOutDir: false,
+          },
+          test: undefined,
+          configFile: false,
+        });
       },
-      configFile: false,
-    });
-  }
+    ),
+  );
 }
 
-buildPackages();
+buildIife();

@@ -13,7 +13,7 @@ await writeFile(
         .map((e) => [e.name, resolve(e.path, e.name)])
         .map(async ([n, p]) => [
           n,
-          (await readdir(p, { withFileTypes: true }))
+          (await readdir(p as string, { withFileTypes: true }))
             .filter(
               (e) =>
                 e.isFile() &&
