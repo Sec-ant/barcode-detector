@@ -241,13 +241,14 @@ async function getImageDataOrBlobFromBlob(
     // if createImageBitmap is supported
     // we use it to check if this is a valid image blob
     // this is not supported in early browsers or web workers in safari (2023.9.16)
-    if (createImageBitmap) {
+    // @ts-expect-error this api may not exist in some runtimes
+    if (globalThis.createImageBitmap) {
       imageSource = await createImageBitmap(blob);
     }
     // if createImageBitmap is not supported
     // we use image element to check if this is a valid image blob
     // this is not supported in web workers by spec
-    else if (Image) {
+    else if (globalThis.Image) {
       imageSource = new Image();
       let imageUrl = "";
       try {
