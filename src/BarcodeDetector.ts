@@ -8,39 +8,18 @@ import {
   getZXingModule,
   readBarcodesFromImageData,
   readBarcodesFromImageFile,
-  type ReadInputBarcodeFormat,
-  type BarcodeFormat as ZXingBarcodeFormat,
   type ReadResult,
   type ZXingReaderModule,
 } from "zxing-wasm/reader";
-import { BARCODE_DETECTOR_FORMATS } from "./utils.js";
+import {
+  convertFormat,
+  formatMap,
+  BARCODE_FORMATS,
+  type BarcodeFormat,
+  type ReadResultBarcodeFormat,
+} from "./utils.js";
 
-export type BarcodeFormat = (typeof BARCODE_DETECTOR_FORMATS)[number];
-
-const formatMap = new Map<BarcodeFormat, ReadInputBarcodeFormat>([
-  ["aztec", "Aztec"],
-  ["code_128", "Code128"],
-  ["code_39", "Code39"],
-  ["code_93", "Code93"],
-  ["codabar", "Codabar"],
-  ["data_matrix", "DataMatrix"],
-  ["ean_13", "EAN-13"],
-  ["ean_8", "EAN-8"],
-  ["itf", "ITF"],
-  ["pdf417", "PDF417"],
-  ["qr_code", "QRCode"],
-  ["upc_a", "UPC-A"],
-  ["upc_e", "UPC-E"],
-]);
-
-function convertFormat(target: ZXingBarcodeFormat): BarcodeFormat {
-  for (const [barcodeFormat, zxingBarcodeFormat] of formatMap) {
-    if (target === zxingBarcodeFormat) {
-      return barcodeFormat;
-    }
-  }
-  return "unknown";
-}
+export { type BarcodeFormat } from "./utils.js";
 
 export interface BarcodeDetectorOptions {
   formats?: BarcodeFormat[];
@@ -54,7 +33,7 @@ export interface Point2D {
 export interface DetectedBarcode {
   boundingBox: DOMRectReadOnly;
   rawValue: string;
-  format: BarcodeFormat;
+  format: ReadResultBarcodeFormat;
   cornerPoints: [Point2D, Point2D, Point2D, Point2D];
 }
 
@@ -91,7 +70,7 @@ export class BarcodeDetector extends EventTarget {
         throw new TypeError("Hint option provided, but is empty.");
       }
       formats?.forEach((format) => {
-        if (!BARCODE_DETECTOR_FORMATS.includes(format)) {
+        if (!formatMap.has(format)) {
           throw new TypeError(
             `Failed to read the 'formats' property from 'BarcodeDetectorOptions': The provided value '${format}' is not a valid enum value of type BarcodeFormat.`,
           );
@@ -122,7 +101,7 @@ export class BarcodeDetector extends EventTarget {
     }
   }
   static async getSupportedFormats(): Promise<readonly BarcodeFormat[]> {
-    return BARCODE_DETECTOR_FORMATS.filter((f) => f !== "unknown");
+    return BARCODE_FORMATS.filter((f) => f !== "unknown");
   }
   async detect(image: ImageBitmapSourceWebCodecs): Promise<DetectedBarcode[]> {
     try {
@@ -140,16 +119,12 @@ export class BarcodeDetector extends EventTarget {
         if (isBlob(imageDataOrBlob)) {
           zxingReadOutputs = await readBarcodesFromImageFile(imageDataOrBlob, {
             tryHarder: true,
-            formats: this.#formats.map(
-              (format) => formatMap.get(format) as ReadInputBarcodeFormat,
-            ),
+            formats: this.#formats.map((format) => formatMap.get(format)!),
           });
         } else {
           zxingReadOutputs = await readBarcodesFromImageData(imageDataOrBlob, {
             tryHarder: true,
-            formats: this.#formats.map(
-              (format) => formatMap.get(format) as ReadInputBarcodeFormat,
-            ),
+            formats: this.#formats.map((format) => formatMap.get(format)!),
           });
         }
       } catch (e) {

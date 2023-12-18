@@ -58,25 +58,21 @@ test("detectedBarcode can be passed to postMessage()", async () => {
 test("get supported barcode formats", async () => {
   const supportedFormats = await BarcodeDetector.getSupportedFormats();
 
-  assert.includeMembers(
-    [
-      "aztec",
-      "code_128",
-      "code_39",
-      "code_93",
-      "codabar",
-      "data_matrix",
-      "ean_13",
-      "ean_8",
-      "itf",
-      "pdf417",
-      "qr_code",
-      "upc_a",
-      "upc_e",
-      "unknown",
-    ],
-    supportedFormats as string[],
-  );
+  assert.includeMembers(supportedFormats as string[], [
+    "aztec",
+    "code_128",
+    "code_39",
+    "code_93",
+    "codabar",
+    "data_matrix",
+    "ean_13",
+    "ean_8",
+    "itf",
+    "pdf417",
+    "qr_code",
+    "upc_a",
+    "upc_e",
+  ]);
 });
 
 // TODO: web worker test

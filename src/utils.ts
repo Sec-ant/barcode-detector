@@ -1,19 +1,57 @@
-export const BARCODE_DETECTOR_FORMATS = [
-  "aztec",
-  "code_128",
-  "code_39",
-  "code_93",
-  "codabar",
-  "data_matrix",
-  "ean_13",
-  "ean_8",
-  "itf",
-  "pdf417",
-  "qr_code",
-  "upc_a",
-  "upc_e",
-  "unknown",
-] as const;
+import {
+  type ReadInputBarcodeFormat,
+  type ReadOutputBarcodeFormat,
+} from "zxing-wasm/reader";
+
+const formatMapEntries = [
+  ["aztec", "Aztec"],
+  ["code_128", "Code128"],
+  ["code_39", "Code39"],
+  ["code_93", "Code93"],
+  ["codabar", "Codabar"],
+  ["databar", "DataBar"],
+  ["databar_expanded", "DataBarExpanded"],
+  ["data_matrix", "DataMatrix"],
+  ["dx_film_edge", "DXFilmEdge"],
+  ["ean_13", "EAN-13"],
+  ["ean_8", "EAN-8"],
+  ["itf", "ITF"],
+  ["maxi_code", "MaxiCode"],
+  ["micro_qr_code", "MicroQRCode"],
+  ["pdf417", "PDF417"],
+  ["qr_code", "QRCode"],
+  ["rm_qr_code", "rMQRCode"],
+  ["upc_a", "UPC-A"],
+  ["upc_e", "UPC-E"],
+  ["linear_codes", "Linear-Codes"],
+  ["matrix_codes", "Matrix-Codes"],
+] as const satisfies readonly [string, ReadInputBarcodeFormat][];
+
+export const BARCODE_FORMATS = (
+  [...formatMapEntries, ["unknown"]] as const
+).map((e) => e[0]);
+
+export type BarcodeFormat = (typeof BARCODE_FORMATS)[number];
+
+export type ReadResultBarcodeFormat = Exclude<
+  BarcodeFormat,
+  "linear_codes" | "matrix_codes"
+>;
+
+export const formatMap = new Map<BarcodeFormat, ReadInputBarcodeFormat>(
+  formatMapEntries,
+);
+
+export function convertFormat(
+  target: ReadOutputBarcodeFormat,
+): ReadResultBarcodeFormat {
+  for (const [barcodeFormat, zxingBarcodeFormat] of formatMap) {
+    if (target === zxingBarcodeFormat) {
+      return barcodeFormat as ReadResultBarcodeFormat;
+    }
+  }
+  return "unknown";
+}
 
 function getIntrinsicDimensionsOfCanvasImageSource(
   image: CanvasImageSourceWebCodecs,
