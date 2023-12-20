@@ -77,11 +77,11 @@
     "bump-zxing-wasm": "npm i zxing-wasm@latest --save-exact"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.14.0",
-    "@typescript-eslint/parser": "^6.14.0",
-    "@vitest/browser": "^1.0.4",
-    "@vitest/coverage-istanbul": "^1.0.4",
-    "@vitest/ui": "^1.0.4",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vitest/browser": "^1.1.0",
+    "@vitest/coverage-istanbul": "^1.1.0",
+    "@vitest/ui": "^1.1.0",
     "concurrently": "^8.2.2",
     "eslint": "^8.56.0",
     "http-server": "^14.1.1",
@@ -90,10 +90,10 @@
     "prettier": "^3.1.1",
     "rimraf": "^5.0.5",
     "start-server-and-test": "^2.0.3",
-    "tsx": "^4.6.2",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.10",
-    "vitest": "^1.0.4"
+    "vitest": "^1.1.0"
   },
   "dependencies": {
     "@types/dom-webcodecs": "^0.1.11",
