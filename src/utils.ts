@@ -198,7 +198,7 @@ function createCanvas(
     }
     throw void 0;
   } catch {
-    const canvas = document.createElement("canvas") as HTMLCanvasElement;
+    const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
     return canvas;
