@@ -53,6 +53,9 @@
   "config": {
     "port": "18080"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "update-hooks": "simple-git-hooks",
     "changeset": "changeset",
