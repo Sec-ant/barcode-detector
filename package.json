@@ -2,9 +2,11 @@
   "name": "barcode-detector",
   "description": "A Barcode Detection API polyfill that uses ZXing webassembly under the hood",
   "private": false,
-  "version": "2.2.2",
+  "version": "2.2.3",
   "type": "module",
-  "files": ["./dist"],
+  "files": [
+    "./dist"
+  ],
   "main": "./dist/cjs/index.js",
   "module": "./dist/es/index.js",
   "exports": {
