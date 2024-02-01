@@ -1,22 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import {
-  getImageDataOrBlobFromImageBitmapSource,
-  addPrefixToExceptionOrError,
-  isBlob,
-} from "./utils.js";
-import {
+  type ReadResult,
+  type ZXingReaderModule,
   getZXingModule,
   readBarcodesFromImageData,
   readBarcodesFromImageFile,
-  type ReadResult,
-  type ZXingReaderModule,
 } from "zxing-wasm/reader";
 import {
-  convertFormat,
-  formatMap,
+  addPrefixToExceptionOrError,
+  getImageDataOrBlobFromImageBitmapSource,
+  isBlob,
+} from "./utils.js";
+import {
   BARCODE_FORMATS,
   type BarcodeFormat,
   type ReadResultBarcodeFormat,
+  convertFormat,
+  formatMap,
 } from "./utils.js";
 
 export { type BarcodeFormat } from "./utils.js";
@@ -69,13 +68,13 @@ export class BarcodeDetector extends EventTarget {
       if (formats?.length === 0) {
         throw new TypeError("Hint option provided, but is empty.");
       }
-      formats?.forEach((format) => {
+      for (const format of formats ?? []) {
         if (!formatMap.has(format)) {
           throw new TypeError(
             `Failed to read the 'formats' property from 'BarcodeDetectorOptions': The provided value '${format}' is not a valid enum value of type BarcodeFormat.`,
           );
         }
-      });
+      }
       this.#formats = formats ?? [];
       // Use eager loading so that a user can fetch and init the wasm
       // before running actual detections, therefore shorten the cold start

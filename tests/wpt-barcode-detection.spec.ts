@@ -1,10 +1,10 @@
-import { test, assert, describe } from "vitest";
+import { assert, describe, test } from "vitest";
 import { BarcodeDetector } from "../src/index.js";
 import {
+  drawImageToCanvas,
   getHTMLImage,
   getSVGImage,
   getVideo,
-  drawImageToCanvas,
   seekTo,
 } from "./helpers.js";
 

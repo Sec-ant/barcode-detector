@@ -1,6 +1,6 @@
-import { type LibraryOptions, build } from "vite";
 import { writeFile } from "node:fs/promises";
-import viteConfig from "../vite.config";
+import { type LibraryOptions, build } from "vite";
+import viteConfig from "../vite.config.js";
 
 async function buildCjs() {
   await build({
@@ -8,7 +8,7 @@ async function buildCjs() {
     build: {
       ...viteConfig.build,
       lib: {
-        ...(viteConfig.build?.lib as LibraryOptions),
+        ...(viteConfig.build!.lib as LibraryOptions),
         formats: ["cjs"],
       },
       outDir: "dist/cjs",
@@ -18,7 +18,7 @@ async function buildCjs() {
   });
   await writeFile(
     "dist/cjs/package.json",
-    JSON.stringify({ type: "commonjs" }, undefined, 2) + "\n",
+    `${JSON.stringify({ type: "commonjs" }, undefined, 2)}\n`,
   );
 }
 

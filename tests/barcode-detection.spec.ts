@@ -1,10 +1,8 @@
 declare const __PORT__: string;
 
-import { test, assert, describe } from "vitest";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+import { assert, describe, test } from "vitest";
 import { BarcodeDetector } from "../src/index.js";
-import { getHTMLImage, getVideo, drawImageToCanvas } from "./helpers.js";
+import { drawImageToCanvas, getHTMLImage, getVideo } from "./helpers.js";
 
 function areCatsAndDogs(detectionResult: DetectedBarcode[]) {
   assert.equal(detectionResult.length, 2, "Number of barcodes");
@@ -26,9 +24,9 @@ test("detectedBarcode.boundingBox should be DOMRectReadOnly", async () => {
     canvas.getContext("2d")!.getImageData(0, 0, canvas.width, canvas.height),
   );
 
-  detectionResult.forEach(({ boundingBox }) => {
+  for (const { boundingBox } of detectionResult) {
     assert.isTrue(boundingBox instanceof DOMRectReadOnly);
-  });
+  }
 });
 
 test("detectedBarcode can be passed to postMessage()", async () => {
@@ -79,7 +77,7 @@ test("get supported barcode formats", async () => {
 
 test("new BarcodeDetector() throws on invalid formats", async () => {
   const invalidFormatsList = [[], ["unknown"], ["foo", "bar"]];
-  invalidFormatsList.forEach((invalidFormats) => {
+  for (const invalidFormats of invalidFormatsList) {
     assert.throw(
       () => {
         new BarcodeDetector({
@@ -90,11 +88,11 @@ test("new BarcodeDetector() throws on invalid formats", async () => {
       undefined,
       `${JSON.stringify(invalidFormats)} contains invalid formats`,
     );
-  });
+  }
 });
 
 describe("BarcodeDetector.detect() accepts", () => {
-  [
+  for (const { createCanvas, pixelFormat, name } of [
     {
       createCanvas: () => {
         return document.createElement("canvas");
@@ -116,7 +114,7 @@ describe("BarcodeDetector.detect() accepts", () => {
       pixelFormat: "uint8",
       name: "BarcodeDetector.detect() accepts an OffscreenCanvas",
     },
-  ].forEach(({ createCanvas, pixelFormat, name }) => {
+  ]) {
     test(name, async () => {
       const image = await getHTMLImage();
       const canvas = drawImageToCanvas(image, {
@@ -127,7 +125,7 @@ describe("BarcodeDetector.detect() accepts", () => {
       const detectionResult = await barcodeDetector.detect(canvas);
       areCatsAndDogs(detectionResult);
     });
-  });
+  }
 
   test("BarcodeDetector.detect() accepts an HTMLImageElement", async () => {
     const image = await getHTMLImage();
@@ -175,8 +173,6 @@ describe("BarcodeDetector.detect() accepts", () => {
 
   test("BarcodeDetector.detect() accepts a uint16 storage format ImageData", async () => {
     // TODO: check the runtime support for storageFormat
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const imgUint16 = new ImageData(1024, 1024, {
       storageFormat: "uint16",
     });
