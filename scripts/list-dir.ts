@@ -1,6 +1,6 @@
-import { fileURLToPath } from "node:url";
-import { resolve, relative } from "node:path";
 import { readdir, writeFile } from "node:fs/promises";
+import { relative, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const samplesDir = fileURLToPath(new URL("../tests/samples", import.meta.url));
 

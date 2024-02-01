@@ -1,0 +1,4 @@
+{
+  "buildCommand": "build:ci",
+  "node": "18"
+}

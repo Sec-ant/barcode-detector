@@ -1,2 +1,14 @@
-tests/resources/*
-tests/samples/*
+*.js
+*.ts
+*.cjs
+*.mjs
+*.cts
+*.mts
+*.d.cts
+*.d.mts
+*.jsx
+*.tsx
+*.json
+*.jsonc
+tests/resources
+tests/samples

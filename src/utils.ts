@@ -1,6 +1,6 @@
-import {
-  type ReadInputBarcodeFormat,
-  type ReadOutputBarcodeFormat,
+import type {
+  ReadInputBarcodeFormat,
+  ReadOutputBarcodeFormat,
 } from "zxing-wasm/reader";
 
 const formatMapEntries = [
@@ -409,13 +409,15 @@ export function addPrefixToExceptionOrError(e: unknown, prefix: string) {
     return new DOMException(`${prefix}: ${e.message}`, e.name);
   }
   if (e instanceof Error) {
-    return new (e.constructor as
-      | ErrorConstructor
-      | EvalErrorConstructor
-      | TypeErrorConstructor
-      | RangeErrorConstructor
-      | SyntaxErrorConstructor
-      | ReferenceErrorConstructor)(`${prefix}: ${e.message}`);
+    return new (
+      e.constructor as
+        | ErrorConstructor
+        | EvalErrorConstructor
+        | TypeErrorConstructor
+        | RangeErrorConstructor
+        | SyntaxErrorConstructor
+        | ReferenceErrorConstructor
+    )(`${prefix}: ${e.message}`);
   }
   return new Error(`${prefix}: ${e}`);
 }

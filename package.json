@@ -4,9 +4,7 @@
   "private": false,
   "version": "2.2.2",
   "type": "module",
-  "files": [
-    "./dist"
-  ],
+  "files": ["./dist"],
   "main": "./dist/cjs/index.js",
   "module": "./dist/es/index.js",
   "exports": {
@@ -33,7 +31,7 @@
   "homepage": "https://github.com/Sec-ant/barcode-detector",
   "bugs": {
     "url": "https://github.com/Sec-ant/barcode-detector/issues",
-    "email": "zzwu@zju.edu.cn"
+    "email": "zezhengwu@proton.me"
   },
   "keywords": [
     "es6",
@@ -54,16 +52,26 @@
     "port": "18080"
   },
   "scripts": {
-    "lint": "eslint . --ext .ts",
+    "update-hooks": "simple-git-hooks",
+    "changeset": "changeset",
+    "bump": "changeset version 2>/dev/null | grep . && npm i; exit 0",
+    "lint": "biome lint .",
     "type-check": "tsc --noEmit --emitDeclarationOnly false",
-    "format": "prettier . --write",
-    "prebuild": "npm run lint && npm run type-check && npm run format",
+    "format:prettier": "prettier . --write",
+    "format:biome": "biome format . --write",
+    "format": "conc \"npm:format:prettier\" \"npm:format:biome\"",
+    "check:biome": "biome check --apply .",
+    "check": "conc \"npm:format:prettier\" \"npm:check:biome\"",
+    "clear:dist": "rimraf dist",
+    "prebuild": "npm run check && npm run type-check && npm run clear:dist",
     "build:es": "vite build",
     "build:cjs": "tsx ./scripts/build-cjs.ts",
     "build:iife": "tsx ./scripts/build-iife.ts",
     "build": "conc \"npm:build:es\" \"npm:build:cjs\" \"npm:build:iife\"",
     "postbuild:es": "tsc --declarationDir ./dist/es",
     "postbuild:cjs": "tsc --declarationDir ./dist/cjs",
+    "prebuild:ci": "npm run type-check && npm run clear:dist",
+    "build:ci": "conc \"npm:build:es\" \"npm:build:cjs\" \"npm:build:iife\"",
     "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
     "pretest": "tsx ./scripts/list-dir.ts",
     "pretest:ui": "tsx ./scripts/list-dir.ts",
@@ -72,31 +80,35 @@
     "test:ui": "start-server-and-test $npm_package_config_port 'vitest --ui --coverage'",
     "coverage": "start-server-and-test $npm_package_config_port 'vitest run --coverage'",
     "prepublishOnly": "npm run build",
-    "ncu": "npx npm-check-updates --filterVersion \"/^[~^]/\" -u",
+    "ncu": "ncu",
     "postncu": "npm i",
-    "bump-zxing-wasm": "npm i zxing-wasm@latest --save-exact"
+    "bump-zxing-wasm": "npm i zxing-wasm@latest --save-exact",
+    "bump-biome": "npm i @biomejs/biome@latest --save-exact"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.16.0",
-    "@typescript-eslint/parser": "^6.16.0",
-    "@vitest/browser": "^1.1.0",
-    "@vitest/coverage-istanbul": "^1.1.0",
-    "@vitest/ui": "^1.1.0",
+    "@biomejs/biome": "^1.5.3",
+    "@changesets/cli": "^2.27.1",
+    "@commitlint/cli": "^18.6.0",
+    "@commitlint/config-conventional": "^18.6.0",
+    "@vitest/browser": "^1.2.2",
+    "@vitest/coverage-istanbul": "^1.2.2",
+    "@vitest/ui": "^1.2.2",
     "concurrently": "^8.2.2",
-    "eslint": "^8.56.0",
     "http-server": "^14.1.1",
-    "npm-check-updates": "^16.14.12",
-    "playwright": "^1.40.1",
-    "prettier": "^3.1.1",
+    "lint-staged": "^15.2.1",
+    "npm-check-updates": "^16.14.14",
+    "playwright": "^1.41.1",
+    "prettier": "^3.2.4",
     "rimraf": "^5.0.5",
+    "simple-git-hooks": "^2.9.0",
     "start-server-and-test": "^2.0.3",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",
-    "vite": "^5.0.10",
-    "vitest": "^1.1.0"
+    "vite": "^5.0.12",
+    "vitest": "^1.2.2"
   },
   "dependencies": {
     "@types/dom-webcodecs": "^0.1.11",
-    "zxing-wasm": "1.2.0"
+    "zxing-wasm": "1.2.3"
   }
 }

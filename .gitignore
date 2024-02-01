@@ -25,3 +25,5 @@ dist-ssr
 *.sw?
 
 coverage
+*.tgz
+*.tar.gz

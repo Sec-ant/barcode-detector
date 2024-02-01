@@ -1,13 +1,12 @@
-import { test, assert, describe } from "vitest";
-import toc from "./samples/toc.json";
-import { getHTMLImage } from "./helpers.js";
+import { assert, describe, test } from "vitest";
 import { BarcodeDetector } from "../src/index.js";
+import { getHTMLImage } from "./helpers.js";
+import toc from "./samples/toc.json";
 
 const barcodeDetector = new BarcodeDetector();
-
-toc.forEach((e) => {
+for (const e of toc) {
   describe(`detect ${e[0]}`, () => {
-    (e[1] as string[]).forEach((f) => {
+    for (const f of e[1] as string[]) {
       test(`detect ${f}`, async () => {
         const image = await getHTMLImage(
           new URL(`./samples/${f}`, import.meta.url).href,
@@ -19,6 +18,6 @@ toc.forEach((e) => {
         const detectedBarcodes = await barcodeDetector.detect(image);
         assert.equal(detectedBarcodes[0]?.rawValue, value, `\n${image.src}\n`);
       });
-    });
+    }
   });
-});
+}

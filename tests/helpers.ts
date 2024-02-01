@@ -24,8 +24,8 @@ export async function getSVGImage(
     );
     image.addEventListener("load", async () => {
       const htmlImage = await htmlImagePromise;
-      image.setAttribute("width", htmlImage.width + "");
-      image.setAttribute("height", htmlImage.height + "");
+      image.setAttribute("width", `${htmlImage.width}`);
+      image.setAttribute("height", `${htmlImage.height}`);
       resolve(image);
     });
     image.addEventListener("error", (error) => {
@@ -68,8 +68,9 @@ async function waitForNFrames(count: number) {
   }
 
   return await new Promise<void>((resolve) => {
+    let c = count;
     function tick() {
-      --count ? requestAnimationFrame(tick) : resolve();
+      --c ? requestAnimationFrame(tick) : resolve();
     }
     requestAnimationFrame(tick);
   });
