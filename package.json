@@ -84,7 +84,7 @@
     "prepublishOnly": "npm run build",
     "ncu": "ncu",
     "postncu": "npm i",
-    "bump-zxing-wasm": "npm i zxing-wasm@latest --save-exact",
+    "bump-zxing-wasm": "npm i -E zxing-wasm@latest",
     "bump-biome:latest": "npm i -DE @biomejs/biome@latest",
     "bump-biome:nightly": "npm i -DE @biomejs/biome@nightly"
   },
