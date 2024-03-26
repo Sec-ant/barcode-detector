@@ -112,6 +112,6 @@
   },
   "dependencies": {
     "@types/dom-webcodecs": "^0.1.11",
-    "zxing-wasm": "1.2.4"
+    "zxing-wasm": "1.2.5"
   }
 }
