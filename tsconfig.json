@@ -4,7 +4,7 @@
     "module": "NodeNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "types": ["dom-webcodecs"],
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "NodeNext"
   },
   "include": ["./src"],
   "references": [
