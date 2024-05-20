@@ -1,0 +1,33 @@
+name: Preview Release
+
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Bump Version
+        run: npm run bump
+
+      - name: Build
+        run: npm run prepublishOnly
+
+      - name: Publish Preview Release
+        run: npx pkg-pr-new publish --compact
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

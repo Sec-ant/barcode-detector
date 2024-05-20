@@ -55,7 +55,6 @@
     "access": "public"
   },
   "scripts": {
-    "install:ci": "npm ci && ./scripts/prepare.sh",
     "update-hooks": "simple-git-hooks",
     "changeset": "changeset",
     "bump": "changeset version 2>/dev/null | grep . && npm i; exit 0",
@@ -89,29 +88,29 @@
     "bump-biome:nightly": "npm i -DE @biomejs/biome@nightly"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.6.3",
-    "@changesets/cli": "^2.27.1",
-    "@commitlint/cli": "^19.2.1",
-    "@commitlint/config-conventional": "^19.1.0",
-    "@vitest/browser": "^1.4.0",
-    "@vitest/coverage-istanbul": "^1.4.0",
-    "@vitest/ui": "^1.4.0",
+    "@biomejs/biome": "1.7.3",
+    "@changesets/cli": "^2.27.3",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@vitest/browser": "^1.6.0",
+    "@vitest/coverage-istanbul": "^1.6.0",
+    "@vitest/ui": "^1.6.0",
     "concurrently": "^8.2.2",
     "http-server": "^14.1.1",
     "lint-staged": "^15.2.2",
-    "npm-check-updates": "^16.14.18",
-    "playwright": "^1.42.1",
+    "npm-check-updates": "^16.14.20",
+    "playwright": "^1.44.0",
     "prettier": "^3.2.5",
-    "rimraf": "^5.0.5",
+    "rimraf": "^5.0.7",
     "simple-git-hooks": "^2.11.1",
     "start-server-and-test": "^2.0.3",
-    "tsx": "^4.7.1",
-    "typescript": "^5.4.3",
-    "vite": "^5.2.7",
-    "vitest": "^1.4.0"
+    "tsx": "^4.10.5",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "@types/dom-webcodecs": "^0.1.11",
-    "zxing-wasm": "1.2.7"
+    "zxing-wasm": "1.2.10"
   }
 }
