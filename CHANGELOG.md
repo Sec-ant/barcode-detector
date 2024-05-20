@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 2.2.6
+
+### Patch Changes
+
+- 4af1507: Bump `zxing-wasm` to v1.2.10
+
 ## 2.2.5
 
 ### Patch Changes
