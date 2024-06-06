@@ -63,7 +63,7 @@
     "format:prettier": "prettier . --write",
     "format:biome": "biome format . --write",
     "format": "conc \"npm:format:prettier\" \"npm:format:biome\"",
-    "check:biome": "biome check --apply .",
+    "check:biome": "biome check --write .",
     "check": "conc \"npm:format:prettier\" \"npm:check:biome\"",
     "clear:dist": "rimraf dist",
     "prebuild": "npm run check && npm run type-check && npm run clear:dist",
@@ -88,8 +88,8 @@
     "bump-biome:nightly": "npm i -DE @biomejs/biome@nightly"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.7.3",
-    "@changesets/cli": "^2.27.3",
+    "@biomejs/biome": "1.8.0",
+    "@changesets/cli": "^2.27.5",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@vitest/browser": "^1.6.0",
@@ -97,20 +97,20 @@
     "@vitest/ui": "^1.6.0",
     "concurrently": "^8.2.2",
     "http-server": "^14.1.1",
-    "lint-staged": "^15.2.2",
+    "lint-staged": "^15.2.5",
     "npm-check-updates": "^16.14.20",
-    "playwright": "^1.44.0",
-    "prettier": "^3.2.5",
+    "playwright": "^1.44.1",
+    "prettier": "^3.3.1",
     "rimraf": "^5.0.7",
     "simple-git-hooks": "^2.11.1",
-    "start-server-and-test": "^2.0.3",
-    "tsx": "^4.10.5",
+    "start-server-and-test": "^2.0.4",
+    "tsx": "^4.12.0",
     "typescript": "^5.4.5",
-    "vite": "^5.2.11",
+    "vite": "^5.2.12",
     "vitest": "^1.6.0"
   },
   "dependencies": {
     "@types/dom-webcodecs": "^0.1.11",
-    "zxing-wasm": "1.2.10"
+    "zxing-wasm": "1.2.11"
   }
 }
