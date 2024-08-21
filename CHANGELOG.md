@@ -1,5 +1,12 @@
 # barcode-detector
 
+## 2.2.8
+
+### Patch Changes
+
+- 519cfe2: Preserve codabar start and end control chars. Fixes [#91](https://github.com/Sec-ant/barcode-detector/issues/91).
+- 70c58e1: Bump `zxing-wasm` and switch to `pnpm` and `renovate`
+
 ## 2.2.7
 
 ### Patch Changes
