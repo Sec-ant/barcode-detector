@@ -10,5 +10,6 @@
 *.tsx
 *.json
 *.jsonc
+pnpm-lock.yaml
 tests/resources
 tests/samples
