@@ -118,11 +118,15 @@ export class BarcodeDetector extends EventTarget {
         if (isBlob(imageDataOrBlob)) {
           zxingReadOutputs = await readBarcodesFromImageFile(imageDataOrBlob, {
             tryHarder: true,
+            // https://github.com/Sec-ant/barcode-detector/issues/91
+            returnCodabarStartEnd: true,
             formats: this.#formats.map((format) => formatMap.get(format)!),
           });
         } else {
           zxingReadOutputs = await readBarcodesFromImageData(imageDataOrBlob, {
             tryHarder: true,
+            // https://github.com/Sec-ant/barcode-detector/issues/91
+            returnCodabarStartEnd: true,
             formats: this.#formats.map((format) => formatMap.get(format)!),
           });
         }
