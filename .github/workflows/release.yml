@@ -26,24 +26,27 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: .node-version
+          cache: pnpm
 
       - name: Install Dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: Get Next Package Version
         id: package-version
-        run: echo "version=$(npx changeset status --output=release.json && jq -r '.releases[0].newVersion // '$(npm pkg get version)'' release.json && rm release.json)" >> $GITHUB_OUTPUT
+        run: echo "version=$(pnpm -s changeset status --output=release.json && jq -r '.releases[0].newVersion // '$(npm pkg get version)'' release.json && rm release.json)" >> $GITHUB_OUTPUT
 
       - name: Create Release Pull Request or Publish to NPM
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@aba318e9165b45b7948c60273e0b72fce0a64eb9 # v1.4.7
         with:
-          version: npm run bump
-          publish: npx changeset publish
+          publish: pnpm -s changeset publish
           commit: "chore(release): v${{ steps.package-version.outputs.version }}"
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESET_TOKEN }}

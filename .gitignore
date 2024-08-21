@@ -27,3 +27,4 @@ dist-ssr
 coverage
 *.tgz
 *.tar.gz
+__screenshots__
