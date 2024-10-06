@@ -109,7 +109,7 @@
   },
   "dependencies": {
     "@types/dom-webcodecs": "^0.1.12",
-    "zxing-wasm": "1.2.12"
+    "zxing-wasm": "1.2.13"
   },
   "packageManager": "pnpm@9.12.0"
 }
