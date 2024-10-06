@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 2.2.9
+
+### Patch Changes
+
+- b0bfea1: Fix detecting HTML elements from iframes. See [#110](https://github.com/Sec-ant/barcode-detector/issues/110).
+
 ## 2.2.8
 
 ### Patch Changes
