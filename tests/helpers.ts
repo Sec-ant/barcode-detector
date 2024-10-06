@@ -13,6 +13,33 @@ export async function getHTMLImage(
   });
 }
 
+export async function getIframeHtmlImage(
+  src = new URL("./resources/cats-dogs.png", import.meta.url).href,
+) {
+  return await new Promise<HTMLImageElement>((resolve, reject) => {
+    const iframe = document.createElement("iframe");
+    iframe.addEventListener("load", () => {
+      const iframeImage = iframe.contentDocument?.querySelector("img");
+      if (iframeImage) {
+        resolve(iframeImage);
+      } else {
+        reject(new DOMException("Image not found in iframe!", "NotFoundError"));
+      }
+    });
+    iframe.addEventListener("error", (error) => {
+      reject([error, iframe] as const);
+    });
+    iframe.srcdoc = `<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <img src="${src}">
+  </body>
+</html>`;
+    document.body.appendChild(iframe);
+  });
+}
+
 export async function getSVGImage(
   src = new URL("./resources/cats-dogs.png", import.meta.url).href,
 ) {
@@ -59,6 +86,44 @@ export async function getVideo(
     video.loop = true;
     video.muted = true;
     video.load();
+  });
+}
+
+export async function getIframeVideo(
+  src = new URL("./resources/cats-dogs.webm", import.meta.url).href,
+) {
+  return await new Promise<HTMLVideoElement>((resolve, reject) => {
+    const iframe = document.createElement("iframe");
+    iframe.addEventListener("load", () => {
+      const iframeVideo = iframe.contentDocument?.querySelector("video");
+      if (iframeVideo) {
+        iframeVideo.addEventListener(
+          "loadeddata",
+          async () => {
+            await seekTo(iframeVideo, 0);
+            resolve(iframeVideo);
+          },
+          { once: true },
+        );
+        iframeVideo.addEventListener("error", (error) => {
+          reject([error, iframeVideo] as const);
+        });
+        iframeVideo.load();
+      } else {
+        reject(new DOMException("Video not found in iframe!", "NotFoundError"));
+      }
+    });
+    iframe.addEventListener("error", (error) => {
+      reject([error, iframe] as const);
+    });
+    iframe.srcdoc = `<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <video src="${src}" loop muted>
+  </body>
+</html>`;
+    document.body.appendChild(iframe);
   });
 }
 

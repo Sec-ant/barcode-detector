@@ -2,7 +2,13 @@ declare const __PORT__: string;
 
 import { assert, describe, test } from "vitest";
 import { BarcodeDetector } from "../src/index.js";
-import { drawImageToCanvas, getHTMLImage, getVideo } from "./helpers.js";
+import {
+  drawImageToCanvas,
+  getHTMLImage,
+  getIframeHtmlImage,
+  getIframeVideo,
+  getVideo,
+} from "./helpers.js";
 
 function areCatsAndDogs(detectionResult: DetectedBarcode[]) {
   assert.equal(detectionResult.length, 2, "Number of barcodes");
@@ -180,6 +186,20 @@ describe("BarcodeDetector.detect() accepts", () => {
     const bacodeDetector = new BarcodeDetector();
 
     await bacodeDetector.detect(imgUint16);
+  });
+
+  test("BarcodeDetector.detect() accepts an iframe HTMLImageElement", async () => {
+    const image = await getIframeHtmlImage();
+    const barcodeDetector = new BarcodeDetector();
+    const detectionResult = await barcodeDetector.detect(image);
+    areCatsAndDogs(detectionResult);
+  });
+
+  test("BarcodeDetector.detect() accepts an iframe HTMLVideoElement", async () => {
+    const video = await getIframeVideo();
+    const barcodeDetector = new BarcodeDetector();
+    const detectionResult = await barcodeDetector.detect(video);
+    areCatsAndDogs(detectionResult);
   });
 });
 

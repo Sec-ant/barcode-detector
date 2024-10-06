@@ -107,7 +107,10 @@ function isHTMLImageElement(
   image: ImageBitmapSourceWebCodecs,
 ): image is HTMLImageElement {
   try {
-    return image instanceof HTMLImageElement;
+    return (
+      image instanceof
+      (image as Node)?.ownerDocument?.defaultView?.HTMLImageElement!
+    );
   } catch {
     return false;
   }
@@ -117,7 +120,10 @@ function isSVGImageElement(
   image: ImageBitmapSourceWebCodecs,
 ): image is SVGImageElement {
   try {
-    return image instanceof SVGImageElement;
+    return (
+      image instanceof
+      (image as Node)?.ownerDocument?.defaultView?.SVGImageElement!
+    );
   } catch {
     return false;
   }
@@ -127,7 +133,10 @@ function isHTMLVideoElement(
   image: ImageBitmapSourceWebCodecs,
 ): image is HTMLVideoElement {
   try {
-    return image instanceof HTMLVideoElement;
+    return (
+      image instanceof
+      (image as Node)?.ownerDocument?.defaultView?.HTMLVideoElement!
+    );
   } catch {
     return false;
   }
@@ -137,7 +146,10 @@ function isHTMLCanvasElement(
   image: ImageBitmapSourceWebCodecs,
 ): image is HTMLCanvasElement {
   try {
-    return image instanceof HTMLCanvasElement;
+    return (
+      image instanceof
+      (image as Node)?.ownerDocument?.defaultView?.HTMLCanvasElement!
+    );
   } catch {
     return false;
   }
