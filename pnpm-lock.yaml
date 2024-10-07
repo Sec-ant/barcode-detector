@@ -12,8 +12,8 @@ importers:
         specifier: ^0.1.12
         version: 0.1.12
       zxing-wasm:
-        specifier: 1.2.12
-        version: 1.2.12
+        specifier: 1.2.14
+        version: 1.2.14
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.3
@@ -2532,8 +2532,8 @@ packages:
     resolution: {integrity: sha512-cYVsTjKl8b+FrnidjibDWskAv7UKOfcwaVZdp/it9n1s9fU3IkgDbhdIRKCW4JDsAlECJY0ytoVPT3sK6kideA==}
     engines: {node: '>=18'}
 
-  zxing-wasm@1.2.12:
-    resolution: {integrity: sha512-UzQvEA5Hv4Nd/jJoKq7UN/jfkQwEDMASqoi1unlXrEgOB9rseLpmNTywcv4/2d9aMqKjfczyk3T25r6DYxAb7g==}
+  zxing-wasm@1.2.14:
+    resolution: {integrity: sha512-UaYfzSmFPIEmYDt/KyPvs/H02t8jO470BBFHUIlvtmloAm8f2zdAmOL93iWYQ5QYfSnTyFPg0yzZwznlBjfg4A==}
 
 snapshots:
 
@@ -4958,6 +4958,6 @@ snapshots:
 
   yoctocolors-cjs@2.1.2: {}
 
-  zxing-wasm@1.2.12:
+  zxing-wasm@1.2.14:
     dependencies:
       '@types/emscripten': 1.39.13
