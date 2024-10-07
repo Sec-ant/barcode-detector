@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 2.2.10
+
+### Patch Changes
+
+- 38e0b9f: Bump zxing-wasm to 1.2.14 to mitigate DOM Clobbering vulnerability.
+
 ## 2.2.9
 
 ### Patch Changes
