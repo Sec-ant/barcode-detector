@@ -5,6 +5,7 @@ import { BarcodeDetector } from "../src/index.js";
 import {
   drawImageToCanvas,
   getHTMLImage,
+  getIframeCanvas,
   getIframeHtmlImage,
   getIframeVideo,
   getVideo,
@@ -177,17 +178,6 @@ describe("BarcodeDetector.detect() accepts", () => {
     areCatsAndDogs(detectionResult);
   });
 
-  test("BarcodeDetector.detect() accepts a uint16 storage format ImageData", async () => {
-    // TODO: check the runtime support for storageFormat
-    const imgUint16 = new ImageData(1024, 1024, {
-      storageFormat: "uint16",
-    });
-
-    const bacodeDetector = new BarcodeDetector();
-
-    await bacodeDetector.detect(imgUint16);
-  });
-
   test("BarcodeDetector.detect() accepts an iframe HTMLImageElement", async () => {
     const image = await getIframeHtmlImage();
     const barcodeDetector = new BarcodeDetector();
@@ -199,6 +189,15 @@ describe("BarcodeDetector.detect() accepts", () => {
     const video = await getIframeVideo();
     const barcodeDetector = new BarcodeDetector();
     const detectionResult = await barcodeDetector.detect(video);
+    areCatsAndDogs(detectionResult);
+  });
+
+  test("BarcodeDetector.detect() accepts an iframe ImageData", async () => {
+    const canvas = await getIframeCanvas();
+    const barcodeDetector = new BarcodeDetector();
+    const detectionResult = await barcodeDetector.detect(
+      canvas.getContext("2d")!.getImageData(0, 0, canvas.width, canvas.height)!,
+    );
     areCatsAndDogs(detectionResult);
   });
 });
