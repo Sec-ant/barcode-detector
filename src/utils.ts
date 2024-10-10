@@ -159,7 +159,10 @@ function isImageBitmap(
   image: ImageBitmapSourceWebCodecs,
 ): image is ImageBitmap {
   try {
-    return image instanceof ImageBitmap;
+    return (
+      image instanceof ImageBitmap ||
+      Object.prototype.toString.call(image) === "[object ImageBitmap]"
+    );
   } catch {
     return false;
   }
@@ -169,7 +172,10 @@ function isOffscreenCanvas(
   image: ImageBitmapSourceWebCodecs,
 ): image is OffscreenCanvas {
   try {
-    return image instanceof OffscreenCanvas;
+    return (
+      image instanceof OffscreenCanvas ||
+      Object.prototype.toString.call(image) === "[object OffscreenCanvas]"
+    );
   } catch {
     return false;
   }
@@ -177,7 +183,10 @@ function isOffscreenCanvas(
 
 function isVideoFrame(image: ImageBitmapSourceWebCodecs): image is VideoFrame {
   try {
-    return image instanceof VideoFrame;
+    return (
+      image instanceof VideoFrame ||
+      Object.prototype.toString.call(image) === "[object VideoFrame]"
+    );
   } catch {
     return false;
   }
@@ -185,7 +194,10 @@ function isVideoFrame(image: ImageBitmapSourceWebCodecs): image is VideoFrame {
 
 export function isBlob(image: ImageBitmapSourceWebCodecs): image is Blob {
   try {
-    return image instanceof Blob;
+    return (
+      image instanceof Blob ||
+      Object.prototype.toString.call(image) === "[object Blob]"
+    );
   } catch {
     return false;
   }
@@ -193,7 +205,10 @@ export function isBlob(image: ImageBitmapSourceWebCodecs): image is Blob {
 
 function isImageData(image: ImageBitmapSourceWebCodecs): image is ImageData {
   try {
-    return image instanceof ImageData;
+    return (
+      image instanceof ImageData ||
+      Object.prototype.toString.call(image) === "[object ImageData]"
+    );
   } catch {
     return false;
   }
@@ -417,10 +432,10 @@ function isImageBitmapClosed(imageBitmap: ImageBitmap) {
 }
 
 export function addPrefixToExceptionOrError(e: unknown, prefix: string) {
-  if (e instanceof DOMException) {
+  if (isDOMException(e)) {
     return new DOMException(`${prefix}: ${e.message}`, e.name);
   }
-  if (e instanceof Error) {
+  if (isError(e)) {
     return new (
       e.constructor as
         | ErrorConstructor
@@ -432,4 +447,17 @@ export function addPrefixToExceptionOrError(e: unknown, prefix: string) {
     )(`${prefix}: ${e.message}`);
   }
   return new Error(`${prefix}: ${e}`);
+}
+
+function isDOMException(e: unknown): e is DOMException {
+  return (
+    e instanceof DOMException ||
+    Object.prototype.toString.call(e) === "[object DOMException]"
+  );
+}
+
+function isError(e: unknown): e is Error {
+  return (
+    e instanceof Error || Object.prototype.toString.call(e) === "[object Error]"
+  );
 }

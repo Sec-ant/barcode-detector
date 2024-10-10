@@ -127,6 +127,43 @@ export async function getIframeVideo(
   });
 }
 
+export async function getIframeCanvas(
+  src = new URL("./resources/cats-dogs.png", import.meta.url).href,
+) {
+  const image = await getHTMLImage(src);
+  return await new Promise<HTMLCanvasElement>((resolve, reject) => {
+    const iframe = document.createElement("iframe");
+    iframe.addEventListener("load", () => {
+      const iframeCanvas = iframe.contentDocument?.querySelector("canvas");
+      if (iframeCanvas) {
+        iframeCanvas.width = image.width;
+        iframeCanvas.height = image.height;
+        (
+          iframeCanvas.getContext("2d") as
+            | CanvasRenderingContext2D
+            | OffscreenCanvasRenderingContext2D
+        ).drawImage(image, 0, 0, image.width, image.height);
+        resolve(iframeCanvas);
+      } else {
+        reject(
+          new DOMException("Canvas not found in iframe!", "NotFoundError"),
+        );
+      }
+    });
+    iframe.addEventListener("error", (error) => {
+      reject([error, iframe] as const);
+    });
+    iframe.srcdoc = `<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <canvas></canvas>
+  </body>
+</html>`;
+    document.body.appendChild(iframe);
+  });
+}
+
 async function waitForNFrames(count: number) {
   if (count <= 0) {
     return Promise.reject(new TypeError("count should be greater than 0!"));

@@ -1,5 +1,6 @@
 import {
   type ReadResult,
+  type ReaderOptions,
   type ZXingReaderModule,
   getZXingModule,
   readBarcodesFromImageData,
@@ -111,24 +112,26 @@ export class BarcodeDetector extends EventTarget {
         return [];
       }
       let zxingReadOutputs: ReadResult[];
+      const readerOptions: ReaderOptions = {
+        tryHarder: true,
+        // https://github.com/Sec-ant/barcode-detector/issues/91
+        returnCodabarStartEnd: true,
+        formats: this.#formats.map((format) => formatMap.get(format)!),
+      };
       try {
         // if `imageDataOrBlob` is still a blob
         // it means we cannot handle it with our js code
         // so we directly feed it to the wasm module
         if (isBlob(imageDataOrBlob)) {
-          zxingReadOutputs = await readBarcodesFromImageFile(imageDataOrBlob, {
-            tryHarder: true,
-            // https://github.com/Sec-ant/barcode-detector/issues/91
-            returnCodabarStartEnd: true,
-            formats: this.#formats.map((format) => formatMap.get(format)!),
-          });
+          zxingReadOutputs = await readBarcodesFromImageFile(
+            imageDataOrBlob,
+            readerOptions,
+          );
         } else {
-          zxingReadOutputs = await readBarcodesFromImageData(imageDataOrBlob, {
-            tryHarder: true,
-            // https://github.com/Sec-ant/barcode-detector/issues/91
-            returnCodabarStartEnd: true,
-            formats: this.#formats.map((format) => formatMap.get(format)!),
-          });
+          zxingReadOutputs = await readBarcodesFromImageData(
+            imageDataOrBlob,
+            readerOptions,
+          );
         }
       } catch (e) {
         // we need this information to debug
