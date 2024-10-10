@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 2.2.11
+
+### Patch Changes
+
+- 1d27f3e: Fix image bitmap source type detection across iframes.
+
 ## 2.2.10
 
 ### Patch Changes
