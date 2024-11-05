@@ -1,5 +1,13 @@
 # barcode-detector
 
+## 2.2.12
+
+### Patch Changes
+
+- 139c454: Remove `zxing`-related tests as they are moved into the `zxing-wasm` repo.
+- 139c454: Pin `@types/dom-webcodecs` to `0.1.11` to avoid breaking types in projects using a lower version of TypeScript. Fixes #120.
+- 139c454: Bump `zxing-wasm` to `1.2.15`. The success rate should be improved a lot.
+
 ## 2.2.11
 
 ### Patch Changes
