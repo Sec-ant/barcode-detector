@@ -4,7 +4,7 @@
 
 A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill that uses [ZXing-C++ WebAssembly](https://github.com/Sec-ant/zxing-wasm) under the hood.
 
-Supported barcode formats: `aztec`, `code_128`, `code_39`, `code_93`, `codabar`, `databar`, `databar_expanded`, `data_matrix`, `dx_film_edge`, `ean_13`, `ean_8`, `itf`, `maxi_code` (only generated ones, and no position info), `micro_qr_code`, `pdf417`, `qr_code`, `rm_qr_code`, `upc_a`, `upc_e`, `linear_codes` and `matrix_codes` (for convenience).
+Supported barcode formats: `aztec`, `code_128`, `code_39`, `code_93`, `codabar`, `databar`, `databar_expanded`, `databar_limited`, `data_matrix`, `dx_film_edge`, `ean_13`, `ean_8`, `itf`, `maxi_code` (only generated ones, and no position info), `micro_qr_code`, `pdf417`, `qr_code`, `rm_qr_code`, `upc_a`, `upc_e`, `linear_codes` and `matrix_codes` (for convenience).
 
 ## Install
 

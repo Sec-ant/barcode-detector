@@ -11,6 +11,7 @@ const formatMapEntries = [
   ["codabar", "Codabar"],
   ["databar", "DataBar"],
   ["databar_expanded", "DataBarExpanded"],
+  ["databar_limited", "DataBarLimited"],
   ["data_matrix", "DataMatrix"],
   ["dx_film_edge", "DXFilmEdge"],
   ["ean_13", "EAN-13"],
