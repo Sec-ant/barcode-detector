@@ -19,7 +19,7 @@ import {
   formatMap,
 } from "./utils.js";
 
-export { type BarcodeFormat } from "./utils.js";
+export type { BarcodeFormat } from "./utils.js";
 
 export interface BarcodeDetectorOptions {
   formats?: BarcodeFormat[];
