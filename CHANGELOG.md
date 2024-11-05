@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 2.3.0
+
+### Minor Changes
+
+- b9910bb: Add `databar_limited` detection support
+
 ## 2.2.12
 
 ### Patch Changes
