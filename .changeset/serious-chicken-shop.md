@@ -2,4 +2,4 @@
 "barcode-detector": minor
 ---
 
-feat: add `databar_limited` detection support
+Add `databar_limited` detection support
