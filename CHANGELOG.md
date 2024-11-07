@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 2.3.1
+
+### Patch Changes
+
+- 1698524: Bump zxing-wasm to v1.3.4 to fix PDF417 position info
+
 ## 2.3.0
 
 ### Minor Changes
