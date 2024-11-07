@@ -260,4 +260,4 @@ barcodeDetector.detect(imageFile).then(console.log);
 
 The source code in this repository, as well as the build output, except for the parts listed below, is licensed under the [MIT license](./LICENSE).
 
-Test samples and resources are collected from [zxing-cpp/zxing-cpp](https://github.com/zxing-cpp/zxing-cpp), which is licensed under the [Apache-2.0 license](https://raw.githubusercontent.com/zxing-cpp/zxing-cpp/master/LICENSE), and [web-platform-tests/wpt](https://github.com/web-platform-tests/wpt), which is licensed under the [3-Clause BSD license](https://raw.githubusercontent.com/web-platform-tests/wpt/master/LICENSE.md).
+Test samples and resources are collected from [web-platform-tests/wpt](https://github.com/web-platform-tests/wpt), which is licensed under the [3-Clause BSD license](https://raw.githubusercontent.com/web-platform-tests/wpt/master/LICENSE.md).
