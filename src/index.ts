@@ -1,2 +1,2 @@
-import "./side-effects.js";
-export * from "./pure.js";
+import "./polyfill.js";
+export * from "./ponyfill.js";

@@ -3,6 +3,19 @@ import type {
   ReadOutputBarcodeFormat,
 } from "zxing-wasm/reader";
 
+export type CanvasImageSourceWebCodecs =
+  | HTMLOrSVGImageElement
+  | HTMLVideoElement
+  | HTMLCanvasElement
+  | ImageBitmap
+  | OffscreenCanvas
+  | VideoFrame;
+
+export type ImageBitmapSourceWebCodecs =
+  | CanvasImageSourceWebCodecs
+  | Blob
+  | ImageData;
+
 const formatMapEntries = [
   ["aztec", "Aztec"],
   ["code_128", "Code128"],
@@ -26,6 +39,7 @@ const formatMapEntries = [
   ["upc_e", "UPC-E"],
   ["linear_codes", "Linear-Codes"],
   ["matrix_codes", "Matrix-Codes"],
+  ["any", "Any"],
 ] as const satisfies readonly [string, ReadInputBarcodeFormat][];
 
 export const BARCODE_FORMATS = (
@@ -36,7 +50,7 @@ export type BarcodeFormat = (typeof BARCODE_FORMATS)[number];
 
 export type ReadResultBarcodeFormat = Exclude<
   BarcodeFormat,
-  "linear_codes" | "matrix_codes"
+  "linear_codes" | "matrix_codes" | "any"
 >;
 
 export const formatMap = new Map<BarcodeFormat, ReadInputBarcodeFormat>(

@@ -1,19 +1,17 @@
 import {
   type ReadResult,
   type ReaderOptions,
-  type ZXingReaderModule,
-  getZXingModule,
-  readBarcodesFromImageData,
-  readBarcodesFromImageFile,
+  prepareZXingModule,
+  readBarcodes,
 } from "zxing-wasm/reader";
 import {
   addPrefixToExceptionOrError,
   getImageDataOrBlobFromImageBitmapSource,
-  isBlob,
 } from "./utils.js";
 import {
   BARCODE_FORMATS,
   type BarcodeFormat,
+  type ImageBitmapSourceWebCodecs,
   type ReadResultBarcodeFormat,
   convertFormat,
   formatMap,
@@ -37,29 +35,9 @@ export interface DetectedBarcode {
   cornerPoints: [Point2D, Point2D, Point2D, Point2D];
 }
 
-interface CustomEventMap {
-  load: CustomEvent<ZXingReaderModule>;
-  error: CustomEvent<unknown>;
-}
-
-type ChangeEventListener = <K extends keyof CustomEventMap>(
-  type: K,
-  callback:
-    | ((evt: CustomEventMap[K]) => void)
-    | { handleEvent(evt: CustomEventMap[K]): void }
-    | null,
-  options?: boolean | AddEventListenerOptions | undefined,
-) => void;
-
-export interface BarcodeDetector {
-  addEventListener: ChangeEventListener;
-  removeEventListener: ChangeEventListener;
-}
-
-export class BarcodeDetector extends EventTarget {
+export class BarcodeDetector {
   #formats: BarcodeFormat[];
   constructor(barcodeDectorOptions: BarcodeDetectorOptions = {}) {
-    super();
     try {
       // TODO(https://github.com/WICG/shape-detection-api/issues/66):
       // Potentially process UNKNOWN as platform-specific formats.
@@ -79,20 +57,8 @@ export class BarcodeDetector extends EventTarget {
       this.#formats = formats ?? [];
       // Use eager loading so that a user can fetch and init the wasm
       // before running actual detections, therefore shorten the cold start
-      // of the first detection. Also we dispatch load and error events
-      // so users can add lifecycle hooks if they want. The load event will
-      // expose the ZXing module for advanced usage.
-      getZXingModule()
-        .then((zxingModule) => {
-          this.dispatchEvent(
-            new CustomEvent("load", {
-              detail: zxingModule as ZXingReaderModule,
-            }),
-          );
-        })
-        .catch((error: unknown) => {
-          this.dispatchEvent(new CustomEvent("error", { detail: error }));
-        });
+      // of the first detection.
+      prepareZXingModule({ fireImmediately: true });
     } catch (e) {
       throw addPrefixToExceptionOrError(
         e,
@@ -113,26 +79,17 @@ export class BarcodeDetector extends EventTarget {
       }
       let zxingReadOutputs: ReadResult[];
       const readerOptions: ReaderOptions = {
-        tryHarder: true,
-        // https://github.com/Sec-ant/barcode-detector/issues/91
-        returnCodabarStartEnd: true,
+        /**
+         * TODO: not sure about these options, need to check if they are
+         * aligned with the implementation in the native BarcodeDetector.
+         */
+        tryCode39ExtendedMode: false,
+        eanAddOnSymbol: "Read",
+        textMode: "Plain",
         formats: this.#formats.map((format) => formatMap.get(format)!),
       };
       try {
-        // if `imageDataOrBlob` is still a blob
-        // it means we cannot handle it with our js code
-        // so we directly feed it to the wasm module
-        if (isBlob(imageDataOrBlob)) {
-          zxingReadOutputs = await readBarcodesFromImageFile(
-            imageDataOrBlob,
-            readerOptions,
-          );
-        } else {
-          zxingReadOutputs = await readBarcodesFromImageData(
-            imageDataOrBlob,
-            readerOptions,
-          );
-        }
+        zxingReadOutputs = await readBarcodes(imageDataOrBlob, readerOptions);
       } catch (e) {
         // we need this information to debug
         console.error(e);
@@ -190,4 +147,9 @@ export class BarcodeDetector extends EventTarget {
   }
 }
 
-export { setZXingModuleOverrides } from "zxing-wasm/reader";
+export {
+  ZXING_WASM_VERSION,
+  ZXING_WASM_SHA256,
+  prepareZXingModule,
+  setZXingModuleOverrides,
+} from "zxing-wasm/reader";

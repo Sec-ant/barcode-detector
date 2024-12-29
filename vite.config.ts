@@ -1,5 +1,4 @@
-/// <reference types="vitest" />
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import { config } from "./package.json";
 
 export default defineConfig({
@@ -8,8 +7,8 @@ export default defineConfig({
     lib: {
       entry: {
         index: "src/index.ts",
-        pure: "src/pure.ts",
-        "side-effects": "src/side-effects.ts",
+        ponyfill: "src/ponyfill.ts",
+        polyfill: "src/polyfill.ts",
       },
       formats: ["es"],
       fileName: (_, entryName) => `${entryName}.js`,

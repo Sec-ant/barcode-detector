@@ -2,9 +2,37 @@
 
 [![npm](https://img.shields.io/npm/v/barcode-detector)](https://www.npmjs.com/package/barcode-detector/v/latest) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/barcode-detector)](https://www.npmjs.com/package/barcode-detector/v/latest) [![jsDelivr hits (npm scoped)](https://img.shields.io/jsdelivr/npm/hm/barcode-detector?color=%23ff5627)](https://cdn.jsdelivr.net/npm/barcode-detector@latest/)
 
-A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill that uses [ZXing-C++ WebAssembly](https://github.com/Sec-ant/zxing-wasm) under the hood.
+A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) ponyfill/polyfill that uses [ZXing-C++ WebAssembly](https://github.com/Sec-ant/zxing-wasm) under the hood.
 
-Supported barcode formats: `aztec`, `code_128`, `code_39`, `code_93`, `codabar`, `databar`, `databar_expanded`, `databar_limited`, `data_matrix`, `dx_film_edge`, `ean_13`, `ean_8`, `itf`, `maxi_code` (only generated ones, and no position info), `micro_qr_code`, `pdf417`, `qr_code`, `rm_qr_code`, `upc_a`, `upc_e`, `linear_codes` and `matrix_codes` (for convenience).
+Supported barcode formats:
+
+<div align="center">
+
+| Linear Barcode Formats | Matrix Barcode Formats | Special Barcode Formats |
+| :--------------------: | :--------------------: | :---------------------: |
+|       `codabar`        |        `aztec`         |     `linear_codes`[^2]  |
+|       `code_39`        |     `data_matrix`      |     `matrix_codes`[^3]  |
+|       `code_93`        |      `maxi_code`[^1]   |         `any`[^4]       |
+|       `code_128`       |        `pdf417`        |                         |
+|       `databar`        |       `qr_code`        |                         |
+|   `databar_limited`    |    `micro_qr_code`     |                         |
+|   `databar_expanded`   |      `rm_qr_code`      |                         |
+|     `dx_film_edge`     |                        |                         |
+|        `ean_8`         |                        |                         |
+|        `ean_13`        |                        |                         |
+|         `itf`          |                        |                         |
+|        `upc_a`         |                        |                         |
+|        `upc_e`         |                        |                         |
+
+[^1]: Detection support for `MaxiCode` requires a pure monochrome image that contains an unrotated and unskewed symbol, along with a sufficient white border surrounding it.
+
+[^2]: `linear_codes` is a shorthand for all linear barcode formats.
+
+[^3]: `matrix_codes` is a shorthand for all matrix barcode formats.
+
+[^4]: `any` is a shorthand for `linear_codes` and `matrix_codes`, i.e., all barcode formats. Note that you don't need to specify `any` in the `formats` option, as an empty array will also detect all barcode formats.
+
+</div>
 
 ## Install
 
@@ -14,51 +42,64 @@ To install, run the following command:
 npm i barcode-detector
 ```
 
-## Recommended Usage with Node + ESM
+## Usage
 
-This package can be imported in three different ways:
-
-### Pure Module
+### Ponyfill
 
 ```ts
-import { BarcodeDetector } from "barcode-detector/pure";
+import { BarcodeDetector } from "barcode-detector/ponyfill";
 ```
 
 To avoid potential namespace collisions, you can also rename the export:
 
 ```ts
-import { BarcodeDetector as BarcodeDetectorPolyfill } from "barcode-detector/pure";
+import { BarcodeDetector as BarcodeDetectorPonyfill } from "barcode-detector/ponyfill";
 ```
 
-This approach is beneficial when you want to use a package to detect barcodes without polluting `globalThis`, or when your runtime already provides an implementation of the Barcode Detection API, but you still want this package to function.
+A ponyfill is a module required to be explicitly imported without introducing side effects. Use this subpath if you want to avoid polluting the global object with the `BarcodeDetector` class, or if you intend to use the implementation provided by this package instead of the native one.
 
-### Side Effects
+### Polyfill
 
 ```ts
-import "barcode-detector/side-effects";
+import "barcode-detector/polyfill";
 ```
 
-This approach is beneficial when you need a drop-in polyfill. If there's already an implementation of Barcode Detection API on `globalThis`, this won't take effect (type declarations will, as we cannot optionally declare types). In such cases, please use the [pure module](#pure-module) instead.
+This subpath is used to polyfill the native `BarcodeDetector` class. It will automatically register the `BarcodeDetector` class in the global object **_if it's not already present_**.
 
-### Both
+> [!IMPORTANT]
+>
+> The polyfill will opt in only if no `BarcodeDetector` is present in `globalThis`. It basically works like this:
+>
+> ```ts
+> import { BarcodeDetector } from "barcode-detector/ponyfill";
+> globalThis.BarcodeDetector ??= BarcodeDetector;
+> ```
+>
+> Note that it **_doesn't_** check if the implementation is provided natively or by another polyfill. It also **_doesn't_** try to augment the existing implementation with all the barcode formats supported by this package. If you want all the features provided by this package, but you already have a native or another polyfilled `BarcodeDetector`, you should use the [ponyfill](#ponyfill) approach. You can register it to the `globalThis` object manually if you want to.
+
+### Ponyfill + Polyfill
 
 ```ts
 import { BarcodeDetector } from "barcode-detector";
 ```
 
-This approach combines the [pure module](#pure-module) and [side effects](#side-effects).
+This approach combines the [ponyfill](#ponyfill) and [polyfill](#polyfill) approaches.
 
-## Recommended Usage in Modern Browsers
+> [!NOTE]
+>
+> The `ponyfill` subpath was named `pure` and the `polyfill` subpath was named `side-effects` in early versions. They are no longer recommended for use and are considered deprecated. Please use the new subpaths as described above.
+
+### `<script type="module">`
 
 For [modern browsers that support ES modules](https://caniuse.com/es6-module), this package can be imported via the `<script type="module">` tags:
 
-1. Include side effects:
+1. Include the polyfill:
 
    ```html
    <!-- register -->
    <script
      type="module"
-     src="https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/es/side-effects.min.js"
+     src="https://fastly.jsdelivr.net/npm/barcode-detector@3/dist/es/polyfill.min.js"
    ></script>
 
    <!-- use -->
@@ -71,7 +112,7 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
 
    ```html
    <script type="module">
-     import { BarcodeDetector } from "https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/es/pure.min.js";
+     import { BarcodeDetector } from "https://fastly.jsdelivr.net/npm/barcode-detector@3/dist/es/ponyfill.min.js";
      const barcodeDetector = new BarcodeDetector();
    </script>
    ```
@@ -83,80 +124,45 @@ For [modern browsers that support ES modules](https://caniuse.com/es6-module), t
    <script type="importmap">
      {
        "imports": {
-         "barcode-detector/pure": "https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/es/pure.min.js"
+         "barcode-detector/ponyfill": "https://fastly.jsdelivr.net/npm/barcode-detector@3/dist/es/ponyfill.min.js"
        }
      }
    </script>
 
    <!-- script scoped access -->
    <script type="module">
-     import { BarcodeDetector } from "barcode-detector/pure";
+     import { BarcodeDetector } from "barcode-detector/ponyfill";
      const barcodeDetector = new BarcodeDetector();
    </script>
    ```
 
-## Usage with Legacy Compatibility
-
-Starting from v1.2, this package supports IIFE and CJS build outputs for use cases that require legacy compatibility.
-
 ### IIFE
 
-For legacy browsers that lack support for module type `<script>` tags, or for userscripts, IIFE is the preferred choice. Upon executing the IIFE script, a variable named `BarcodeDetectionAPI` will be registered in the global.
+For legacy browsers or userscripts that lack support for `<script type="module">` tags, IIFE is the preferred choice. Upon executing the IIFE script, a variable named `BarcodeDetectionAPI` will be registered in the global `window` by `var` declaration.
 
 ```html
 <!-- 
-  IIFE pure.js registers:
+  IIFE ponyfill.js registers:
   window.BarcodeDetectionAPI.BarcodeDetector
-  window.BarcodeDetectionAPI.setZXingModuleOverrides
+  window.BarcodeDetectionAPI.prepareZXingModule
   -->
-<script src="https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/iife/pure.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/barcode-detector@3/dist/iife/ponyfill.min.js"></script>
 
 <!-- 
-  IIFE side-effects.js registers:
+  IIFE polyfill.js registers:
   window.BarcodeDetector
-  window.BarcodeDetectionAPI.setZXingModuleOverrides
+  window.BarcodeDetectionAPI.prepareZXingModule
   -->
-<script src="https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/iife/side-effects.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/barcode-detector@3/dist/iife/polyfill.min.js"></script>
 
 <!-- 
   IIFE index.js registers:
   window.BarcodeDetector
   window.BarcodeDetectionAPI.BarcodeDetector
-  window.BarcodeDetectionAPI.setZXingModuleOverrides
+  window.BarcodeDetectionAPI.prepareZXingModule
   -->
-<script src="https://fastly.jsdelivr.net/npm/barcode-detector@2/dist/iife/index.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/barcode-detector@3/dist/iife/index.min.js"></script>
 ```
-
-### CJS
-
-This package can also be consumed as a commonjs package:
-
-1. Vanilla Javascript:
-
-   ```js
-   // src/index.js
-   const { BarcodeDetector } = require("barcode-detector/pure");
-   ```
-
-2. With Typescript:
-
-   ```ts
-   // src/index.ts
-   import { BarcodeDetector } from "barcode-detector/pure";
-   ```
-
-   `tsconfig.json`:
-
-   ```json
-   {
-     "compilerOptions": {
-       "module": "CommonJS",
-       "moduleResolution": "Node",
-       "skipLibCheck": true
-     },
-     "include": ["src"]
-   }
-   ```
 
 ## `setZXingModuleOverrides`
 

@@ -15,15 +15,45 @@
       "require": "./dist/cjs/index.js",
       "default": "./dist/es/index.js"
     },
+    "./ponyfill": {
+      "import": "./dist/es/ponyfill.js",
+      "require": "./dist/cjs/ponyfill.js",
+      "default": "./dist/es/ponyfill.js"
+    },
+    "./polyfill": {
+      "import": "./dist/es/polyfill.js",
+      "require": "./dist/cjs/polyfill.js",
+      "default": "./dist/es/polyfill.js"
+    },
     "./pure": {
-      "import": "./dist/es/pure.js",
-      "require": "./dist/cjs/pure.js",
-      "default": "./dist/es/pure.js"
+      "import": "./dist/es/ponyfill.js",
+      "require": "./dist/cjs/ponyfill.js",
+      "default": "./dist/es/ponyfill.js"
     },
     "./side-effects": {
-      "import": "./dist/es/side-effects.js",
-      "require": "./dist/cjs/side-effects.js",
-      "default": "./dist/es/side-effects.js"
+      "import": "./dist/es/polyfill.js",
+      "require": "./dist/cjs/polyfill.js",
+      "default": "./dist/es/polyfill.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "ponyfill": [
+        "./dist/es/ponyfill.d.ts",
+        "./dist/cjs/ponyfill.d.ts"
+      ],
+      "polyfill": [
+        "./dist/es/polyfill.d.ts",
+        "./dist/cjs/polyfill.d.ts"
+      ],
+      "pure": [
+        "./dist/es/ponyfill.d.ts",
+        "./dist/cjs/ponyfill.d.ts"
+      ],
+      "side-effects": [
+        "./dist/es/polyfill.d.ts",
+        "./dist/cjs/polyfill.d.ts"
+      ]
     }
   },
   "repository": {
@@ -74,39 +104,48 @@
     "postbuild:es": "tsc --declarationDir ./dist/es",
     "postbuild:cjs": "tsc --declarationDir ./dist/cjs",
     "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
-    "test": "start-server-and-test $npm_package_config_port 'vitest --coverage'",
-    "test:ui": "start-server-and-test $npm_package_config_port 'vitest --ui --coverage'",
-    "coverage": "start-server-and-test $npm_package_config_port 'vitest run --coverage'",
+    "test": "pnpm -s playwright install && start-server-and-test $npm_package_config_port 'vitest --coverage'",
+    "test:ui": "pnpm -s playwright install && start-server-and-test $npm_package_config_port 'vitest --ui --coverage'",
+    "coverage": "pnpm -s playwright install && start-server-and-test $npm_package_config_port 'vitest run --coverage'",
     "prepublishOnly": "pnpm -s build",
     "bump-zxing-wasm": "pnpm add -E zxing-wasm@latest",
     "bump-biome:latest": "pnpm add -DE @biomejs/biome@latest",
     "bump-biome:nightly": "pnpm add -DE @biomejs/biome@nightly"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.3",
-    "@changesets/cli": "^2.27.10",
-    "@commitlint/cli": "^19.6.0",
+    "@biomejs/biome": "1.9.4",
+    "@changesets/cli": "^2.27.11",
+    "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
-    "@types/node": "^22.10.1",
-    "@vitest/browser": "^2.1.6",
-    "@vitest/coverage-istanbul": "^2.1.6",
-    "@vitest/ui": "^2.1.6",
-    "concurrently": "^9.1.0",
+    "@types/node": "^22.10.2",
+    "@vitest/browser": "^2.1.8",
+    "@vitest/coverage-istanbul": "^2.1.8",
+    "@vitest/ui": "^2.1.8",
+    "concurrently": "^9.1.1",
     "http-server": "^14.1.1",
-    "lint-staged": "^15.2.10",
-    "playwright": "^1.49.0",
-    "prettier": "^3.4.1",
+    "lint-staged": "^15.3.0",
+    "playwright": "^1.49.1",
+    "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.11.1",
-    "start-server-and-test": "^2.0.8",
+    "start-server-and-test": "^2.0.9",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "vite": "^6.0.1",
-    "vitest": "^2.1.6"
+    "vite": "^6.0.6",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
-    "@types/dom-webcodecs": "0.1.11",
-    "zxing-wasm": "1.3.4"
+    "zxing-wasm": "2.0.0-beta.3"
   },
-  "packageManager": "pnpm@9.15.1+sha512.1acb565e6193efbebda772702950469150cf12bcc764262e7587e71d19dc98a423dff9536e57ea44c49bdf790ff694e83c27be5faa23d67e0c033b583be4bfcf"
+  "pnpm": {
+    "overrides": {
+      "vite": "$vite"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "vite": "6"
+      }
+    }
+  },
+  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321"
 }
