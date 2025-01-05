@@ -164,94 +164,56 @@ For legacy browsers or userscripts that lack support for `<script type="module">
 <script src="https://fastly.jsdelivr.net/npm/barcode-detector@3/dist/iife/index.min.js"></script>
 ```
 
-## `setZXingModuleOverrides`
+## `prepareZXingModule`
 
-In addition to `BarcodeDetector`, this package exports another function called `setZXingModuleOverrides`.
+The core barcode reading functionality of this package is powered by [`zxing-wasm`](https://github.com/Sec-ant/zxing-wasm). Therefore, a `.wasm` binary file is fetched at runtime. By default, the `.wasm` serving path is initialized with a jsDelivr CDN URL. However, there're cases where this is not desired, such as the allowed serving path is white-listed by the Content Security Policy (CSP), or offline usage is required.
 
-This package employs [zxing-wasm](https://github.com/Sec-ant/zxing-wasm) to enable the core barcode reading functionality. As a result, a `.wasm` binary file is fetched at runtime. The default fetch path for this binary file is:
+To customize the `.wasm` serving path, this package reexports `prepareZXingModule` along with `ZXING_WASM_VERSION` and `ZXING_WASM_SHA256` from `zxing-wasm`. For more details on how to use them, please check [Configuring `.wasm` Serving](https://github.com/Sec-ant/zxing-wasm?tab=readme-ov-file#configuring-wasm-serving) and [Controlling `.wasm` Instantiation Timing and Caching](https://github.com/Sec-ant/zxing-wasm?tab=readme-ov-file#controlling-wasm-instantiation-timing-and-caching) sections in the `zxing-wasm` repository.
 
-```
-https://fastly.jsdelivr.net/npm/zxing-wasm@<version>/dist/reader/zxing_reader.wasm
-```
-
-The `setZXingModuleOverrides` function allows you to govern where the `.wasm` binary is served from, thereby enabling offline use of the package, use within a local network, or within a site having strict [CSP](https://developer.mozilla.org/docs/Web/HTTP/CSP) rules.
-
-For instance, should you want to inline this `.wasm` file in your build output for offline usage, with the assistance of build tools, you could try:
+An example usage to override the `.wasm` serving path with an `unpkg.com` CDN url is as follows:
 
 ```ts
-// src/index.ts
-import wasmFile from "../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm?url";
-
 import {
-  setZXingModuleOverrides,
   BarcodeDetector,
-} from "barcode-detector/pure";
+  ZXING_WASM_VERSION,
+  prepareZXingModule,
+} from "barcode-detector/ponyfill";
 
-setZXingModuleOverrides({
-  locateFile: (path, prefix) => {
-    if (path.endsWith(".wasm")) {
-      return wasmFile;
-    }
-    return prefix + path;
+// Override the locateFile function
+prepareZXingModule({
+  overrides: {
+    locateFile: (path, prefix) => {
+      if (path.endsWith(".wasm")) {
+        return `https://unpkg.com/zxing-wasm@${ZXING_WASM_VERSION}/dist/reader/${path}`;
+      }
+      return prefix + path;
+    },
   },
 });
 
-const barcodeDetector = new BarcodeDetector();
-
-// detect barcodes
-// ...
+// Now you can create a BarcodeDetector instance
+const barcodeDetector = new BarcodeDetector({
+  formats: ["qr_code"],
+});
 ```
 
-Alternatively, the `.wasm` file could be copied to your dist folder to be served from your local server, without incorporating it into the output as an extensive base64 data URL.
-
-It's noteworthy that you'll always want to choose the correct version of the `.wasm` file, so the APIs exported by it are exactly what the js code expects.
-
-For more information on how to use this function, you can check [the notes here](https://github.com/Sec-ant/zxing-wasm#notes) and [discussions here](https://github.com/Sec-ant/barcode-detector/issues/18) and [here](https://github.com/gruhn/vue-qrcode-reader/issues/354).
-
-This function is exported from all the subpaths, including the [side effects](#side-effects).
+> [!Note]
+> The `setZXingModuleOverrides` method is deprecated in favor of `prepareZXingModule`.
 
 ## API
 
 Please check the [spec](https://wicg.github.io/shape-detection-api/#barcode-detection-api), [MDN doc](https://developer.mozilla.org/docs/Web/API/Barcode_Detection_API) and [Chromium implementation](https://github.com/chromium/chromium/tree/main/third_party/blink/renderer/modules/shapedetection) for more information.
 
-## Lifecycle Events
-
-The `BarcodeDetector` provided by this package also extends class `EventTarget` and provides 2 lifecycle events: `load` and `error`. You can use `addEventListener` and `removeEventListener` to register and remove callback hooks on these events.
-
-### `load` Event
-
-The `load` event, which is a `CustomEvent`, will be dispatched on the successful instantiation of ZXing wasm module. For advanced usage, the instantiated module is passed as the `detail` parameter.
+An example usage is as follows:
 
 ```ts
-import { BarcodeDetector } from "barcode-detector/pure";
+import { BarcodeDetector } from "barcode-detector/ponyfill";
 
-const barcodeDetector = new BarcodeDetector();
-
-barcodeDetector.addEventListener("load", ({ detail }) => {
-  console.log(detail); // zxing wasm module
-});
-```
-
-### `error` Event
-
-The `error` event, which is a `CustomEvent`, will be dispatched if the instantiation of ZXing wasm module is failed. An error is passed as the `detail` parameter.
-
-```ts
-import { BarcodeDetector } from "barcode-detector/pure";
-
-const barcodeDetector = new BarcodeDetector();
-
-barcodeDetector.addEventListener("error", ({ detail }) => {
-  console.log(detail); // an error
-});
-```
-
-## Example
-
-```ts
-import { BarcodeDetector } from "barcode-detector/pure";
+// check supported formats
+const supportedFormats = await BarcodeDetector.getSupportedFormats();
 
 const barcodeDetector: BarcodeDetector = new BarcodeDetector({
+  // make sure the formats are supported
   formats: ["qr_code"],
 });
 

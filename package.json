@@ -117,11 +117,11 @@
     "@changesets/cli": "^2.27.11",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
-    "@types/node": "^22.10.2",
+    "@types/node": "^22.10.5",
     "@vitest/browser": "^2.1.8",
     "@vitest/coverage-istanbul": "^2.1.8",
     "@vitest/ui": "^2.1.8",
-    "concurrently": "^9.1.1",
+    "concurrently": "^9.1.2",
     "http-server": "^14.1.1",
     "lint-staged": "^15.3.0",
     "playwright": "^1.49.1",
@@ -131,11 +131,11 @@
     "start-server-and-test": "^2.0.9",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "vite": "^6.0.6",
+    "vite": "^6.0.7",
     "vitest": "^2.1.8"
   },
   "dependencies": {
-    "zxing-wasm": "2.0.0-beta.3"
+    "zxing-wasm": "2.0.0-beta.4"
   },
   "pnpm": {
     "overrides": {
