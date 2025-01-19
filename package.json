@@ -88,9 +88,9 @@
     "@commitlint/cli": "^19.6.0",
     "@commitlint/config-conventional": "^19.6.0",
     "@types/node": "^22.10.1",
-    "@vitest/browser": "^2.1.6",
-    "@vitest/coverage-istanbul": "^2.1.6",
-    "@vitest/ui": "^2.1.6",
+    "@vitest/browser": "^3.0.0",
+    "@vitest/coverage-istanbul": "^3.0.0",
+    "@vitest/ui": "^3.0.0",
     "concurrently": "^9.1.0",
     "http-server": "^14.1.1",
     "lint-staged": "^15.2.10",
@@ -102,7 +102,7 @@
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^6.0.1",
-    "vitest": "^2.1.6"
+    "vitest": "^3.0.0"
   },
   "dependencies": {
     "@types/dom-webcodecs": "0.1.11",
