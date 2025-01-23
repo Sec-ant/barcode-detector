@@ -117,35 +117,25 @@
     "@changesets/cli": "^2.27.11",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
-    "@types/node": "^22.10.5",
-    "@vitest/browser": "^2.1.8",
-    "@vitest/coverage-istanbul": "^2.1.8",
-    "@vitest/ui": "^2.1.8",
+    "@types/node": "^22.10.9",
+    "@vitest/browser": "^3.0.4",
+    "@vitest/coverage-istanbul": "^3.0.4",
+    "@vitest/ui": "^3.0.4",
     "concurrently": "^9.1.2",
     "http-server": "^14.1.1",
-    "lint-staged": "^15.3.0",
-    "playwright": "^1.49.1",
+    "lint-staged": "^15.4.2",
+    "playwright": "^1.50.0",
     "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.11.1",
-    "start-server-and-test": "^2.0.9",
+    "start-server-and-test": "^2.0.10",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.7",
-    "vitest": "^2.1.8"
+    "typescript": "^5.7.3",
+    "vite": "^6.0.11",
+    "vitest": "^3.0.4"
   },
   "dependencies": {
-    "zxing-wasm": "2.0.0-beta.4"
+    "zxing-wasm": "2.0.0"
   },
-  "pnpm": {
-    "overrides": {
-      "vite": "$vite"
-    },
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "vite": "6"
-      }
-    }
-  },
-  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321"
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
 }
