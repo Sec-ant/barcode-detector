@@ -104,9 +104,9 @@
     "postbuild:es": "tsc --declarationDir ./dist/es",
     "postbuild:cjs": "tsc --declarationDir ./dist/cjs",
     "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
-    "test": "pnpm -s playwright install && start-server-and-test $npm_package_config_port 'vitest --coverage'",
-    "test:ui": "pnpm -s playwright install && start-server-and-test $npm_package_config_port 'vitest --ui --coverage'",
-    "coverage": "pnpm -s playwright install && start-server-and-test $npm_package_config_port 'vitest run --coverage'",
+    "test": "pnpm -s playwright install && start-server-and-test http://localhost:${npm_package_config_port} 'vitest --coverage --hideSkippedTests'",
+    "test:ui": "pnpm -s playwright install && start-server-and-test http://localhost:${npm_package_config_port} 'vitest --ui --coverage --hideSkippedTests'",
+    "coverage": "pnpm -s playwright install && start-server-and-test http://localhost:${npm_package_config_port} 'vitest run --coverage --hideSkippedTests'",
     "prepublishOnly": "pnpm -s build",
     "bump-zxing-wasm": "pnpm add -E zxing-wasm@latest",
     "bump-biome:latest": "pnpm add -DE @biomejs/biome@latest",
@@ -114,10 +114,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@changesets/cli": "^2.27.11",
+    "@changesets/cli": "^2.27.12",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
-    "@types/node": "^22.10.9",
+    "@types/node": "^22.10.10",
     "@vitest/browser": "^3.0.4",
     "@vitest/coverage-istanbul": "^3.0.4",
     "@vitest/ui": "^3.0.4",
@@ -135,7 +135,7 @@
     "vitest": "^3.0.4"
   },
   "dependencies": {
-    "zxing-wasm": "2.0.0"
+    "zxing-wasm": "^2.0.1"
   },
   "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
 }

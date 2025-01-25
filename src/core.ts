@@ -58,7 +58,7 @@ export class BarcodeDetector {
       // Use eager loading so that a user can fetch and init the wasm
       // before running actual detections, therefore shorten the cold start
       // of the first detection.
-      prepareZXingModule({ fireImmediately: true });
+      prepareZXingModule({ fireImmediately: true }).catch(() => {});
     } catch (e) {
       throw addPrefixToExceptionOrError(
         e,
@@ -79,12 +79,7 @@ export class BarcodeDetector {
       }
       let zxingReadOutputs: ReadResult[];
       const readerOptions: ReaderOptions = {
-        /**
-         * TODO: not sure about these options, need to check if they are
-         * aligned with the implementation in the native BarcodeDetector.
-         */
         tryCode39ExtendedMode: false,
-        eanAddOnSymbol: "Read",
         textMode: "Plain",
         formats: this.#formats.map((format) => formatMap.get(format)!),
       };
@@ -146,10 +141,3 @@ export class BarcodeDetector {
     }
   }
 }
-
-export {
-  ZXING_WASM_VERSION,
-  ZXING_WASM_SHA256,
-  prepareZXingModule,
-  setZXingModuleOverrides,
-} from "zxing-wasm/reader";

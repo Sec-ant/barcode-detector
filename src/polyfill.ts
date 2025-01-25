@@ -1,10 +1,4 @@
 import { BarcodeDetector } from "./core.js";
-export {
-  ZXING_WASM_VERSION,
-  ZXING_WASM_SHA256,
-  prepareZXingModule,
-  setZXingModuleOverrides,
-} from "./core.js";
 
 declare global {
   // biome-ignore lint/style/noVar: let or const doesn't do the trick
@@ -18,3 +12,5 @@ declare global {
 }
 
 globalThis.BarcodeDetector ??= BarcodeDetector;
+
+export * from "./zxing-exported.js";

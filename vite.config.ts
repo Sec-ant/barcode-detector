@@ -1,4 +1,5 @@
-import { defineConfig } from "vitest/config";
+/// <reference types="@vitest/browser/providers/playwright" />
+import { coverageConfigDefaults, defineConfig } from "vitest/config";
 import { config } from "./package.json";
 
 export default defineConfig({
@@ -15,15 +16,28 @@ export default defineConfig({
     },
     outDir: "dist/es",
   },
+  server: {
+    host: "localhost",
+  },
+  worker: {
+    format: "es",
+  },
   test: {
+    includeTaskLocation: true,
     browser: {
       enabled: true,
       headless: true,
-      name: "chromium",
       provider: "playwright",
+      instances: [
+        {
+          browser: "chromium",
+        },
+      ],
+      screenshotFailures: false,
     },
     coverage: {
       provider: "istanbul",
+      exclude: ["./scripts/**", ...coverageConfigDefaults.exclude],
     },
   },
   define: {
