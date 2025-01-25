@@ -30,7 +30,7 @@ Supported barcode formats:
 
 [^3]: `matrix_codes` is a shorthand for all matrix barcode formats.
 
-[^4]: `any` is a shorthand for `linear_codes` and `matrix_codes`, i.e., all barcode formats. Note that you don't need to specify `any` in the `formats` option, as an empty array will also detect all barcode formats.
+[^4]: `any` is a shorthand for `linear_codes` and `matrix_codes`, i.e., all barcode formats. Note that you don't need to specify `any` in the `formats` option, as not providing the option also indicates detecting all barcode formats.
 
 </div>
 
