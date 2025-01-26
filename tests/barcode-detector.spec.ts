@@ -1,34 +1,45 @@
-import { afterAll, assert, beforeAll, describe, test, vi } from "vitest";
+///<reference types="vite/client" />
+import { assert, afterAll, beforeAll, describe, test, vi } from "vitest";
 import {
   BarcodeDetector,
-  type DetectedBarcode,
   type BarcodeFormat,
+  type DetectedBarcode,
   prepareZXingModule,
   purgeZXingModule,
 } from "../src/ponyfill.js";
-import {
-  getBlob,
-  getCanvas,
-  getHtmlImage,
-  getIframeBlob,
-  getIframeCanvas,
-  getIframeHtmlImage,
-  getIframeImageBitmap,
-  getIframeImageData,
-  getIframeOffscreenCanvas,
-  getIframeSvgImage,
-  getIframeVideo,
-  getIframeVideoFrame,
-  getImageBitmap,
-  getImageData,
-  getOffscreenCanvas,
-  getSvgImage,
-  getVideo,
-  getVideoFrame,
-  areCatsAndDogs,
-  areCats,
-} from "./helpers.js";
 import { BARCODE_FORMATS } from "../src/utils.js";
+import {
+  BROKEN_IMAGE_URL,
+  BROKEN_VIDEO_URL,
+  ZERO_SIZE_IMAGE_URL,
+} from "./consts.js";
+import { areCats } from "./utils/areCats.js";
+import { areCatsAndDogs } from "./utils/areCatsAndDogs.js";
+import { getBlob } from "./utils/getBlob.js";
+import { getCanvas } from "./utils/getCanvas.js";
+import { getDomImageBitmp } from "./utils/getDomImageBitmap.js";
+import { getDomOffscreenCanvas } from "./utils/getDomOffscreenCanvas.js";
+import { getHtmlImage } from "./utils/getHtmlImage.js";
+import { getIframeBlob } from "./utils/getIframeBlob.js";
+import { getIframeCanvas } from "./utils/getIframeCanvas.js";
+import { getIframeHtmlImage } from "./utils/getIframeHtmlImage.js";
+import { getIframeImageBitmap } from "./utils/getIframeImageBitmap.js";
+import { getIframeImageData } from "./utils/getIframeImageData.js";
+import { getIframeOffscreenCanvas } from "./utils/getIframeOffscreenCanvas.js";
+import { getIframeSvgImage } from "./utils/getIframeSvgImage.js";
+import { getIframeVideo } from "./utils/getIframeVideo.js";
+import { getIframeVideoFrame } from "./utils/getIframeVideoFrame.js";
+import { getImageBitmap } from "./utils/getImageBitmap.js";
+import { getImageData } from "./utils/getImageData.js";
+import { getOffscreenCanvas } from "./utils/getOffscreenCanvas.js";
+import { getSvgImage } from "./utils/getSvgImage.js";
+import { getVideo } from "./utils/getVideo.js";
+import { getVideoFrame } from "./utils/getVideoFrame.js";
+import type {
+  MessageRequestData,
+  MessageResponseData,
+} from "./utils/messageData.js";
+import BarcodeDetectionWorker from "./worker.js?worker";
 
 declare const __PORT__: string;
 
@@ -87,6 +98,16 @@ describe("BarcodeDetector.getSupportedFormats()", () => {
 });
 
 describe("BarcodeDetector.prototype.detect()", () => {
+  let worker: Worker;
+
+  beforeAll(() => {
+    worker = new BarcodeDetectionWorker();
+  });
+
+  afterAll(() => {
+    worker.terminate();
+  });
+
   describe("HTMLImageElement", () => {
     test("accepts an HTMLImageElement", async () => {
       const img = await getHtmlImage();
@@ -97,9 +118,9 @@ describe("BarcodeDetector.prototype.detect()", () => {
     });
 
     test("accepts a 0x0 sized HTMLImageElement", async () => {
-      const img = await getHtmlImage(
-        new URL("./resources/zerosize.svg", import.meta.url).href,
-      );
+      const img = await getHtmlImage(ZERO_SIZE_IMAGE_URL);
+      assert.equal(img.width, 0);
+      assert.equal(img.height, 0);
       const barcodeDetector = new BarcodeDetector();
       const detectionResult = await barcodeDetector.detect(img);
       assert.isEmpty(detectionResult);
@@ -130,9 +151,7 @@ describe("BarcodeDetector.prototype.detect()", () => {
     });
 
     test("rejects a broken HTMLImageElement", async () => {
-      const img = await getHtmlImage(
-        new URL("./resources/broken.png", import.meta.url).href,
-      );
+      const img = await getHtmlImage(BROKEN_IMAGE_URL);
       const barcodeDetector = new BarcodeDetector();
       try {
         await barcodeDetector.detect(img);
@@ -180,9 +199,9 @@ describe("BarcodeDetector.prototype.detect()", () => {
     });
 
     test("accepts a 0x0 sized HTMLCanvasElement", async () => {
-      const canvas = await getCanvas(
-        new URL("./resources/zerosize.svg", import.meta.url).href,
-      );
+      const canvas = await getCanvas(ZERO_SIZE_IMAGE_URL);
+      assert.equal(canvas.width, 0);
+      assert.equal(canvas.height, 0);
       const barcodeDetector = new BarcodeDetector();
       const detectionResult = await barcodeDetector.detect(canvas);
       assert.isEmpty(detectionResult);
@@ -222,9 +241,9 @@ describe("BarcodeDetector.prototype.detect()", () => {
     });
 
     test("accepts a 0x0 sized OffscreenCanvas", async () => {
-      const canvas = await getOffscreenCanvas(
-        new URL("./resources/zerosize.svg", import.meta.url).href,
-      );
+      const canvas = await getDomOffscreenCanvas(ZERO_SIZE_IMAGE_URL);
+      assert.equal(canvas.width, 0);
+      assert.equal(canvas.height, 0);
       const barcodeDetector = new BarcodeDetector();
       const detectionResult = await barcodeDetector.detect(canvas);
       assert.isEmpty(detectionResult);
@@ -238,8 +257,33 @@ describe("BarcodeDetector.prototype.detect()", () => {
       areCatsAndDogs(detectionResult);
     });
 
+    test("accepts an OffscreenCanvas in a web worker", async () => {
+      const fingerPrint = Math.random();
+      const messageRequestData: MessageRequestData = {
+        imageType: "offscreenCanvas",
+        fingerPrint,
+      };
+      const detectedBarcodesPromise = new Promise<DetectedBarcode[]>(
+        (resolve, reject) => {
+          worker.onmessage = ({ data }: MessageEvent<MessageResponseData>) => {
+            if (data.fingerPrint !== fingerPrint) {
+              return;
+            }
+            if ("error" in data) {
+              reject(data.error);
+              return;
+            }
+            resolve(data.detectedBarcodes);
+          };
+        },
+      );
+      worker.postMessage(messageRequestData);
+      const detectedBarcodes = await detectedBarcodesPromise;
+      areCatsAndDogs(detectedBarcodes);
+    });
+
     test("rejects a cross-origin OffscreenCanvas", async () => {
-      const canvas = await getOffscreenCanvas(
+      const canvas = await getDomOffscreenCanvas(
         `http://localhost:${__PORT__}/resources/cats-dogs.png`,
       );
       const barcodeDetector = new BarcodeDetector();
@@ -265,9 +309,9 @@ describe("BarcodeDetector.prototype.detect()", () => {
     });
 
     test("accepts a 0x0 sized SVGImageElement", async () => {
-      const image = await getSvgImage(
-        new URL("./resources/zerosize.svg", import.meta.url).href,
-      );
+      const image = await getSvgImage(ZERO_SIZE_IMAGE_URL);
+      assert.equal(image.width.baseVal.value, 0);
+      assert.equal(image.height.baseVal.value, 0);
       const barcodeDetector = new BarcodeDetector();
       const detectionResult = await barcodeDetector.detect(image);
       assert.isEmpty(detectionResult);
@@ -298,9 +342,7 @@ describe("BarcodeDetector.prototype.detect()", () => {
     });
 
     test("rejects a broken SVGImageElement", async () => {
-      const image = await getSvgImage(
-        new URL("./resources/broken.png", import.meta.url).href,
-      );
+      const image = await getSvgImage(BROKEN_IMAGE_URL);
       const barcodeDetector = new BarcodeDetector();
       try {
         await barcodeDetector.detect(image);
@@ -375,9 +417,7 @@ describe("BarcodeDetector.prototype.detect()", () => {
     });
 
     test("rejects a broken HTMLVideoElement", async () => {
-      const video = await getVideo(
-        new URL("./resources/broken.webm", import.meta.url).href,
-      );
+      const video = await getVideo(BROKEN_VIDEO_URL);
       const barcodeDetector = new BarcodeDetector();
       try {
         await barcodeDetector.detect(video);
@@ -425,9 +465,7 @@ describe("BarcodeDetector.prototype.detect()", () => {
     });
 
     test("accepts a 0x0 sized Blob", async () => {
-      const blob = await getBlob(
-        new URL("./resources/zerosize.svg", import.meta.url).href,
-      );
+      const blob = await getBlob(ZERO_SIZE_IMAGE_URL);
       const barcodeDetector = new BarcodeDetector();
       const detectionResult = await barcodeDetector.detect(blob);
       assert.isEmpty(detectionResult);
@@ -439,6 +477,31 @@ describe("BarcodeDetector.prototype.detect()", () => {
       const barcodeDetector = new BarcodeDetector();
       const detectionResult = await barcodeDetector.detect(blob);
       areCatsAndDogs(detectionResult);
+    });
+
+    test("accepts a Blob in a web worker", async () => {
+      const fingerPrint = Math.random();
+      const messageRequestData: MessageRequestData = {
+        imageType: "blob",
+        fingerPrint,
+      };
+      const detectedBarcodesPromise = new Promise<DetectedBarcode[]>(
+        (resolve, reject) => {
+          worker.onmessage = ({ data }: MessageEvent<MessageResponseData>) => {
+            if (data.fingerPrint !== fingerPrint) {
+              return;
+            }
+            if ("error" in data) {
+              reject(data.error);
+              return;
+            }
+            resolve(data.detectedBarcodes);
+          };
+        },
+      );
+      worker.postMessage(messageRequestData);
+      const detectedBarcodes = await detectedBarcodesPromise;
+      areCatsAndDogs(detectedBarcodes);
     });
 
     test("rejects a fake image type Blob", async () => {
@@ -454,9 +517,7 @@ describe("BarcodeDetector.prototype.detect()", () => {
     });
 
     test("rejects a broken image type Blob", async () => {
-      const blob = await getBlob(
-        new URL("./resources/broken.png", import.meta.url).href,
-      );
+      const blob = await getBlob(BROKEN_IMAGE_URL);
       const barcodeDetector = new BarcodeDetector();
       try {
         await barcodeDetector.detect(blob);
@@ -497,9 +558,34 @@ describe("BarcodeDetector.prototype.detect()", () => {
       areCatsAndDogs(detectionResult);
     });
 
+    test("accepts an ImageBitmap in a web worker", async () => {
+      const fingerPrint = Math.random();
+      const messageRequestData: MessageRequestData = {
+        imageType: "imageBitmap",
+        fingerPrint,
+      };
+      const detectedBarcodesPromise = new Promise<DetectedBarcode[]>(
+        (resolve, reject) => {
+          worker.onmessage = ({ data }: MessageEvent<MessageResponseData>) => {
+            if (data.fingerPrint !== fingerPrint) {
+              return;
+            }
+            if ("error" in data) {
+              reject(data.error);
+              return;
+            }
+            resolve(data.detectedBarcodes);
+          };
+        },
+      );
+      worker.postMessage(messageRequestData);
+      const detectedBarcodes = await detectedBarcodesPromise;
+      areCatsAndDogs(detectedBarcodes);
+    });
+
     test("rejects a cross-origin ImageBitmap", async () => {
       let imageBitmap: ImageBitmap;
-      imageBitmap = await getImageBitmap(
+      imageBitmap = await getDomImageBitmp(
         `http://localhost:${__PORT__}/resources/cats-dogs.png`,
       );
       const barcodeDetector = new BarcodeDetector();
@@ -545,6 +631,31 @@ describe("BarcodeDetector.prototype.detect()", () => {
       areCatsAndDogs(detectionResult);
     });
 
+    test("accepts an ImageData in a web worker", async () => {
+      const fingerPrint = Math.random();
+      const messageRequestData: MessageRequestData = {
+        imageType: "imageData",
+        fingerPrint,
+      };
+      const detectedBarcodesPromise = new Promise<DetectedBarcode[]>(
+        (resolve, reject) => {
+          worker.onmessage = ({ data }: MessageEvent<MessageResponseData>) => {
+            if (data.fingerPrint !== fingerPrint) {
+              return;
+            }
+            if ("error" in data) {
+              reject(data.error);
+              return;
+            }
+            resolve(data.detectedBarcodes);
+          };
+        },
+      );
+      worker.postMessage(messageRequestData);
+      const detectedBarcodes = await detectedBarcodesPromise;
+      areCatsAndDogs(detectedBarcodes);
+    });
+
     test("rejects a buffer-detached ImageData", async () => {
       const imageData = await getImageData();
       window.postMessage("", "*", [imageData.data.buffer]);
@@ -576,6 +687,31 @@ describe("BarcodeDetector.prototype.detect()", () => {
       const barcodeDetector = new BarcodeDetector();
       const detectionResult = await barcodeDetector.detect(videoFrame);
       areCatsAndDogs(detectionResult);
+    });
+
+    test("accepts a VideoFrame in a web worker", async () => {
+      const fingerPrint = Math.random();
+      const messageRequestData: MessageRequestData = {
+        imageType: "videoFrame",
+        fingerPrint,
+      };
+      const detectedBarcodesPromise = new Promise<DetectedBarcode[]>(
+        (resolve, reject) => {
+          worker.onmessage = ({ data }: MessageEvent<MessageResponseData>) => {
+            if (data.fingerPrint !== fingerPrint) {
+              return;
+            }
+            if ("error" in data) {
+              reject(data.error);
+              return;
+            }
+            resolve(data.detectedBarcodes);
+          };
+        },
+      );
+      worker.postMessage(messageRequestData);
+      const detectedBarcodes = await detectedBarcodesPromise;
+      areCatsAndDogs(detectedBarcodes);
     });
 
     test("rejects a closed VideoFrame", async () => {
