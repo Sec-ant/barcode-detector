@@ -17,7 +17,7 @@ import { areCats } from "./utils/areCats.js";
 import { areCatsAndDogs } from "./utils/areCatsAndDogs.js";
 import { getBlob } from "./utils/getBlob.js";
 import { getCanvas } from "./utils/getCanvas.js";
-import { getDomImageBitmp } from "./utils/getDomImageBitmap.js";
+import { getDomImageBitmap } from "./utils/getDomImageBitmap.js";
 import { getDomOffscreenCanvas } from "./utils/getDomOffscreenCanvas.js";
 import { getHtmlImage } from "./utils/getHtmlImage.js";
 import { getIframeBlob } from "./utils/getIframeBlob.js";
@@ -583,7 +583,7 @@ describe("BarcodeDetector.prototype.detect()", () => {
 
     test("rejects a cross-origin ImageBitmap", async () => {
       let imageBitmap: ImageBitmap;
-      imageBitmap = await getDomImageBitmp(
+      imageBitmap = await getDomImageBitmap(
         `http://localhost:${__PORT__}/resources/cats-dogs.png`,
       );
       const barcodeDetector = new BarcodeDetector();
