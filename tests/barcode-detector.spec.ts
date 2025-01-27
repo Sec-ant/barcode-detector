@@ -398,6 +398,42 @@ describe("BarcodeDetector.prototype.detect()", () => {
       areCatsAndDogs(detectionResult);
     });
 
+    test("rejects a HAVE_NOTHING readyState HTMLVideoElement", async () => {
+      const video = await getVideo(undefined, { readyState: "nothing" });
+      assert.equal(video.readyState, HTMLMediaElement.HAVE_NOTHING);
+      const barcodeDetector = new BarcodeDetector();
+      try {
+        await barcodeDetector.detect(video);
+        assert.fail(
+          "HAVE_NOTHING readyState HTMLVideoElement should trigger a detection error",
+        );
+      } catch (e) {
+        assert.instanceOf(e, DOMException);
+        assert.equal((e as DOMException)?.code, DOMException.INVALID_STATE_ERR);
+      }
+    });
+
+    test.todo(
+      "rejects a HAVE_METADATA readyState HTMLVideoElement",
+      async () => {
+        const video = await getVideo(undefined, { readyState: "metadata" });
+        assert.equal(video.readyState, HTMLMediaElement.HAVE_METADATA);
+        const barcodeDetector = new BarcodeDetector();
+        try {
+          await barcodeDetector.detect(video);
+          assert.fail(
+            "HAVE_METADATA readyState HTMLVideoElement should trigger a detection error",
+          );
+        } catch (e) {
+          assert.instanceOf(e, DOMException);
+          assert.equal(
+            (e as DOMException)?.code,
+            DOMException.INVALID_STATE_ERR,
+          );
+        }
+      },
+    );
+
     test("rejects a cross-origin HTMLVideoElement", async () => {
       const video = await getVideo(
         `http://localhost:${__PORT__}/resources/cats-dogs.webm`,
