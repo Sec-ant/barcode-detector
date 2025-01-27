@@ -17,7 +17,7 @@ export default defineConfig({
     outDir: "dist/es",
   },
   server: {
-    host: "localhost",
+    host: "127.0.0.1",
   },
   worker: {
     format: "es",
