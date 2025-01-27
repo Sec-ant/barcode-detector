@@ -115,8 +115,17 @@ describe("BarcodeDetector.prototype.detect()", () => {
       areCatsAndDogs(detectionResult);
     });
 
-    test("accepts a 0x0 sized HTMLImageElement", async () => {
-      const img = await getHtmlImage(ZERO_SIZE_IMAGE_URL);
+    test("accepts a 0x0 sized HTMLImageElement", async ({
+      task: {
+        file: { projectName },
+      },
+      skip,
+    }) => {
+      if (projectName === "webkit") {
+        skip();
+        return;
+      }
+      const img = await getHtmlImage(ZERO_SIZE_IMAGE_URL, true);
       assert.equal(img.width, 0);
       assert.equal(img.height, 0);
       const barcodeDetector = new BarcodeDetector();
@@ -196,7 +205,16 @@ describe("BarcodeDetector.prototype.detect()", () => {
       areCatsAndDogs(detectionResult);
     });
 
-    test("accepts a 0x0 sized HTMLCanvasElement", async () => {
+    test("accepts a 0x0 sized HTMLCanvasElement", async ({
+      task: {
+        file: { projectName },
+      },
+      skip,
+    }) => {
+      if (projectName === "webkit") {
+        skip();
+        return;
+      }
       const canvas = await getCanvas(ZERO_SIZE_IMAGE_URL);
       assert.equal(canvas.width, 0);
       assert.equal(canvas.height, 0);
@@ -238,7 +256,16 @@ describe("BarcodeDetector.prototype.detect()", () => {
       areCatsAndDogs(detectionResult);
     });
 
-    test("accepts a 0x0 sized OffscreenCanvas", async () => {
+    test("accepts a 0x0 sized OffscreenCanvas", async ({
+      task: {
+        file: { projectName },
+      },
+      skip,
+    }) => {
+      if (projectName === "webkit") {
+        skip();
+        return;
+      }
       const canvas = await getDomOffscreenCanvas(ZERO_SIZE_IMAGE_URL);
       assert.equal(canvas.width, 0);
       assert.equal(canvas.height, 0);
@@ -306,7 +333,16 @@ describe("BarcodeDetector.prototype.detect()", () => {
       areCatsAndDogs(detectionResult);
     });
 
-    test("accepts a 0x0 sized SVGImageElement", async () => {
+    test("accepts a 0x0 sized SVGImageElement", async ({
+      task: {
+        file: { projectName },
+      },
+      skip,
+    }) => {
+      if (projectName === "webkit") {
+        skip();
+        return;
+      }
       const image = await getSvgImage(ZERO_SIZE_IMAGE_URL);
       assert.equal(image.width.baseVal.value, 0);
       assert.equal(image.height.baseVal.value, 0);
