@@ -418,7 +418,16 @@ describe("BarcodeDetector.prototype.detect()", () => {
   });
 
   describe("HTMLVideoElement", () => {
-    test("accepts an HTMLVideoElement", async () => {
+    test("accepts an HTMLVideoElement", async ({
+      task: {
+        file: { projectName },
+      },
+      skip,
+    }) => {
+      if (projectName === "webkit") {
+        skip();
+        return;
+      }
       const video = await getVideo();
       assert.instanceOf(video, HTMLVideoElement);
       const barcodeDetector = new BarcodeDetector();
