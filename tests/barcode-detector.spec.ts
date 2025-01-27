@@ -43,8 +43,6 @@ import BarcodeDetectionWorker from "./worker.js?worker";
 
 declare const __PORT__: string;
 
-// TODO: web worker test
-
 describe("new BarcodeDetector()", () => {
   test("should throw type error if provided formats is empty", () => {
     try {

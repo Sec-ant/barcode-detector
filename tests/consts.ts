@@ -9,7 +9,7 @@ export const DEFAULT_VIDEO_URL = new URL(
 ).href;
 
 export const ZERO_SIZE_IMAGE_URL = new URL(
-  "./resources/zerosize.svg",
+  "./resources/zero-size.svg",
   import.meta.url,
 ).href;
 
