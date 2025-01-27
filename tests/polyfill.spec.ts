@@ -14,8 +14,14 @@ describe("Polyfill doesn't take effect on existing non-nullable implementations"
     await import(/* @vite-ignore */ `../src/polyfill?update=${Date.now()}`);
     assert.isTrue(Object.is(globalThis.BarcodeDetector, placeholder));
   });
-  test("existing number type implementation", async () => {
+  test("existing number (0) type implementation", async () => {
     const placeholder = 0;
+    globalThis.BarcodeDetector = placeholder;
+    await import(/* @vite-ignore */ `../src/polyfill?update=${Date.now()}`);
+    assert.isTrue(Object.is(globalThis.BarcodeDetector, placeholder));
+  });
+  test("existing number (NaN) type implementation", async () => {
+    const placeholder = Number.NaN;
     globalThis.BarcodeDetector = placeholder;
     await import(/* @vite-ignore */ `../src/polyfill?update=${Date.now()}`);
     assert.isTrue(Object.is(globalThis.BarcodeDetector, placeholder));
@@ -34,6 +40,12 @@ describe("Polyfill doesn't take effect on existing non-nullable implementations"
   });
   test("existing object type implementation", async () => {
     const placeholder = Object.create(null);
+    globalThis.BarcodeDetector = placeholder;
+    await import(/* @vite-ignore */ `../src/polyfill?update=${Date.now()}`);
+    assert.isTrue(Object.is(globalThis.BarcodeDetector, placeholder));
+  });
+  test("existing array type implementation", async () => {
+    const placeholder = [];
     globalThis.BarcodeDetector = placeholder;
     await import(/* @vite-ignore */ `../src/polyfill?update=${Date.now()}`);
     assert.isTrue(Object.is(globalThis.BarcodeDetector, placeholder));
