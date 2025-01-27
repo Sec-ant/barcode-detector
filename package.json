@@ -104,7 +104,7 @@
     "postbuild:es": "tsc --declarationDir ./dist/es",
     "postbuild:cjs": "tsc --declarationDir ./dist/cjs",
     "start": "vite preview --outDir ./tests --port $npm_package_config_port -l silent",
-    "browser": "playwright install chromium firefox",
+    "browser": "playwright install chromium firefox webkit",
     "test": "pnpm -s browser && start-server-and-test $npm_package_config_port 'vitest --coverage --hideSkippedTests'",
     "test:ui": "pnpm -s browser && start-server-and-test $npm_package_config_port 'vitest --ui --coverage --hideSkippedTests'",
     "coverage": "pnpm -s browser && start-server-and-test $npm_package_config_port 'vitest run --coverage --hideSkippedTests'",
