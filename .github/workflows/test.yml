@@ -1,13 +1,13 @@
-name: Preview Release
+name: Test
 
-on: [push, pull_request]
+on: [pull_request]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  preview-release:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -16,11 +16,5 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Bump Version
-        run: pnpm -s changeset version
-
-      - name: Build
-        run: pnpm -s prepublishOnly
-
-      - name: Publish Preview Release
-        run: pnpx pkg-pr-new publish --compact
+      - name: Test
+        run: pnpm -s test
