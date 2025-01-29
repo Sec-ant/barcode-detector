@@ -1,5 +1,5 @@
-/// <reference types="vitest" />
-import { defineConfig } from "vite";
+/// <reference types="@vitest/browser/providers/playwright" />
+import { coverageConfigDefaults, defineConfig } from "vitest/config";
 import { config } from "./package.json";
 
 export default defineConfig({
@@ -8,23 +8,39 @@ export default defineConfig({
     lib: {
       entry: {
         index: "src/index.ts",
-        pure: "src/pure.ts",
-        "side-effects": "src/side-effects.ts",
+        ponyfill: "src/ponyfill.ts",
+        polyfill: "src/polyfill.ts",
       },
       formats: ["es"],
       fileName: (_, entryName) => `${entryName}.js`,
     },
     outDir: "dist/es",
   },
+  server: {
+    host: "127.0.0.1",
+  },
+  worker: {
+    format: "es",
+  },
   test: {
+    includeTaskLocation: true,
     browser: {
       enabled: true,
       headless: true,
-      name: "chromium",
       provider: "playwright",
+      instances: [
+        {
+          browser: "chromium",
+        },
+        {
+          browser: "firefox",
+        },
+      ],
+      screenshotFailures: false,
     },
     coverage: {
       provider: "istanbul",
+      exclude: ["./scripts/**", ...coverageConfigDefaults.exclude],
     },
   },
   define: {

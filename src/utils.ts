@@ -3,6 +3,19 @@ import type {
   ReadOutputBarcodeFormat,
 } from "zxing-wasm/reader";
 
+export type CanvasImageSourceWebCodecs =
+  | HTMLOrSVGImageElement
+  | HTMLVideoElement
+  | HTMLCanvasElement
+  | ImageBitmap
+  | OffscreenCanvas
+  | VideoFrame;
+
+export type ImageBitmapSourceWebCodecs =
+  | CanvasImageSourceWebCodecs
+  | Blob
+  | ImageData;
+
 const formatMapEntries = [
   ["aztec", "Aztec"],
   ["code_128", "Code128"],
@@ -26,6 +39,7 @@ const formatMapEntries = [
   ["upc_e", "UPC-E"],
   ["linear_codes", "Linear-Codes"],
   ["matrix_codes", "Matrix-Codes"],
+  ["any", "Any"],
 ] as const satisfies readonly [string, ReadInputBarcodeFormat][];
 
 export const BARCODE_FORMATS = (
@@ -36,7 +50,7 @@ export type BarcodeFormat = (typeof BARCODE_FORMATS)[number];
 
 export type ReadResultBarcodeFormat = Exclude<
   BarcodeFormat,
-  "linear_codes" | "matrix_codes"
+  "linear_codes" | "matrix_codes" | "any"
 >;
 
 export const formatMap = new Map<BarcodeFormat, ReadInputBarcodeFormat>(
@@ -224,7 +238,7 @@ function createCanvas(
     if (canvas.getContext("2d") instanceof OffscreenCanvasRenderingContext2D) {
       return canvas;
     }
-    throw void 0;
+    throw undefined;
   } catch {
     const canvas = document.createElement("canvas");
     canvas.width = width;
@@ -307,37 +321,37 @@ async function getImageDataOrBlobFromBlob(
     // if createImageBitmap is supported
     // we use it to check if this is a valid image blob
     // this is not supported in early browsers or web workers in safari (2023.9.16)
-    // @ts-expect-error this api may not exist in some runtimes
-    if (globalThis.createImageBitmap) {
-      imageSource = await createImageBitmap(blob);
-    }
-    // if createImageBitmap is not supported
-    // we use image element to check if this is a valid image blob
-    // this is not supported in web workers by spec
-    else if (globalThis.Image) {
-      imageSource = new Image();
-      let imageUrl = "";
-      try {
-        imageUrl = URL.createObjectURL(blob);
-        imageSource.src = imageUrl;
-        await imageSource.decode();
-      } finally {
-        URL.revokeObjectURL(imageUrl);
+    imageSource = await createImageBitmap(blob);
+  } catch (e) {
+    try {
+      // if createImageBitmap is not supported
+      // we use image element to check if this is a valid image blob
+      // this is not supported in web workers by spec
+      if (globalThis.Image) {
+        imageSource = new Image();
+        let imageUrl = "";
+        try {
+          imageUrl = URL.createObjectURL(blob);
+          imageSource.src = imageUrl;
+          await imageSource.decode();
+        } finally {
+          URL.revokeObjectURL(imageUrl);
+        }
       }
+      // if we are not lucky enough (web workers in early browsers or safari)
+      // just return the blob and use `readBarcodes` to detect barcodes
+      else {
+        return blob;
+      }
+    } catch (e) {
+      // TODO(https://github.com/chromium/chromium/blob/fe4f6d2155412504930c9d1c53892af5aac1db8d/third_party/blink/renderer/modules/shapedetection/shape_detector.cc#L59-L63):
+      // Blob type inputs are not supported in Chromium.
+      // We still support blobs, but we should reject on non-image blobs.
+      throw new DOMException(
+        "Failed to load or decode Blob.",
+        "InvalidStateError",
+      );
     }
-    // if we are not lucky enough (web workers in early browsers or safari)
-    // just return the blob and use `readBarcodesFromImageFile` to detect barcodes
-    else {
-      return blob;
-    }
-  } catch {
-    // TODO(https://github.com/chromium/chromium/blob/fe4f6d2155412504930c9d1c53892af5aac1db8d/third_party/blink/renderer/modules/shapedetection/shape_detector.cc#L59-L63):
-    // Blob type inputs are not supported in Chromium.
-    // We still support blobs, but we should reject on non-image blobs.
-    throw new DOMException(
-      "Failed to load or decode Blob.",
-      "InvalidStateError",
-    );
   }
   const imageData = await getImageDataFromCanvasImageSource(imageSource);
   return imageData;
