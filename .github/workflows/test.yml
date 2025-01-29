@@ -17,4 +17,4 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Test
-        run: pnpm -s test
+        run: pnpm -s test:ci
