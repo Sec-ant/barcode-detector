@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.0.1
+
+### Patch Changes
+
+- 8206888: Bump zxing-wasm to v2.1.0 and other deps.
+
 ## 3.0.0
 
 Generally, this release bumped the [`zxing-wasm`](https://github.com/Sec-ant/zxing-wasm) dependency to [`v2`](https://github.com/Sec-ant/zxing-wasm/releases/tag/v2.0.1) and renamed the subpath exports to `ponyfill` and `polyfill` from `pure` and `side-effects`. Detailed changes are as follows:
