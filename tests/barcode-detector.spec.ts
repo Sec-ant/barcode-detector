@@ -2,6 +2,7 @@
 import { assert, afterAll, beforeAll, describe, test, vi } from "vitest";
 import {
   BarcodeDetector,
+  type BarcodeDetectorParameters,
   type BarcodeFormat,
   type DetectedBarcode,
   prepareZXingModule,
@@ -980,6 +981,34 @@ describe("BarcodeDetector.prototype.detect()", () => {
       window.addEventListener("message", handleMessage);
 
       window.postMessage(detectionResult);
+    });
+  });
+});
+
+describe("Barcode options", () => {
+  test("if parameters are not provided, the default values are used", async () => {
+    const barcodeDetector = new BarcodeDetector();
+    assert.deepEqual(barcodeDetector.getOptions(), {
+      formats: [],
+      parameters: {
+        textMode: "Plain",
+        tryCode39ExtendedMode: false,
+      },
+    });
+  });
+  test("if parameters are provided, the detector instantiate with provided parameters", async () => {
+    const parameters: BarcodeDetectorParameters = {
+      textMode: "Plain",
+      tryCode39ExtendedMode: true,
+      tryHarder: true,
+    };
+    const barcodeDetector = new BarcodeDetector({
+      formats: ["qr_code"],
+      parameters,
+    });
+    assert.deepEqual(barcodeDetector.getOptions(), {
+      formats: ["qr_code"],
+      parameters,
     });
   });
 });

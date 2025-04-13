@@ -21,6 +21,21 @@ export type { BarcodeFormat } from "./utils.js";
 
 export interface BarcodeDetectorOptions {
   formats?: BarcodeFormat[];
+  parameters?: BarcodeDetectorParameters;
+}
+
+export interface BarcodeDetectorParameters {
+  isPure?: boolean;
+  maxNumberOfSymbols?: number;
+  minLineCount?: number;
+  returnErrors?: boolean;
+  textMode?: "Plain" | "ECI" | "HRI" | "Hex" | "Escaped";
+  tryCode39ExtendedMode?: boolean;
+  tryDenoise?: boolean;
+  tryDownscale?: boolean;
+  tryHarder?: boolean;
+  tryInvert?: boolean;
+  tryRotate?: boolean;
 }
 
 export interface Point2D {
@@ -37,6 +52,13 @@ export interface DetectedBarcode {
 
 export class BarcodeDetector {
   #formats: BarcodeFormat[];
+  #detectorOptions: BarcodeDetectorParameters;
+
+  private defaultReaderOptions: ReaderOptions = {
+    tryCode39ExtendedMode: false,
+    textMode: "Plain",
+  };
+
   constructor(barcodeDectorOptions: BarcodeDetectorOptions = {}) {
     try {
       // TODO(https://github.com/WICG/shape-detection-api/issues/66):
@@ -55,6 +77,8 @@ export class BarcodeDetector {
         }
       }
       this.#formats = formats ?? [];
+      this.#detectorOptions =
+        barcodeDectorOptions?.parameters ?? this.defaultReaderOptions;
       // Use eager loading so that a user can fetch and init the wasm
       // before running actual detections, therefore shorten the cold start
       // of the first detection.
@@ -78,11 +102,13 @@ export class BarcodeDetector {
         return [];
       }
       let zxingReadOutputs: ReadResult[];
+
+      const formats = this.#formats.map((format) => formatMap.get(format)!);
       const readerOptions: ReaderOptions = {
-        tryCode39ExtendedMode: false,
-        textMode: "Plain",
-        formats: this.#formats.map((format) => formatMap.get(format)!),
+        ...this.#detectorOptions,
+        formats: formats,
       };
+
       try {
         zxingReadOutputs = await readBarcodes(imageDataOrBlob, readerOptions);
       } catch (e) {
@@ -139,5 +165,12 @@ export class BarcodeDetector {
         "Failed to execute 'detect' on 'BarcodeDetector'",
       );
     }
+  }
+
+  getOptions(): BarcodeDetectorOptions {
+    return {
+      formats: this.#formats,
+      parameters: this.#detectorOptions,
+    };
   }
 }
