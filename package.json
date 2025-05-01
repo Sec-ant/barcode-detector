@@ -88,6 +88,7 @@
   },
   "scripts": {
     "update-hooks": "simple-git-hooks",
+    "dev": "vite dev",
     "lint": "biome lint .",
     "type-check": "tsc --noEmit --emitDeclarationOnly false",
     "format:prettier": "prettier . --write",
@@ -116,34 +117,35 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@changesets/cli": "^2.28.1",
-    "@commitlint/cli": "^19.7.1",
-    "@commitlint/config-conventional": "^19.7.1",
-    "@types/node": "^22.13.5",
-    "@vitest/browser": "^3.0.6",
-    "@vitest/coverage-istanbul": "^3.0.6",
-    "@vitest/ui": "^3.0.6",
+    "@changesets/cli": "^2.29.2",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@types/node": "^22.15.3",
+    "@vitest/browser": "^3.1.2",
+    "@vitest/coverage-istanbul": "^3.1.2",
+    "@vitest/ui": "^3.1.2",
     "concurrently": "^9.1.2",
     "http-server": "^14.1.1",
-    "lint-staged": "^15.4.3",
-    "playwright": "^1.50.1",
-    "prettier": "^3.5.2",
+    "lint-staged": "^15.5.1",
+    "playwright": "^1.52.0",
+    "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
-    "simple-git-hooks": "^2.11.1",
-    "start-server-and-test": "^2.0.10",
-    "tsx": "^4.19.3",
-    "typescript": "^5.7.3",
-    "vite": "^6.1.1",
-    "vitest": "^3.0.6"
+    "simple-git-hooks": "^2.13.0",
+    "start-server-and-test": "^2.0.11",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.4",
+    "vitest": "^3.1.2"
   },
   "dependencies": {
-    "zxing-wasm": "^2.1.0"
+    "zxing-wasm": "^2.1.1"
   },
   "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
-      "msw"
+      "msw",
+      "simple-git-hooks"
     ]
   }
 }

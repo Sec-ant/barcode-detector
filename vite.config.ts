@@ -32,9 +32,9 @@ export default defineConfig({
         {
           browser: "chromium",
         },
-        // {
-        //   browser: "firefox",
-        // },
+        {
+          browser: "firefox",
+        },
       ],
       screenshotFailures: false,
     },
