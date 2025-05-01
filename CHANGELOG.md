@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.0.2
+
+### Patch Changes
+
+- e3e97da: Bump zxing-wasm to v2.1.1 along with other deps. Re-enable firefox tests. Add a simple dev page.
+
 ## 3.0.1
 
 ### Patch Changes
