@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.0.3
+
+### Patch Changes
+
+- c679c9a: Bump `zxing-wasm` to `v2.1.2` to fix unexpected `new URL(..., import.meta.url)` expansion when bundling this package on the consumer side, which fixes #176, and also updated several deps.
+
 ## 3.0.2
 
 ### Patch Changes
