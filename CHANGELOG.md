@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.0.4
+
+### Patch Changes
+
+- 6ad20b6: The version of `zxing-wasm` should be pinned.
+
 ## 3.0.3
 
 ### Patch Changes
