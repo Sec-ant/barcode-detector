@@ -1,8 +1,8 @@
 export {
-  ZXING_WASM_VERSION,
-  ZXING_WASM_SHA256,
-  ZXING_CPP_COMMIT,
   prepareZXingModule,
-  setZXingModuleOverrides,
   purgeZXingModule,
+  setZXingModuleOverrides,
+  ZXING_CPP_COMMIT,
+  ZXING_WASM_SHA256,
+  ZXING_WASM_VERSION,
 } from "zxing-wasm/reader";

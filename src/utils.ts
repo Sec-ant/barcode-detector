@@ -308,7 +308,7 @@ async function getImageDataFromCanvasImageSource(
   try {
     const imageData = context.getImageData(0, 0, width, height);
     return imageData;
-  } catch (e) {
+  } catch (_e) {
     throw new DOMException("Source would taint origin.", "SecurityError");
   }
 }
@@ -322,7 +322,7 @@ async function getImageDataOrBlobFromBlob(
     // we use it to check if this is a valid image blob
     // this is not supported in early browsers or web workers in safari (2023.9.16)
     imageSource = await createImageBitmap(blob);
-  } catch (e) {
+  } catch (_e) {
     try {
       // if createImageBitmap is not supported
       // we use image element to check if this is a valid image blob
@@ -343,7 +343,7 @@ async function getImageDataOrBlobFromBlob(
       else {
         return blob;
       }
-    } catch (e) {
+    } catch (_e) {
       // TODO(https://github.com/chromium/chromium/blob/fe4f6d2155412504930c9d1c53892af5aac1db8d/third_party/blink/renderer/modules/shapedetection/shape_detector.cc#L59-L63):
       // Blob type inputs are not supported in Chromium.
       // We still support blobs, but we should reject on non-image blobs.
@@ -370,7 +370,7 @@ function getImageDataFromCanvas(
   try {
     const imageData = context.getImageData(0, 0, width, height);
     return imageData;
-  } catch (e) {
+  } catch (_e) {
     throw new DOMException("Source would taint origin.", "SecurityError");
   }
 }

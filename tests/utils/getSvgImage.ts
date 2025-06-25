@@ -2,8 +2,8 @@ import { DEFAULT_IMAGE_URL } from "../consts";
 import { getHtmlImage } from "./getHtmlImage";
 
 export async function getSvgImage(src = DEFAULT_IMAGE_URL, decode = false) {
-  let width: number | undefined = undefined;
-  let height: number | undefined = undefined;
+  let width: number | undefined;
+  let height: number | undefined;
   try {
     const htmlImage = await getHtmlImage(src, true);
     width = htmlImage.width;

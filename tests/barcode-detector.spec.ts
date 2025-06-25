@@ -1,5 +1,5 @@
 ///<reference types="vite/client" />
-import { assert, afterAll, beforeAll, describe, test, vi } from "vitest";
+import { afterAll, assert, beforeAll, describe, test, vi } from "vitest";
 import {
   BarcodeDetector,
   type BarcodeFormat,
@@ -829,7 +829,6 @@ describe("BarcodeDetector.prototype.detect()", () => {
 
     beforeAll(() => {
       // @ts-expect-error
-      // biome-ignore lint/performance/noDelete: test
       delete globalThis.OffscreenCanvas;
     });
 
@@ -851,10 +850,8 @@ describe("BarcodeDetector.prototype.detect()", () => {
 
     beforeAll(() => {
       // @ts-expect-error
-      // biome-ignore lint/performance/noDelete: test
       delete globalThis.createImageBitmap;
       // @ts-expect-error
-      // biome-ignore lint/performance/noDelete: test
       delete globalThis.Image;
     });
 
