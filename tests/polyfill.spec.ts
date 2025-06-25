@@ -1,4 +1,4 @@
-import { assert, afterEach, beforeEach, describe, test } from "vitest";
+import { afterEach, assert, beforeEach, describe, test } from "vitest";
 
 describe("Polyfill doesn't take effect on existing non-nullable implementations", () => {
   let originalImplementation: unknown;
@@ -67,7 +67,6 @@ describe("Polyfill takes effect on nullable implementations", () => {
     globalThis.BarcodeDetector = originalImplementation;
   });
   test("existing implementation is deleted", async () => {
-    // biome-ignore lint/performance/noDelete: for testing
     delete globalThis.BarcodeDetector;
     await import(/* @vite-ignore */ `../src/polyfill?update=${Date.now()}`);
     assert.instanceOf(globalThis.BarcodeDetector, Function);

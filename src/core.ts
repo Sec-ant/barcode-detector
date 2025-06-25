@@ -1,20 +1,18 @@
 import {
-  type ReadResult,
-  type ReaderOptions,
   prepareZXingModule,
+  type ReaderOptions,
+  type ReadResult,
   readBarcodes,
 } from "zxing-wasm/reader";
 import {
   addPrefixToExceptionOrError,
-  getImageDataOrBlobFromImageBitmapSource,
-} from "./utils.js";
-import {
   BARCODE_FORMATS,
   type BarcodeFormat,
-  type ImageBitmapSourceWebCodecs,
-  type ReadResultBarcodeFormat,
   convertFormat,
   formatMap,
+  getImageDataOrBlobFromImageBitmapSource,
+  type ImageBitmapSourceWebCodecs,
+  type ReadResultBarcodeFormat,
 } from "./utils.js";
 
 export type { BarcodeFormat } from "./utils.js";
