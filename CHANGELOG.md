@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.0.6
+
+### Patch Changes
+
+- 4037bd8: Bump deps and switch to OIDC trusted publishing
+
 ## 3.0.5
 
 ### Patch Changes
