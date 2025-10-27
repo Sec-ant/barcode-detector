@@ -1,4 +1,4 @@
-/// <reference types="@vitest/browser/providers/playwright" />
+import { playwright } from "@vitest/browser-playwright";
 import { coverageConfigDefaults, defineConfig } from "vitest/config";
 import { config } from "./package.json";
 
@@ -28,7 +28,7 @@ export default defineConfig({
     browser: {
       enabled: true,
       headless: true,
-      provider: "playwright",
+      provider: playwright(),
       instances: [
         {
           browser: "chromium",
