@@ -124,7 +124,7 @@ function isHTMLImageElement(
   try {
     return (
       image instanceof
-      (image as Node)?.ownerDocument?.defaultView?.HTMLImageElement!
+      ((image as Node)?.ownerDocument?.defaultView?.HTMLImageElement as never)
     );
   } catch {
     return false;
@@ -137,7 +137,7 @@ function isSVGImageElement(
   try {
     return (
       image instanceof
-      (image as Node)?.ownerDocument?.defaultView?.SVGImageElement!
+      ((image as Node)?.ownerDocument?.defaultView?.SVGImageElement as never)
     );
   } catch {
     return false;
@@ -150,7 +150,7 @@ function isHTMLVideoElement(
   try {
     return (
       image instanceof
-      (image as Node)?.ownerDocument?.defaultView?.HTMLVideoElement!
+      ((image as Node)?.ownerDocument?.defaultView?.HTMLVideoElement as never)
     );
   } catch {
     return false;
@@ -163,7 +163,7 @@ function isHTMLCanvasElement(
   try {
     return (
       image instanceof
-      (image as Node)?.ownerDocument?.defaultView?.HTMLCanvasElement!
+      ((image as Node)?.ownerDocument?.defaultView?.HTMLCanvasElement as never)
     );
   } catch {
     return false;
