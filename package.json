@@ -2,7 +2,7 @@
   "name": "barcode-detector",
   "description": "A Barcode Detection API polyfill that uses ZXing webassembly under the hood",
   "private": false,
-  "version": "3.0.6",
+  "version": "3.0.7",
   "type": "module",
   "files": [
     "./dist"
