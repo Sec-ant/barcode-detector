@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.0.7
+
+### Patch Changes
+
+- 5fa1ce1: Bump zxing-wasm to v2.2.3. No more unhandled errors but only service unavailable DOM exception will be thrown when the WASM initialization fails.
+
 ## 3.0.6
 
 ### Patch Changes
