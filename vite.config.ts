@@ -24,7 +24,6 @@ export default defineConfig({
   },
   test: {
     includeTaskLocation: true,
-    dangerouslyIgnoreUnhandledErrors: true,
     browser: {
       enabled: true,
       headless: true,
