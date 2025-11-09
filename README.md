@@ -168,7 +168,7 @@ For legacy browsers or userscripts that lack support for `<script type="module">
 
 The core barcode reading functionality of this package is powered by [`zxing-wasm`](https://github.com/Sec-ant/zxing-wasm). Therefore, a `.wasm` binary file is fetched at runtime. By default, the `.wasm` serving path is initialized with a jsDelivr CDN URL. However, there're cases where this is not desired, such as the allowed serving path is white-listed by the Content Security Policy (CSP), or offline usage is required.
 
-To customize the `.wasm` serving path, this package reexports `prepareZXingModule` along with `ZXING_WASM_VERSION` and `ZXING_WASM_SHA256` from `zxing-wasm`. For more details on how to use them, please check [Configuring `.wasm` Serving](https://github.com/Sec-ant/zxing-wasm?tab=readme-ov-file#configuring-wasm-serving) and [Controlling `.wasm` Instantiation Timing and Caching](https://github.com/Sec-ant/zxing-wasm?tab=readme-ov-file#controlling-wasm-instantiation-timing-and-caching) sections in the `zxing-wasm` repository.
+To customize the `.wasm` serving path, this package reexports `prepareZXingModule` along with `ZXING_WASM_VERSION`, `ZXING_WASM_SHA256` and `ZXING_CPP_COMMIT` from `zxing-wasm`. For more details on how to use them, please check [Configuring `.wasm` Serving](https://github.com/Sec-ant/zxing-wasm?tab=readme-ov-file#configuring-wasm-serving) and [Controlling `.wasm` Instantiation Timing and Caching](https://github.com/Sec-ant/zxing-wasm?tab=readme-ov-file#controlling-wasm-instantiation-timing-and-caching) sections in the `zxing-wasm` repository.
 
 An example usage to override the `.wasm` serving path with an `unpkg.com` CDN url is as follows:
 
