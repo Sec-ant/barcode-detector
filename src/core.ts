@@ -85,7 +85,7 @@ export class BarcodeDetector {
         zxingReadOutputs = await readBarcodes(imageDataOrBlob, readerOptions);
       } catch (e) {
         // we need this information to debug
-        console.error(e);
+        console.trace(e);
         throw new DOMException(
           "Barcode detection service unavailable.",
           "NotSupportedError",
