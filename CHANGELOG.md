@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.0.8
+
+### Patch Changes
+
+- 1157548: Bump zxing-wasm to v2.2.4 and remove any usage of `Array.prototype.entries`
+
 ## 3.0.7
 
 ### Patch Changes
