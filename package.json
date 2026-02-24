@@ -116,32 +116,32 @@
     "bump-biome:nightly": "pnpm add -DE @biomejs/biome@nightly"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.11",
-    "@changesets/cli": "^2.29.7",
-    "@commitlint/cli": "^20.1.0",
-    "@commitlint/config-conventional": "^20.0.0",
-    "@types/node": "^24.10.1",
-    "@vitest/browser": "^4.0.10",
-    "@vitest/browser-playwright": "^4.0.10",
-    "@vitest/coverage-istanbul": "^4.0.10",
-    "@vitest/ui": "^4.0.10",
+    "@biomejs/biome": "2.4.4",
+    "@changesets/cli": "^2.29.8",
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
+    "@types/node": "^25.3.0",
+    "@vitest/browser": "^4.0.18",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-istanbul": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
     "concurrently": "^9.2.1",
     "http-server": "^14.1.1",
-    "lint-staged": "^16.2.6",
-    "playwright": "^1.56.1",
-    "prettier": "^3.6.2",
-    "rimraf": "^6.1.0",
+    "lint-staged": "^16.2.7",
+    "playwright": "^1.58.2",
+    "prettier": "^3.8.1",
+    "rimraf": "^6.1.3",
     "simple-git-hooks": "^2.13.1",
-    "start-server-and-test": "^2.1.2",
-    "tsx": "^4.20.6",
+    "start-server-and-test": "^2.1.3",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vite": "^7.2.2",
-    "vitest": "^4.0.10"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
-    "zxing-wasm": "2.2.4"
+    "zxing-wasm": "3.0.0"
   },
-  "packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48",
+  "packageManager": "pnpm@10.30.2+sha512.36cdc707e7b7940a988c9c1ecf88d084f8514b5c3f085f53a2e244c2921d3b2545bc20dd4ebe1fc245feec463bb298aecea7a63ed1f7680b877dc6379d8d0cb4",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",

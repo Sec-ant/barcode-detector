@@ -77,7 +77,6 @@ export class BarcodeDetector {
       }
       let zxingReadOutputs: ReadResult[];
       const readerOptions: ReaderOptions = {
-        tryCode39ExtendedMode: false,
         textMode: "Plain",
         formats: this.#formats.map((format) => formatMap.get(format)!),
       };
