@@ -18,28 +18,48 @@ export type ImageBitmapSourceWebCodecs =
 
 const formatMapEntries = [
   ["aztec", "Aztec"],
+  ["aztec_code", "AztecCode"],
+  ["aztec_rune", "AztecRune"],
   ["code_128", "Code128"],
   ["code_39", "Code39"],
+  ["code_39_standard", "Code39Std"],
+  ["code_39_extended", "Code39Ext"],
+  ["code_32", "Code32"],
+  ["pzn", "PZN"],
   ["code_93", "Code93"],
   ["codabar", "Codabar"],
   ["databar", "DataBar"],
-  ["databar_expanded", "DataBarExpanded"],
-  ["databar_limited", "DataBarLimited"],
+  ["databar_omni", "DataBarOmni"],
+  ["databar_stacked", "DataBarStk"],
+  ["databar_stacked_omni", "DataBarStkOmni"],
+  ["databar_expanded", "DataBarExp"],
+  ["databar_expanded_stacked", "DataBarExpStk"],
+  ["databar_limited", "DataBarLtd"],
   ["data_matrix", "DataMatrix"],
   ["dx_film_edge", "DXFilmEdge"],
-  ["ean_13", "EAN-13"],
-  ["ean_8", "EAN-8"],
+  ["ean_13", "EAN13"],
+  ["ean_upc", "EANUPC"],
+  ["isbn", "ISBN"],
+  ["ean_8", "EAN8"],
   ["itf", "ITF"],
+  ["itf_14", "ITF14"],
   ["maxi_code", "MaxiCode"],
   ["micro_qr_code", "MicroQRCode"],
   ["pdf417", "PDF417"],
+  ["compact_pdf417", "CompactPDF417"],
   ["qr_code", "QRCode"],
-  ["rm_qr_code", "rMQRCode"],
-  ["upc_a", "UPC-A"],
-  ["upc_e", "UPC-E"],
-  ["linear_codes", "Linear-Codes"],
-  ["matrix_codes", "Matrix-Codes"],
-  ["any", "Any"],
+  ["qr_code_model_1", "QRCodeModel1"],
+  ["qr_code_model_2", "QRCodeModel2"],
+  ["rm_qr_code", "RMQRCode"],
+  ["upc_a", "UPCA"],
+  ["upc_e", "UPCE"],
+  ["other_barcode", "OtherBarcode"],
+  ["linear_codes", "AllLinear"],
+  ["matrix_codes", "AllMatrix"],
+  ["gs1_codes", "AllGS1"],
+  ["retail_codes", "AllRetail"],
+  ["industrial_codes", "AllIndustrial"],
+  ["any", "All"],
 ] as const satisfies readonly [string, ReadInputBarcodeFormat][];
 
 export const BARCODE_FORMATS = (
@@ -50,7 +70,12 @@ export type BarcodeFormat = (typeof BARCODE_FORMATS)[number];
 
 export type ReadResultBarcodeFormat = Exclude<
   BarcodeFormat,
-  "linear_codes" | "matrix_codes" | "any"
+  | "linear_codes"
+  | "matrix_codes"
+  | "gs1_codes"
+  | "retail_codes"
+  | "industrial_codes"
+  | "any"
 >;
 
 export const formatMap = new Map<BarcodeFormat, ReadInputBarcodeFormat>(
