@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.1.1
+
+### Patch Changes
+
+- a01dc0e: Bump zxing-wasm to v3.0.1 with better performance. Bump other deps.
+
 ## 3.1.0
 
 ### Minor Changes
