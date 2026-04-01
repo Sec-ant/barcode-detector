@@ -4,7 +4,8 @@
     "module": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "types": ["emscripten"],
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "rootDir": "./src"
   },
   "include": ["./src"],
   "references": [
