@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.1.2
+
+### Patch Changes
+
+- 90fbb1d: Update all dependencies including vite 8, typescript 6, vitest 4.1, and zxing-wasm 3.0.2. Upgrade pnpm/action-setup to v5.
+
 ## 3.1.1
 
 ### Patch Changes
