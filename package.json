@@ -116,7 +116,7 @@
     "bump-biome:nightly": "pnpm add -DE @biomejs/biome@nightly"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.10",
+    "@biomejs/biome": "2.4.13",
     "@changesets/cli": "^2.30.0",
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
