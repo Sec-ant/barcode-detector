@@ -1,4 +1,6 @@
 dedupePeers: true
+publicHoistPattern:
+  - "@types/emscripten"
 allowBuilds:
   esbuild: true
   simple-git-hooks: true

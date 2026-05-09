@@ -24,6 +24,7 @@ export default defineConfig({
   },
   test: {
     includeTaskLocation: true,
+    globalSetup: ["./tests/globalSetup.ts"],
     browser: {
       enabled: true,
       headless: true,
