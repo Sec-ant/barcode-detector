@@ -17,12 +17,12 @@ Supported barcode formats:
 |         `code_32`          |    `maxi_code`[^1]     |   `retail_codes`[^5]    |
 |           `pzn`            |        `pdf417`        | `industrial_codes`[^6]  |
 |         `code_93`          |    `compact_pdf417`    |        `any`[^7]        |
-|         `code_128`         |       `qr_code`        |                         |
-|         `databar`          |   `qr_code_model_1`    |                         |
-|       `databar_omni`       |   `qr_code_model_2`    |                         |
-|     `databar_stacked`      |    `micro_qr_code`     |                         |
-|   `databar_stacked_omni`   |      `rm_qr_code`      |                         |
-|     `databar_expanded`     |                        |                         |
+|         `code_128`         |     `micro_pdf417`     |                         |
+|         `databar`          |       `qr_code`        |                         |
+|       `databar_omni`       |   `qr_code_model_1`    |                         |
+|     `databar_stacked`      |   `qr_code_model_2`    |                         |
+|   `databar_stacked_omni`   |    `micro_qr_code`     |                         |
+|     `databar_expanded`     |      `rm_qr_code`      |                         |
 | `databar_expanded_stacked` |                        |                         |
 |     `databar_limited`      |                        |                         |
 |       `dx_film_edge`       |                        |                         |
@@ -34,6 +34,9 @@ Supported barcode formats:
 |          `itf_14`          |                        |                         |
 |          `upc_a`           |                        |                         |
 |          `upc_e`           |                        |                         |
+|         `telepen`          |                        |                         |
+|      `telepen_alpha`       |                        |                         |
+|     `telepen_numeric`      |                        |                         |
 
 [^1]: Detection support for `MaxiCode` requires a pure monochrome image that contains an unrotated and unskewed symbol, along with a sufficient white border surrounding it.
 
