@@ -1,5 +1,15 @@
 # barcode-detector
 
+## 3.2.0
+
+### Minor Changes
+
+- 4b2e75d: Add `micro_pdf417`, `telepen`, `telepen_alpha`, and `telepen_numeric` as supported barcode formats.
+
+### Patch Changes
+
+- 67fb794: Stop copying dev public assets into package builds and use stable shared chunk names.
+
 ## 3.1.3
 
 ### Patch Changes
