@@ -4,6 +4,7 @@ import { config } from "./package.json";
 
 export default defineConfig({
   build: {
+    copyPublicDir: false,
     target: ["es2020", "edge88", "firefox68", "chrome75", "safari13"],
     lib: {
       entry: {
@@ -13,6 +14,11 @@ export default defineConfig({
       },
       formats: ["es"],
       fileName: (_, entryName) => `${entryName}.js`,
+    },
+    rolldownOptions: {
+      output: {
+        chunkFileNames: "[name].js",
+      },
     },
     outDir: "dist/es",
   },
