@@ -153,6 +153,7 @@ function isHTMLImageElement(
   try {
     return (
       image instanceof
+      // biome-ignore lint/correctness/noUnsafeOptionalChaining: short-circuit throws are caught and return false
       ((image as Node)?.ownerDocument?.defaultView?.HTMLImageElement as never)
     );
   } catch {
@@ -166,6 +167,7 @@ function isSVGImageElement(
   try {
     return (
       image instanceof
+      // biome-ignore lint/correctness/noUnsafeOptionalChaining: short-circuit throws are caught and return false
       ((image as Node)?.ownerDocument?.defaultView?.SVGImageElement as never)
     );
   } catch {
@@ -179,6 +181,7 @@ function isHTMLVideoElement(
   try {
     return (
       image instanceof
+      // biome-ignore lint/correctness/noUnsafeOptionalChaining: short-circuit throws are caught and return false
       ((image as Node)?.ownerDocument?.defaultView?.HTMLVideoElement as never)
     );
   } catch {
@@ -192,6 +195,7 @@ function isHTMLCanvasElement(
   try {
     return (
       image instanceof
+      // biome-ignore lint/correctness/noUnsafeOptionalChaining: short-circuit throws are caught and return false
       ((image as Node)?.ownerDocument?.defaultView?.HTMLCanvasElement as never)
     );
   } catch {
