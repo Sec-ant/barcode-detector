@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.2.1
+
+### Patch Changes
+
+- 50c8e8a: Bump `zxing-wasm` to 3.1.1. Refresh dev deps, upgrade pnpm to v11.12, and update GitHub Actions. Replace `pnpm/action-setup` with corepack to avoid lockfile bootstrap incompatibility.
+
 ## 3.2.0
 
 ### Minor Changes
