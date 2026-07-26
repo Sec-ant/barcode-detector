@@ -10,8 +10,8 @@ importers:
   .:
     dependencies:
       zxing-wasm:
-        specifier: 3.1.1
-        version: 3.1.1(@types/emscripten@1.41.5)
+        specifier: 3.1.2
+        version: 3.1.2(@types/emscripten@1.41.5)
     devDependencies:
       '@biomejs/biome':
         specifier: 2.5.3
@@ -1882,8 +1882,8 @@ packages:
     resolution: {integrity: sha512-4UEqdc2RYGHZc7Doyqkrqiln3p9X2DZVxaGbwhn2pi7MrRagKaOcIKe8L3OxYcbhXLgLFUS3zAYuQjKBQgmuNg==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=23}
 
-  zxing-wasm@3.1.1:
-    resolution: {integrity: sha512-g0sPJBIubO6zLcJh1jftLPIN6xziaqLsvLgtpGKwDrEhyXXqla3E3yjFrznlr78UHIOMzbJPi0HDWKs/KgaB7A==}
+  zxing-wasm@3.1.2:
+    resolution: {integrity: sha512-yHloUw+h43r9QhFwVEbdkfmsl9h3rHRpgvvVd9WdhipM3TCYYzGVACmnT+i/YPrNK/eZRgs1ZMISsyJtAoimzA==}
     peerDependencies:
       '@types/emscripten': '>=1.39.6'
 
@@ -3558,7 +3558,7 @@ snapshots:
       y18n: 5.0.8
       yargs-parser: 22.0.0
 
-  zxing-wasm@3.1.1(@types/emscripten@1.41.5):
+  zxing-wasm@3.1.2(@types/emscripten@1.41.5):
     dependencies:
       '@types/emscripten': 1.41.5
       type-fest: 5.8.0
