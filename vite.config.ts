@@ -1,6 +1,6 @@
 import { playwright } from "@vitest/browser-playwright";
 import { coverageConfigDefaults, defineConfig } from "vitest/config";
-import { config } from "./package.json";
+import { config } from "./package.json" with { type: "json" };
 
 export default defineConfig({
   build: {
