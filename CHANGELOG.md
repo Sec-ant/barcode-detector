@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.2.2
+
+### Patch Changes
+
+- d74518d: Update `zxing-wasm` with upstream bug fixes and performance improvements, and modernize the development and release toolchain.
+
 ## 3.2.1
 
 ### Patch Changes
