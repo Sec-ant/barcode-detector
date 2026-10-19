@@ -1,5 +1,12 @@
 # barcode-detector
 
+## 3.2.3
+
+### Patch Changes
+
+- 818194e: Release internally created `ImageBitmap` resources after Blob conversion, including failed conversions.
+- 818194e: Improve barcode detection performance by upgrading `zxing-wasm` to 3.1.6. Detection latency decreased by approximately 40–48% in the benchmarked 720p/1080p scenarios on Chromium 156 (Apple M3 Pro).
+
 ## 3.2.2
 
 ### Patch Changes
