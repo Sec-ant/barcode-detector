@@ -4,30 +4,31 @@ import viteConfig from "../vite.config.js";
 
 async function buildIife() {
   await rimraf("dist/iife");
+  const lib = viteConfig.build!.lib as LibraryOptions & {
+    entry: Record<string, string>;
+  };
   await Promise.all(
-    Object.entries((viteConfig.build!.lib as LibraryOptions).entry).map(
-      ([entryAlias, entryPath]) => {
-        return build({
-          ...viteConfig,
-          build: {
-            ...viteConfig.build,
-            lib: {
-              ...viteConfig.build!.lib,
-              entry: {
-                [entryAlias]: entryPath,
-              },
-              formats: ["iife"],
-              name: "BarcodeDetectionAPI",
+    Object.entries(lib.entry).map(([entryAlias, entryPath]) => {
+      return build({
+        ...viteConfig,
+        build: {
+          ...viteConfig.build,
+          lib: {
+            ...lib,
+            entry: {
+              [entryAlias]: entryPath,
             },
-            rolldownOptions: undefined,
-            outDir: "dist/iife",
-            emptyOutDir: false,
+            formats: ["iife"],
+            name: "BarcodeDetectionAPI",
           },
-          test: undefined,
-          configFile: false,
-        });
-      },
-    ),
+          rolldownOptions: undefined,
+          outDir: "dist/iife",
+          emptyOutDir: false,
+        },
+        test: undefined,
+        configFile: false,
+      });
+    }),
   );
 }
 

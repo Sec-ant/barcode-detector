@@ -1,7 +1,7 @@
 import { createReadStream, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
-import { config } from "../package.json";
+import pkg from "../package.json" with { type: "json" };
 
 const ROOT = resolve("tests");
 
@@ -70,7 +70,7 @@ async function startServer() {
   });
 
   await new Promise<void>((r) =>
-    server.listen(Number(config.port), "127.0.0.1", r),
+    server.listen(Number(pkg.config.port), "127.0.0.1", r),
   );
 
   return {
