@@ -386,8 +386,13 @@ async function getImageDataOrBlobFromBlob(
       );
     }
   }
-  const imageData = await getImageDataFromCanvasImageSource(imageSource);
-  return imageData;
+  try {
+    return await getImageDataFromCanvasImageSource(imageSource);
+  } finally {
+    if (isImageBitmap(imageSource)) {
+      imageSource.close();
+    }
+  }
 }
 
 function getImageDataFromCanvas(

@@ -25,6 +25,7 @@ dist-ssr
 *.sw?
 
 coverage
+*.tsbuildinfo
 *.tgz
 *.tar.gz
 __screenshots__

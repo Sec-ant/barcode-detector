@@ -1,6 +1,6 @@
 import { playwright } from "@vitest/browser-playwright";
 import { coverageConfigDefaults, defineConfig } from "vitest/config";
-import { config } from "./package.json" with { type: "json" };
+import pkg from "./package.json" with { type: "json" };
 
 export default defineConfig({
   build: {
@@ -29,6 +29,7 @@ export default defineConfig({
     format: "es",
   },
   test: {
+    reporters: ["default"],
     includeTaskLocation: true,
     globalSetup: ["./tests/globalSetup.ts"],
     browser: {
@@ -51,6 +52,6 @@ export default defineConfig({
     },
   },
   define: {
-    __PORT__: JSON.stringify(config.port),
+    __PORT__: JSON.stringify(pkg.config.port),
   },
 });
