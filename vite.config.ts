@@ -29,7 +29,6 @@ export default defineConfig({
     format: "es",
   },
   test: {
-    reporters: ["default"],
     includeTaskLocation: true,
     globalSetup: ["./tests/globalSetup.ts"],
     browser: {
