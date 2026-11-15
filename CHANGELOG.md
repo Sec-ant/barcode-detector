@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.2.4
+
+### Patch Changes
+
+- ac820ca: Update zxing-wasm to 3.1.7 for improved compatibility with older browsers and upstream barcode detection improvements.
+
 ## 3.2.3
 
 ### Patch Changes
