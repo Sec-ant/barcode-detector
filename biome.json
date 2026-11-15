@@ -2,7 +2,12 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!**/tests/resources", "!**/tests/samples"]
+    "includes": [
+      "**",
+      "!**/tests/resources",
+      "!**/tests/samples",
+      "!.changeset/*.md"
+    ]
   },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "formatter": {
