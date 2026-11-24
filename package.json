@@ -115,17 +115,17 @@
     "bump-biome:nightly": "pnpm add -DE @biomejs/biome@nightly"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.8",
+    "@biomejs/biome": "2.6.9",
     "@changesets/cli": "^3.0.3",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@types/node": "^26.6.6",
-    "@vitest/browser": "^5.1.0",
-    "@vitest/browser-playwright": "^5.1.0",
-    "@vitest/coverage-istanbul": "^5.1.0",
-    "@vitest/ui": "^5.1.0",
+    "@vitest/browser": "^5.1.1",
+    "@vitest/browser-playwright": "^5.1.1",
+    "@vitest/coverage-istanbul": "^5.1.1",
+    "@vitest/ui": "^5.1.1",
     "concurrently": "^10.0.7",
-    "lint-staged": "^17.6.0",
+    "lint-staged": "^17.6.2",
     "playwright": "^1.65.1",
     "prettier": "^3.10.1",
     "rimraf": "^6.1.4",
@@ -133,10 +133,10 @@
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.8",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.1"
   },
   "dependencies": {
-    "zxing-wasm": "3.1.7"
+    "zxing-wasm": "3.1.8"
   },
-  "packageManager": "pnpm@12.21.0+sha512.66fd8278ee28935ce951792d34367ff3af5c432a2756445823029533835b8da529bbe0be5130afd56ed0713fb8789e47bad82d93bd5ae2fe54b15562d6276ef0"
+  "packageManager": "pnpm@12.23.0+sha512.02da94ffaf133f46074322afe552f90d40b5f71ae259aefbccdacc5085b1d617e98d65e0131f5748b9b67445978ee5055d7d59a473f1eef0d504854fefcd5975"
 }
