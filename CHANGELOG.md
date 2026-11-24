@@ -1,5 +1,11 @@
 # barcode-detector
 
+## 3.2.5
+
+### Patch Changes
+
+- 07b1c2e: Update zxing-wasm to 3.1.8, including ZXing-C++ 3.2.0 barcode detection fixes and upstream security updates.
+
 ## 3.2.4
 
 ### Patch Changes
